@@ -11,6 +11,7 @@
 /source/Homestead.yaml
 /source/npm-debug.log
 /source/yarn-error.log
+/source/composer.lock
 
 .env
 .vscode
