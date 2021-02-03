@@ -27,7 +27,15 @@ sudo docker-compose up --build
 
 ## Init Laravel project
 
-Once docker containers are running, it's time to download composer dependencies for Laravel such as **vendor** direcotry. 
+Once docker containers are running, it's time to init laravel. 
+
+First switch to **source** directory.
+
+``` bash
+cd source
+```
+
+Download composer dependencies for Laravel such as **vendor** direcotry.
 
 ``` bash
 sudo docker-compose run --rm composer update
@@ -38,6 +46,8 @@ After that Laravel wants to generate key for *php artisan*.
 ``` bash
 sudo docker-compose run --rm php /var/www/html/artisan key:generate
 ```
+
+Now it should work.
 
 ## Delete docker containers and images
 
