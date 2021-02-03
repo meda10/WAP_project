@@ -50,5 +50,5 @@ sudo docker rm -f $(sudo docker ps -a -q)
 ```
 
 ``` bash
-sudo docker rmi -f $(sudo images ps -a -q)
+sudo docker rmi -f $(sudo docker images -a -q)
 ```
