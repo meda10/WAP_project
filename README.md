@@ -47,7 +47,14 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose run --rm php /var/www/html/artisan key:generate
 ```
 
-Now it should work.
+Now it should work:
+
+Service | Address
+------- | -------
+Web app | localhost:8080
+phpmyadmin | localhost:8081
+
+In phpmyadmin leave **Server** field empty. Default **Name** is *root* and default **Password** is *secret* (from **.env** file).
 
 ## Delete docker containers and images
 
