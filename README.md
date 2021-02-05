@@ -41,6 +41,11 @@ Download composer dependencies for Laravel such as **vendor** direcotry.
 sudo docker-compose run --rm composer update
 ```
 
+If Laravel shows Permission denied error for storage:
+``` bash
+sudo chmod -R 777 storage bootstrap/cache
+```
+
 After that Laravel wants to generate key for *php artisan*.
 
 ``` bash
