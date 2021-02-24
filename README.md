@@ -56,6 +56,8 @@ Next you must install the frontend scaffolding (Bootstrap and Vue.js):
 ``` bash
 php artisan ui bootstrap
 php artisan ui vue
+php artisan ui bootstrap --auth
+php artisan ui vue --auth
 ```
 
 Next you must install project frontend dependencies:
