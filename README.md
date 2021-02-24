@@ -52,7 +52,7 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose run --rm php /var/www/html/artisan key:generate
 ```
 
-Next you must install the frontend scaffolding (Bootstrap and Vue.js):
+Next you must install the frontend scaffolding (Bootstrap and Vue.js). ("Yes" for commands with `--auth`):
 ``` bash
 php artisan ui bootstrap
 php artisan ui vue
