@@ -52,6 +52,19 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose run --rm php /var/www/html/artisan key:generate
 ```
 
+Next you must install the frontend scaffolding (Bootstrap and Vue.js):
+``` bash
+php artisan ui bootstrap
+php artisan ui vue
+```
+
+Next you must install project frontend dependencies:
+``` bash
+npm install
+```
+If you edit css (sass) files, run `npm run dev` command to compile sass file and it will be put into `public/css` directory (more https://laravel.com/docs/7.x/frontend#writing-css). 
+
+
 Now it should work:
 
 Service | Address
