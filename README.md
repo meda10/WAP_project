@@ -89,3 +89,12 @@ sudo docker rm -f $(sudo docker ps -a -q)
 ``` bash
 sudo docker rmi -f $(sudo docker images -a -q)
 ```
+
+
+## Migrate Database
+
+To initialize tables in PhpMyAdmin run command: 
+
+``` bash
+sudo docker-compose run --rm php /var/www/html/artisan migrate
+```
