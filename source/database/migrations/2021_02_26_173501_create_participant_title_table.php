@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTitleGenreTable extends Migration
+class CreateParticipantTitleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateTitleGenreTable extends Migration
      */
     public function up()
     {
-        Schema::create('title_genre', function (Blueprint $table) {
-            $table->primary(['genre_id','title_id']);
-            $table->bigInteger('genre_id')->unsigned();
+        Schema::create('participant_title', function (Blueprint $table) {
+            $table->primary(['participant_id','title_id']);
+            $table->bigInteger('participant_id')->unsigned();
             $table->bigInteger('title_id')->unsigned();
-            $table->foreign('genre_id')->references('id')->on('genres');
+            $table->foreign('participant_id')->references('id')->on('participants');
             $table->foreign('title_id')->references('id')->on('titles');
+            $table->boolean('director');
         });
     }
 
@@ -29,6 +30,6 @@ class CreateTitleGenreTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('title_genre');
+        Schema::dropIfExists('participant_title');
     }
 }

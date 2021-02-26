@@ -17,8 +17,8 @@ class CreateUserStoreTable extends Migration
             $table->primary(['user_id','store_id']);
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('store_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('user');
-            $table->foreign('store_id')->references('id')->on('store');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('store_id')->references('id')->on('stores');
         });
     }
 

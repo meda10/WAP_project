@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActorDirectorTable extends Migration
+class CreateGenresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateActorDirectorTable extends Migration
      */
     public function up()
     {
-        Schema::create('actordirector', function (Blueprint $table) {
+        Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('surname');
-            $table->date('birth');
+            $table->string('genre_name');
         });
     }
 
@@ -28,6 +26,6 @@ class CreateActorDirectorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('actordirector');
+        Schema::dropIfExists('genres');
     }
 }
