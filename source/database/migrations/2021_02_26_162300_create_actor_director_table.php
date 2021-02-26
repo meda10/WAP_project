@@ -13,7 +13,7 @@ class CreateActorDirectorTable extends Migration
      */
     public function up()
     {
-        Schema::create('actor_director', function (Blueprint $table) {
+        Schema::create('actordirector', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('surname');
@@ -28,6 +28,6 @@ class CreateActorDirectorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('actor_director');
+        Schema::dropIfExists('actordirector');
     }
 }

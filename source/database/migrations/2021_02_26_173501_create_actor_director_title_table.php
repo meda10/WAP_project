@@ -13,11 +13,11 @@ class CreateActorDirectorTitleTable extends Migration
      */
     public function up()
     {
-        Schema::create('actor_director_title', function (Blueprint $table) {
-            $table->primary(['actor_director_id','title_id']);
-            $table->bigInteger('actor_director_id')->unsigned();
+        Schema::create('actordirector_title', function (Blueprint $table) {
+            $table->primary(['actordirector_id','title_id']);
+            $table->bigInteger('actordirector_id')->unsigned();
             $table->bigInteger('title_id')->unsigned();
-            $table->foreign('actor_director_id')->references('id')->on('actor_director');
+            $table->foreign('actordirector_id')->references('id')->on('actordirector');
             $table->foreign('title_id')->references('id')->on('title');
             $table->boolean('director');
         });
