@@ -8,7 +8,7 @@
             @foreach($participants as $participant)
             
             <div class="card">
-                {{ $participant->name }} {{ $participant->surname }} ({{ $participant->birth }})
+                {{ $participant->name }} {{ $participant->surname }} ({{date('d.m.Y', strtotime($participant->birth))}})
             </div>
 
             @endforeach
