@@ -24,8 +24,6 @@
                 <a href="" class="navbar-brand">Wap-projekt</a>
                 {{ $name }}
             </div>
-        </div><br><br>
-    Unix time is {{ time() }}.
-
+        </div>
     </body>
 </html>
