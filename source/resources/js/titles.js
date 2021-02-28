@@ -11,7 +11,7 @@ function getTitle (vm) {
     created () {
       const title = getTitle(this)
       if (title) {
-        document.title = title
+        document.title = 'Blockbuster 2.0 - ' + title;
       }
     }
   }
