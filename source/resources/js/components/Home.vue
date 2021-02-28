@@ -6,6 +6,6 @@
 
 <script>
     export default {
-
+        title: 'Home Page'
     }
 </script>

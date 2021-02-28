@@ -21,7 +21,21 @@
 </template>
 
 <script>
-    export default {
+    function getTitle (vm) {
+        const { title } = vm.$options
+        if (title) {
+            return typeof title === 'function'
+            ? title.call(vm)
+            : title
+        }
+    }
 
+    export default {
+        created () {
+            alert(title);
+            if (title) {
+                document.title = title;
+            }
+        }
     }
 </script>
