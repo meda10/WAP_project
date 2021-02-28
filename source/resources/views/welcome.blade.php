@@ -21,13 +21,10 @@
     <body>
         <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
             <div class="container">
-                <a href="" class="navbar-brand">Wap-projekt</a>
+                <a href="" class="navbar-brand">WAP projekt</a>
                 {{ $name }}
             </div>
-        </div><br><br>
-        
-        Unix time is {{ time() }}.
-    
+        </div>
 
         <div id="app">
             <app></app>
