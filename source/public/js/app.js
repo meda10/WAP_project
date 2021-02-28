@@ -1858,6 +1858,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
@@ -37715,22 +37721,34 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticStyle: { "margin-top": "50px" } }, [
+  return _c("div", [
     _c(
-      "p",
+      "div",
+      { staticClass: "navbar navbar-expand-lg fixed-top navbar-dark bg-dark" },
       [
-        _c("router-link", { attrs: { to: { name: "home" } } }, [
-          _vm._v("Home")
-        ]),
-        _vm._v(" "),
-        _c("router-link", { attrs: { to: { name: "titles" } } }, [
-          _vm._v("Titles")
-        ])
-      ],
-      1
+        _c(
+          "div",
+          { staticClass: "container" },
+          [
+            _c(
+              "router-link",
+              { staticClass: "navbar-brand", attrs: { to: { name: "home" } } },
+              [_vm._v("Home")]
+            ),
+            _vm._v(" "),
+            _c("router-link", { attrs: { to: { name: "titles" } } }, [
+              _vm._v("Titles")
+            ]),
+            _vm._v("\n            " + _vm._s(_vm.$name) + "\n        ")
+          ],
+          1
+        )
+      ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "container" }, [_c("router-view")], 1)
+    _c("div", { staticStyle: { "margin-top": "50px" } }, [
+      _c("div", { staticClass: "container" }, [_c("router-view")], 1)
+    ])
   ])
 }
 var staticRenderFns = []

@@ -19,17 +19,9 @@
         </style>
     </head>
     <body>
-        <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-            <div class="container">
-                <a href="" class="navbar-brand">WAP projekt</a>
-                {{ $name }}
-            </div>
-        </div>
-
         <div id="app">
             <app></app>
         </div>
-
         <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
