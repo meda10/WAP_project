@@ -25,7 +25,14 @@
                 {{ $name }}
             </div>
         </div><br><br>
-    Unix time is {{ time() }}.
+        
+        Unix time is {{ time() }}.
+    
 
+        <div id="app">
+            <app></app>
+        </div>
+
+        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
