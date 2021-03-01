@@ -71,7 +71,7 @@
 
         <div style="margin-top: 100px;">
             <div class="container">
-                <router-view></router-view>
+                <router-view :user="user"></router-view>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
                 ]
             }
         },
-        watch:{
+        watch: {
             $route (to, from){
                 this.getUser();
             }

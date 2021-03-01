@@ -75,6 +75,7 @@
 <script>
 export default {
     title: 'Register',
+    props: ['user'],
     data() {
         return {
             form: {
@@ -84,6 +85,14 @@ export default {
                 password_confirmation: ''
             },
             errors: []
+        }
+    },
+    watch: {
+        user: {
+            handler: function (user) {
+                if (user != null) this.$router.push({ name: 'home' });
+            },
+            immediate: true
         }
     },
     methods: {

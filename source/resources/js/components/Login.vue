@@ -68,6 +68,7 @@
 <script>
 export default {
     title: 'Login',
+    props: ['user'],
     data() {
         return {
             form: {
@@ -79,8 +80,15 @@ export default {
         }
     },
     mounted() {
-        alert(this.user);
         this.registered = this.$route.params.registration;
+    },
+    watch: {
+        user: {
+            handler: function (user) {
+                if (user != null) this.$router.push({ name: 'home' });
+            },
+            immediate: true
+        }
     },
     methods: {
         loginUser() {

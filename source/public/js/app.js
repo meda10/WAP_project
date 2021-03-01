@@ -2137,6 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Login',
+  props: ['user'],
   data: function data() {
     return {
       form: {
@@ -2148,8 +2149,17 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    alert(this.user);
     this.registered = this.$route.params.registration;
+  },
+  watch: {
+    user: {
+      handler: function handler(user) {
+        if (user != null) this.$router.push({
+          name: 'home'
+        });
+      },
+      immediate: true
+    }
   },
   methods: {
     loginUser: function loginUser() {
@@ -2276,6 +2286,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Register',
+  props: ['user'],
   data: function data() {
     return {
       form: {
@@ -2286,6 +2297,16 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: []
     };
+  },
+  watch: {
+    user: {
+      handler: function handler(user) {
+        if (user != null) this.$router.push({
+          name: 'home'
+        });
+      },
+      immediate: true
+    }
   },
   methods: {
     registerUser: function registerUser() {
@@ -38605,7 +38626,12 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticStyle: { "margin-top": "100px" } }, [
-      _c("div", { staticClass: "container" }, [_c("router-view")], 1)
+      _c(
+        "div",
+        { staticClass: "container" },
+        [_c("router-view", { attrs: { user: _vm.user } })],
+        1
+      )
     ])
   ])
 }
