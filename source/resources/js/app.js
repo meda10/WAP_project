@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 Vue.mixin(titleMixin);
 
 const app = new Vue({
-    el: '#app',    
+    el: '#app',
     components: { App },
     router: new VueRouter(router)
 });
