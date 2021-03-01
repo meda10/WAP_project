@@ -1867,7 +1867,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      seriesGenres: [{
+        text: 'Akční'
+      }, {
+        text: 'Horror'
+      }, {
+        text: 'Komedie'
+      }, {
+        text: 'Romantické'
+      }]
+    };
+  }
+}); // module.exports ={
+//     el: '#navbar',
+//     data: {
+//         seriesGenres: [
+//             {text: 'Akční'},
+//             {text: 'Horror'},
+//             {text: 'Komedie'},
+//             {text: 'Romantické'}
+//         ]
+//     }
+// }
 
 /***/ }),
 
@@ -37726,42 +37797,128 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c(
-      "div",
-      { staticClass: "navbar navbar-expand-lg fixed-top navbar-dark bg-dark" },
+      "nav",
+      { staticClass: "navbar navbar-expand-lg navbar-dark bg-primary" },
       [
-        _c("ul", { staticClass: "navbar-nav me-auto mb-2 mb-lg-0" }, [
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "navbar-brand",
-                  attrs: { to: { name: "home" } }
-                },
-                [_vm._v("Home")]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "navbar-brand",
-                  attrs: { to: { name: "titles" } }
-                },
-                [_vm._v("Titles")]
-              )
-            ],
-            1
-          )
-        ])
+        _c(
+          "div",
+          { staticClass: "container" },
+          [
+            _c(
+              "router-link",
+              { staticClass: "navbar-brand", attrs: { to: { name: "home" } } },
+              [_vm._v("Wap-projekt")]
+            ),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse navbar-collapse",
+                attrs: { id: "navbar" }
+              },
+              [
+                _c("ul", { staticClass: "navbar-nav col" }, [
+                  _c("li", { staticClass: "nav-item dropdown" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-link dropdown-toggle",
+                        attrs: {
+                          "data-toggle": "dropdown",
+                          role: "button",
+                          "aria-haspopup": "true",
+                          "aria-expanded": "false"
+                        }
+                      },
+                      [_vm._v("Filmy")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "dropdown-menu" },
+                      [
+                        _vm._l(_vm.seriesGenres, function(genre) {
+                          return _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v(" " + _vm._s(genre.text) + " ")]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "dropdown-divider" }),
+                        _vm._v(" "),
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { to: { name: "movies" } }
+                          },
+                          [_vm._v("Jiné")]
+                        )
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "nav-item dropdown" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-link dropdown-toggle",
+                        attrs: {
+                          "data-toggle": "dropdown",
+                          role: "button",
+                          "aria-haspopup": "true",
+                          "aria-expanded": "false"
+                        }
+                      },
+                      [_vm._v("Seriály")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "dropdown-menu" },
+                      [
+                        _vm._l(_vm.seriesGenres, function(genre) {
+                          return _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v(" " + _vm._s(genre.text) + " ")]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "dropdown-divider" }),
+                        _vm._v(" "),
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { to: { name: "series" } }
+                          },
+                          [_vm._v("Jiné")]
+                        )
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(1),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
+          ],
+          1
+        )
       ]
     ),
     _vm._v(" "),
@@ -37770,7 +37927,63 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "navbar-toggler",
+        attrs: {
+          type: "button",
+          "data-toggle": "collapse",
+          "data-target": "#navbarColor01",
+          "aria-controls": "navbarColor01",
+          "aria-expanded": "false",
+          "aria-label": "Toggle navigation"
+        }
+      },
+      [_c("span", { staticClass: "navbar-toggler-icon" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("form", { staticClass: "form-inline col-auto" }, [
+      _c("input", {
+        staticClass: "form-control ",
+        attrs: { type: "text", placeholder: "Search" }
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-secondary", attrs: { type: "submit" } },
+        [_vm._v("Search")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "navbar-nav col col-sm-2" }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+          _vm._v("Login")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+          _vm._v("Register")
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
