@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->get('/authenticated', function () {
+    return true;
+});
+
+Route::post('/login', [App\Http\Controllers\Api\LoginController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
+Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
+Route::post('/password', [App\Http\Controllers\Api\ForgotPasswordController::class, 'reset']);

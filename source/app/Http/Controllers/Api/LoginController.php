@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 
 class LoginController extends Controller
 {
@@ -35,6 +39,25 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        //s$this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required']
+        ]);
+
+        if (Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(Auth::user(), 200);
+        } throw ValidationException::withMessages([
+            'email' => ['Uživatelské jméno nebo heslo je nesprávné.']
+        ]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
     }
 }
