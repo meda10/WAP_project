@@ -1914,6 +1914,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -1929,24 +1939,33 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
+  watch: {
+    $route: function $route(to, from) {
+      this.getUser();
+    }
+  },
+  mounted: function mounted() {
+    this.getUser();
+  },
   methods: {
     logout: function logout() {
       var _this = this;
 
       axios.post('/api/logout').then(function () {
         _this.$router.push({
-          name: 'home'
-        }); //alert('logged out');
+          name: 'login'
+        });
 
+        _this.user = null;
+      });
+    },
+    getUser: function getUser() {
+      var _this2 = this;
+
+      axios.get('/api/user').then(function (res) {
+        _this2.user = res.data;
       });
     }
-  },
-  mounted: function mounted() {
-    var _this2 = this;
-
-    axios.get('/api/user').then(function (res) {
-      _this2.user = res.data;
-    });
   }
 }); // module.exports ={
 //     el: '#navbar',
@@ -2124,10 +2143,12 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         password: ''
       },
-      errors: []
+      errors: [],
+      registered: false
     };
   },
   mounted: function mounted() {
+    alert(this.user);
     this.registered = this.$route.params.registration;
   },
   methods: {
@@ -38495,39 +38516,86 @@ var render = function() {
                 _vm._v(" "),
                 _vm._m(1),
                 _vm._v(" "),
-                _c("ul", { staticClass: "navbar-nav col col-sm-2" }, [
-                  _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { to: { name: "login" } }
-                        },
-                        [_vm._v("Přihlásit se")]
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "li",
-                    { staticClass: "nav-item" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { to: { name: "register" } }
-                        },
-                        [_vm._v("Registrace")]
-                      )
-                    ],
-                    1
-                  )
-                ])
+                !_vm.user
+                  ? _c(
+                      "ul",
+                      {
+                        staticClass: "navbar-nav col col-sm-2",
+                        attrs: { id: "login-nav" }
+                      },
+                      [
+                        _c(
+                          "li",
+                          { staticClass: "nav-item" },
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { to: { name: "login" } }
+                              },
+                              [_vm._v("Přihlásit se")]
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "li",
+                          { staticClass: "nav-item" },
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { to: { name: "register" } }
+                              },
+                              [_vm._v("Registrace")]
+                            )
+                          ],
+                          1
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.user
+                  ? _c(
+                      "ul",
+                      {
+                        staticClass: "navbar-nav col col-sm-4",
+                        attrs: { id: "logout-nav" }
+                      },
+                      [
+                        _c("li", { staticClass: "nav-item" }, [
+                          _c("span", { staticClass: "dropdown-item" }, [
+                            _vm._v(
+                              _vm._s(_vm.user.name) +
+                                " " +
+                                _vm._s(_vm.user.surname)
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("li", { staticClass: "nav-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.logout($event)
+                                }
+                              }
+                            },
+                            [_vm._v("Odhlásit se")]
+                          )
+                        ])
+                      ]
+                    )
+                  : _vm._e()
               ]
             )
           ],

@@ -47,12 +47,22 @@
 <!--                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">-->
 <!--                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>-->
 <!--                    </div>-->
-                    <ul class="navbar-nav col col-sm-2">
+
+                    <ul id="login-nav" class="navbar-nav col col-sm-2" v-if="!user">
                         <li class="nav-item">
                             <router-link :to="{ name: 'login' }" class="dropdown-item">Přihlásit se</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link :to="{ name: 'register' }" class="dropdown-item">Registrace</router-link>
+                        </li>
+                    </ul>
+
+                    <ul id="logout-nav" class="navbar-nav col col-sm-4" v-if="user">
+                        <li class="nav-item">
+                            <span class="dropdown-item">{{ user.name }} {{ user.surname }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
                         </li>
                     </ul>
                 </div>
@@ -80,19 +90,27 @@
                 ]
             }
         },
-        methods: {
-            logout() {
-                axios.post('/api/logout').then(() => {
-                    this.$router.push({ name: 'home' });
-                    //alert('logged out');
-                });
+        watch:{
+            $route (to, from){
+                this.getUser();
             }
         },
         mounted() {
-            axios.get('/api/user').then((res) => {
-                this.user = res.data;
-            });
-        }
+            this.getUser();
+        },
+        methods: {
+            logout() {
+                axios.post('/api/logout').then(() => {
+                    this.$router.push({ name: 'login' });
+                    this.user = null;
+                });
+            },
+            getUser() {
+                axios.get('/api/user').then((res) => {
+                    this.user = res.data;
+                });
+            }
+        }   
     }
 
     // module.exports ={

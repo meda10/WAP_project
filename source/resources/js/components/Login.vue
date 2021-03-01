@@ -74,10 +74,12 @@ export default {
                 email: '',
                 password: ''
             },
-            errors: []
+            errors: [],
+            registered: false
         }
     },
     mounted() {
+        alert(this.user);
         this.registered = this.$route.params.registration;
     },
     methods: {
