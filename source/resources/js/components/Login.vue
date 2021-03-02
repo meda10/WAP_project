@@ -88,10 +88,18 @@ export default {
                 if (user != null) this.$router.push({ name: 'home' });
             },
             immediate: true
+        },
+        errors: {
+            handler: function (errors) {
+                if (errors != null) this.$emit('emitIsLoading', false);
+            },
+            immediate: true
         }
     },
     methods: {
         loginUser() {
+            this.$emit('emitIsLoading', true);
+
             axios.post('/api/login', this.form).then(() => {
                 this.$router.push({ name: 'home' });
             }).catch((error) => {

@@ -11,6 +11,8 @@
 <!--            </ul>-->
 <!--        </div>-->
 
+        <loading :active='isLoading' :is-full-page="true" />
+
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
                 <router-link :to="{ name: 'home' }" class="navbar-brand">Wap-projekt</router-link>
@@ -71,57 +73,69 @@
 
         <div style="margin-top: 100px;">
             <div class="container">
-                <router-view :user="user"></router-view>
+                <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                user: null,
-                seriesGenres: [
-                    {text: 'Akční'},
-                    {text: 'Horror'},
-                    {text: 'Komedie'},
-                    {text: 'Romantické'}
-                ]
-            }
-        },
-        watch: {
-            $route (to, from){
-                this.getUser();
-            }
-        },
-        mounted() {
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+export default {
+    components: {
+        Loading
+    },
+    data() {
+        return {
+            user: null,
+            isLoading: false,
+            seriesGenres: [
+                {text: 'Akční'},
+                {text: 'Horror'},
+                {text: 'Komedie'},
+                {text: 'Romantické'}
+            ]
+        }
+    },
+    watch: {
+        $route (to, from) {
             this.getUser();
         },
-        methods: {
-            logout() {
-                axios.post('/api/logout').then(() => {
-                    this.$router.push({ name: 'login' });
-                    this.user = null;
-                });
+        user: {
+            handler: function (user) {
+                this.isLoading = false;
             },
-            getUser() {
-                axios.get('/api/user').then((res) => {
-                    this.user = res.data;
-                });
-            }
-        }   
-    }
-
-    // module.exports ={
-    //     el: '#navbar',
-    //     data: {
-    //         seriesGenres: [
-    //             {text: 'Akční'},
-    //             {text: 'Horror'},
-    //             {text: 'Komedie'},
-    //             {text: 'Romantické'}
-    //         ]
-    //     }
-    // }
+            immediate: true
+        },
+        isLoading: {
+            handler: function (isLoading) {
+                this.$forceUpdate();
+            },
+            immediate: true
+        }
+    },
+    mounted() {
+        this.getUser();
+    },
+    methods: {
+        logout() {
+            this.isLoading = true;
+            
+            axios.post('/api/logout').then(() => {
+                this.$router.push({ name: 'login' });
+                this.user = null;
+            });
+        },
+        getUser() {
+            axios.get('/api/user').then((res) => {
+                this.user = res.data;
+            });
+        },
+        emitIsLoadingHandler(isLoading) {
+            this.isLoading = isLoading;
+        }
+    }   
+}
 </script>
