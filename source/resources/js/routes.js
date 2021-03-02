@@ -4,6 +4,7 @@ import NotFound from './components/NotFound';
 import Login from './components/Login';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
+import Settings from './components/Settings';
 import axios from 'axios';
 
 
@@ -41,6 +42,11 @@ export default {
             path: '/password',
             name: 'password',
             component: ForgotPassword
+        },
+        {
+            path: '/settings',
+            name: 'settings',
+            component: Settings
         },
         {
             path: "*",

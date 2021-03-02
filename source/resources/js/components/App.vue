@@ -59,12 +59,16 @@
                         </li>
                     </ul>
 
-                    <ul id="logout-nav" class="navbar-nav col col-sm-4" v-if="user">
-                        <li class="nav-item">
-                            <span class="dropdown-item">{{ user.name }} {{ user.surname }}</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
+                    <ul id="logout-nav" class="navbar-nav col col-sm-2" v-if="user">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                {{ user.name }} {{ user.surname }}
+                            </a>
+                            <div class="dropdown-menu">
+                                <router-link :to="{ name: 'settings' }" class="dropdown-item">Nastevení</router-link>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
