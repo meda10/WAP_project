@@ -1939,15 +1939,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       user: null,
       isLoading: false,
-      seriesGenres: [{
-        text: 'Akční'
-      }, {
-        text: 'Horror'
-      }, {
-        text: 'Komedie'
-      }, {
-        text: 'Romantické'
-      }]
+      seriesGenres: []
     };
   },
   watch: {
@@ -1968,26 +1960,31 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/genres_menu').then(function (res) {
+      _this.seriesGenres = res.data;
+    });
     this.getUser();
   },
   methods: {
     logout: function logout() {
-      var _this = this;
+      var _this2 = this;
 
       this.isLoading = true;
       axios.post('/api/logout').then(function () {
-        _this.$router.push({
+        _this2.$router.push({
           name: 'login'
         });
 
-        _this.user = null;
+        _this2.user = null;
       });
     },
     getUser: function getUser() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/api/user').then(function (res) {
-        _this2.user = res.data;
+        _this3.user = res.data;
       });
     },
     emitIsLoadingHandler: function emitIsLoadingHandler(isLoading) {
@@ -38912,11 +38909,11 @@ var render = function() {
                             return _c(
                               "a",
                               {
-                                key: genre.text,
+                                key: genre.name,
                                 staticClass: "dropdown-item",
                                 attrs: { href: "#" }
                               },
-                              [_vm._v(" " + _vm._s(genre.text) + " ")]
+                              [_vm._v(" " + _vm._s(genre.name) + " ")]
                             )
                           }),
                           _vm._v(" "),
@@ -38958,11 +38955,11 @@ var render = function() {
                             return _c(
                               "a",
                               {
-                                key: genre.text,
+                                key: genre.name,
                                 staticClass: "dropdown-item",
                                 attrs: { href: "#" }
                               },
-                              [_vm._v(" " + _vm._s(genre.text) + " ")]
+                              [_vm._v(" " + _vm._s(genre.name) + " ")]
                             )
                           }),
                           _vm._v(" "),

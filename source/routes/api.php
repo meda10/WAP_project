@@ -26,3 +26,4 @@ Route::post('/login', [App\Http\Controllers\Api\LoginController::class, 'login']
 Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
 Route::post('/password', [App\Http\Controllers\Api\ForgotPasswordController::class, 'reset']);
+Route::get('/genres_menu', [App\Http\Controllers\Api\TitlesController::class, 'genresMenu']);
