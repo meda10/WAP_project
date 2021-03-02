@@ -26,7 +26,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filmy</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" v-for="genre in seriesGenres" href="#" v-bind:key="genre.name"> {{ genre.name }} </a>
+                                <a class="dropdown-item" v-for="genre in moviesGenres" href="#" v-bind:key="genre.name"> {{ genre.name }} </a>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'movies' }" class="dropdown-item">Jiné</router-link>
                             </div>
@@ -91,7 +91,8 @@ export default {
         return {
             user: null,
             isLoading: false,
-            seriesGenres: []
+            seriesGenres: [],
+            moviesGenres: []
         }
     },
     watch: {
@@ -112,10 +113,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/genres_menu').then((res) => {
-            this.seriesGenres = res.data;
-        });
-
+        this.getGenres();
         this.getUser();
     },
     methods: {
@@ -130,6 +128,12 @@ export default {
         getUser() {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
+            });
+        },
+        getGenres() {
+            axios.get('/api/genres_menu').then((res) => {
+                this.moviesGenres = res.data.movies;
+                this.seriesGenres = res.data.series;
             });
         },
         emitIsLoadingHandler(isLoading) {

@@ -1939,7 +1939,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       user: null,
       isLoading: false,
-      seriesGenres: []
+      seriesGenres: [],
+      moviesGenres: []
     };
   },
   watch: {
@@ -1960,31 +1961,35 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get('/api/genres_menu').then(function (res) {
-      _this.seriesGenres = res.data;
-    });
+    this.getGenres();
     this.getUser();
   },
   methods: {
     logout: function logout() {
-      var _this2 = this;
+      var _this = this;
 
       this.isLoading = true;
       axios.post('/api/logout').then(function () {
-        _this2.$router.push({
+        _this.$router.push({
           name: 'login'
         });
 
-        _this2.user = null;
+        _this.user = null;
       });
     },
     getUser: function getUser() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.get('/api/user').then(function (res) {
-        _this3.user = res.data;
+        _this2.user = res.data;
+      });
+    },
+    getGenres: function getGenres() {
+      var _this3 = this;
+
+      axios.get('/api/genres_menu').then(function (res) {
+        _this3.moviesGenres = res.data.movies;
+        _this3.seriesGenres = res.data.series;
       });
     },
     emitIsLoadingHandler: function emitIsLoadingHandler(isLoading) {
@@ -38905,7 +38910,7 @@ var render = function() {
                         "div",
                         { staticClass: "dropdown-menu" },
                         [
-                          _vm._l(_vm.seriesGenres, function(genre) {
+                          _vm._l(_vm.moviesGenres, function(genre) {
                             return _c(
                               "a",
                               {
