@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Settings from './components/Settings';
+import Administration from './components/Administration';
 import axios from 'axios';
 
 
@@ -42,6 +43,11 @@ export default {
             path: '/password',
             name: 'password',
             component: ForgotPassword
+        },
+        {
+            path: '/administration',
+            name: 'administration',
+            component: Administration
         },
         {
             path: '/settings',
