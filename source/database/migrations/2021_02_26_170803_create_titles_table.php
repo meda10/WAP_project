@@ -20,6 +20,7 @@ class CreateTitlesTable extends Migration
             $table->string('cover_path');
             $table->string('description');
             $table->year('year');
+            $table->dateTime('created_at');
             $table->enum('type', ['serial', 'movie']);
             $table->bigInteger('state_id')->unsigned();
             $table->foreign('state_id')->references('id')->on('states');
