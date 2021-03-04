@@ -58,6 +58,13 @@ After install npm dependencies.
 sudo docker-compose run --rm npm install
 ```
 
+
+If you want to change .vue files, you have to run this:
+
+``` bash
+sudo docker-compose run --rm npm run watch
+```
+
 <!--
 Next you must install the frontend scaffolding (Bootstrap and Vue.js). ("Yes" for commands with `--auth`):
 ``` bash
