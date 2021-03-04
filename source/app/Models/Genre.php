@@ -10,4 +10,9 @@ class Genre extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    public static function getGenresMenu() 
+    {
+        return Genre::select(['genre_name AS name'])->orderBy('genre_name', 'ASC')->take(5)->get();
+    }
 }
