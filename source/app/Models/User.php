@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,30 @@ class User extends Authenticatable
     /*protected $casts = [
         'email_verified_at' => 'datetime',
     ];*/
+
+
+    public function hasRole($roles) 
+    {
+        foreach ($roles as $role)
+            if ($this->role == $role) return true;
+        return false;
+    }
+
+
+    public function isConfirmed()
+    {
+        return boolval($this->confirmed);
+    }
+
+    
+    public static function getPossibleRoles()
+    {
+        $type = DB::select(DB::raw('SHOW COLUMNS FROM users WHERE Field = "role"'))[0]->Type;
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $values = array();
+        foreach(explode(',', $matches[1]) as $value){
+            $values[] = trim($value, "'");
+        }
+        return $values;
+    }
 }
