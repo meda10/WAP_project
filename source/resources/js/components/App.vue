@@ -26,7 +26,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filmy</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" v-for="genre in moviesGenres" href="#" v-bind:key="genre.name"> {{ genre.name }} </a>
+                                <router-link class="dropdown-item" v-for="genre in moviesGenres" v-bind:key="genre.name" :to="'/filmy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'movies' }" class="dropdown-item">Jiné</router-link>
                             </div>
@@ -35,7 +35,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Seriály</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" v-for="genre in seriesGenres" href="#" v-bind:key="genre.name"> {{ genre.name }} </a>
+                                <router-link class="dropdown-item" v-for="genre in seriesGenres" v-bind:key="genre.name" :to="'/serialy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'series' }" class="dropdown-item">Jiné</router-link>
                             </div>

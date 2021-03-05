@@ -1,0 +1,43 @@
+<template>
+<div>
+    <h1>{{ genre.name }}</h1>
+</div>
+</template>
+<script>
+export default {
+    title: 'Filmy',
+    data() {
+        return {
+            genre: {
+                name: '',
+                url: this.$route.params.movieGenre
+            }
+        }
+    },
+    watch: {
+        $route (to, from) {
+            this.getGenreByUrl();
+        },
+    },
+    mounted() {
+        this.getGenreByUrl();
+
+        if (this.$route.params.genre != null)
+            this.genre.url = this.$route.params.genre;
+    },
+    methods: {
+        getGenreByUrl() { 
+            this.$emit('emitIsLoading', true);
+
+            axios.post('/api/genre_info_from_url', {'url' : this.$route.params.movieGenre}).then((res) => {
+                this.genre.name = res.data.name;
+                this.$emit('emitIsLoading', false);
+            }).catch((error) => {
+                // TODO handle this error
+                console.log(error);
+                this.$emit('emitIsLoading', false);
+            });
+        }
+    }
+}
+</script>
