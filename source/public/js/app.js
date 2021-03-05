@@ -1951,8 +1951,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2088,6 +2086,71 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39401,19 +39464,17 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticStyle: { "margin-top": "100px" } }, [
-        _c(
-          "div",
-          { staticClass: "container" },
-          [
-            _c("router-view", {
-              attrs: { user: _vm.user },
-              on: { emitIsLoading: _vm.emitIsLoadingHandler }
-            })
-          ],
-          1
-        )
-      ])
+      _c(
+        "div",
+        { staticClass: "container" },
+        [
+          _c("router-view", {
+            attrs: { user: _vm.user },
+            on: { emitIsLoading: _vm.emitIsLoadingHandler }
+          })
+        ],
+        1
+      )
     ],
     1
   )
@@ -39571,14 +39632,187 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "div",
+      {
+        staticClass: "carousel slide",
+        attrs: { id: "carouselNews", "data-ride": "carousel" }
+      },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "carousel-inner" }, [
+          _c("div", { staticClass: "carousel-item active" }, [
+            _c("img", {
+              staticClass: "d-block w-100",
+              attrs: { src: "/img/slide1.svg", alt: "First slide" }
+            }),
+            _vm._v(" "),
+            _vm._m(1)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "carousel-item" }, [
+            _c("img", {
+              staticClass: "d-block w-100",
+              attrs: { src: "/img/slide2.svg", alt: "Second slide" }
+            }),
+            _vm._v(" "),
+            _vm._m(2)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "carousel-item" }, [
+            _c("img", {
+              staticClass: "d-block w-100",
+              attrs: { src: "/img/slide3.svg", alt: "Third slide" }
+            }),
+            _vm._v(" "),
+            _vm._m(3)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "carousel-item" }, [
+            _c("img", {
+              staticClass: "d-block w-100",
+              attrs: { src: "/img/slide4.svg", alt: "Fourth slide" }
+            }),
+            _vm._v(" "),
+            _vm._m(4)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "carousel-item" }, [
+            _c("img", {
+              staticClass: "d-block w-100",
+              attrs: { src: "/img/slide5.svg", alt: "Fifth slide" }
+            }),
+            _vm._v(" "),
+            _vm._m(5)
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(6),
+        _vm._v(" "),
+        _vm._m(7)
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Home")])])
+    return _c("ol", { staticClass: "carousel-indicators" }, [
+      _c("li", {
+        staticClass: "active",
+        attrs: { "data-target": "#carouselNews", "data-slide-to": "0" }
+      }),
+      _vm._v(" "),
+      _c("li", {
+        attrs: { "data-target": "#carouselNews", "data-slide-to": "1" }
+      }),
+      _vm._v(" "),
+      _c("li", {
+        attrs: { "data-target": "#carouselNews", "data-slide-to": "2" }
+      }),
+      _vm._v(" "),
+      _c("li", {
+        attrs: { "data-target": "#carouselNews", "data-slide-to": "3" }
+      }),
+      _vm._v(" "),
+      _c("li", {
+        attrs: { "data-target": "#carouselNews", "data-slide-to": "4" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-caption d-none d-md-block" }, [
+      _c("h5", [_vm._v("First Slide")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Tady bude super text, který tady bude něco ukazovat.")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-caption d-none d-md-block" }, [
+      _c("h5", [_vm._v("Druhý slide")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Tady bude super text, který tady bude něco ukazovat.")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-caption d-none d-md-block" }, [
+      _c("h5", [_vm._v("Třetí slide")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Tady bude super text, který tady bude něco ukazovat.")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-caption d-none d-md-block" }, [
+      _c("h5", [_vm._v("Čtvrtý slide")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Tady bude super text, který tady bude něco ukazovat.")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "carousel-caption d-none d-md-block" }, [
+      _c("h5", [_vm._v("Páty slide")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Tady bude super text, který tady bude něco ukazovat.")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-prev",
+        attrs: { href: "#carouselNews", role: "button", "data-slide": "prev" }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-prev-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Previous")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-next",
+        attrs: { href: "#carouselNews", role: "button", "data-slide": "next" }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-next-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Next")])
+      ]
+    )
   }
 ]
 render._withStripped = true

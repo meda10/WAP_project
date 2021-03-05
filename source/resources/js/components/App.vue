@@ -74,12 +74,10 @@
                 </div>
             </div>
         </nav>
-
-        <div style="margin-top: 100px;">
-            <div class="container">
-                <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
-            </div>
+        <div class="container">
+            <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
         </div>
+
     </div>
 </template>
 
