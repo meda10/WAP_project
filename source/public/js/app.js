@@ -2245,17 +2245,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  title: 'Seriály',
+  title: 'Filmy',
   data: function data() {
     return {
       genre: {
-        id: 0,
-        name: ''
+        name: '',
+        url: this.$route.params.movieGenre
       }
     };
   },
+  watch: {
+    $route: function $route(to, from) {
+      this.getGenreByUrl();
+    }
+  },
   mounted: function mounted() {
-    if (this.$route.params.genre != null) this.genre = this.$route.params.genre;
+    this.getGenreByUrl();
+    if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
+  },
+  methods: {
+    getGenreByUrl: function getGenreByUrl() {
+      var _this = this;
+
+      this.$emit('emitIsLoading', true);
+      axios.post('/api/genre_info_from_url', {
+        'url': this.$route.params.movieGenre
+      }).then(function (res) {
+        _this.genre.name = res.data.name;
+
+        _this.$emit('emitIsLoading', false);
+      })["catch"](function (error) {
+        // TODO handle this error
+        console.log(error);
+
+        _this.$emit('emitIsLoading', false);
+      });
+    }
   }
 });
 
@@ -2438,11 +2463,39 @@ __webpack_require__.r(__webpack_exports__);
   title: 'Seriály',
   data: function data() {
     return {
-      genre: null
+      genre: {
+        name: '',
+        url: this.$route.params.serialGenre
+      }
     };
   },
+  watch: {
+    $route: function $route(to, from) {
+      this.getGenreByUrl();
+    }
+  },
   mounted: function mounted() {
-    this.genre = this.$route.params.genre;
+    this.getGenreByUrl();
+    if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
+  },
+  methods: {
+    getGenreByUrl: function getGenreByUrl() {
+      var _this = this;
+
+      this.$emit('emitIsLoading', true);
+      axios.post('/api/genre_info_from_url', {
+        'url': this.$route.params.serialGenre
+      }).then(function (res) {
+        _this.genre.name = res.data.name;
+
+        _this.$emit('emitIsLoading', false);
+      })["catch"](function (error) {
+        // TODO handle this error
+        console.log(error);
+
+        _this.$emit('emitIsLoading', false);
+      });
+    }
   }
 });
 
@@ -2616,7 +2669,7 @@ __webpack_require__.r(__webpack_exports__);
     name: 'home',
     component: _components_Home__WEBPACK_IMPORTED_MODULE_0__.default
   }, {
-    path: '/titles',
+    path: '/tituly',
     name: 'titles',
     component: _components_Titles__WEBPACK_IMPORTED_MODULE_1__.default,
     beforeEnter: function beforeEnter(to, from, next) {
@@ -2629,31 +2682,39 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   }, {
-    path: '/register',
+    path: '/registrovat',
     name: 'register',
     component: _components_Register__WEBPACK_IMPORTED_MODULE_4__.default
   }, {
-    path: '/login',
+    path: '/prihlasit',
     name: 'login',
     component: _components_Login__WEBPACK_IMPORTED_MODULE_3__.default
   }, {
-    path: '/password',
+    path: '/heslo',
     name: 'password',
     component: _components_ForgotPassword__WEBPACK_IMPORTED_MODULE_5__.default
   }, {
-    path: '/administration',
+    path: '/admin',
     name: 'administration',
     component: _components_Administration__WEBPACK_IMPORTED_MODULE_7__.default
   }, {
-    path: '/settings',
+    path: '/nastaveni',
     name: 'settings',
     component: _components_Settings__WEBPACK_IMPORTED_MODULE_6__.default
   }, {
-    path: '/movies',
+    path: '/filmy',
     name: 'movies',
     component: _components_Movies__WEBPACK_IMPORTED_MODULE_9__.default
   }, {
-    path: '/series',
+    path: '/filmy/:movieGenre',
+    name: 'movies',
+    component: _components_Movies__WEBPACK_IMPORTED_MODULE_9__.default
+  }, {
+    path: '/serialy',
+    name: 'series',
+    component: _components_Series__WEBPACK_IMPORTED_MODULE_8__.default
+  }, {
+    path: '/serialy/:serialGenre',
     name: 'series',
     component: _components_Series__WEBPACK_IMPORTED_MODULE_8__.default
   }, {
@@ -39368,12 +39429,7 @@ var render = function() {
                               {
                                 key: genre.name,
                                 staticClass: "dropdown-item",
-                                attrs: {
-                                  to: {
-                                    name: "movies",
-                                    params: { genre: genre }
-                                  }
-                                }
+                                attrs: { to: "/filmy/" + genre.url }
                               },
                               [_vm._v(_vm._s(genre.name))]
                             )
@@ -39415,13 +39471,13 @@ var render = function() {
                         [
                           _vm._l(_vm.seriesGenres, function(genre) {
                             return _c(
-                              "a",
+                              "router-link",
                               {
                                 key: genre.name,
                                 staticClass: "dropdown-item",
-                                attrs: { href: "#" }
+                                attrs: { to: "/serialy/" + genre.url }
                               },
-                              [_vm._v(" " + _vm._s(genre.name) + " ")]
+                              [_vm._v(_vm._s(genre.name))]
                             )
                           }),
                           _vm._v(" "),
@@ -40006,11 +40062,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v(
-      "\n    " + _vm._s(_vm.genre.id) + " - " + _vm._s(_vm.genre.name) + "\n"
-    )
-  ])
+  return _c("div", [_c("h1", [_vm._v(_vm._s(_vm.genre.name))])])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -40377,11 +40429,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v(
-      "\n    " + _vm._s(_vm.genre.id) + " - " + _vm._s(_vm.genre.name) + "\n"
-    )
-  ])
+  return _c("div", [_c("h1", [_vm._v(_vm._s(_vm.genre.name))])])
 }
 var staticRenderFns = []
 render._withStripped = true

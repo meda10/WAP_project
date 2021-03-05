@@ -6,6 +6,8 @@ import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Settings from './components/Settings';
 import Administration from './components/Administration';
+import Series from './components/Series';
+import Movies from './components/Movies';
 import axios from 'axios';
 
 
@@ -18,7 +20,7 @@ export default {
             component: Home
         },
         {
-            path: '/titles',
+            path: '/tituly',
             name: 'titles',
             component: Titles,
             beforeEnter: (to, from, next) => {
@@ -30,29 +32,49 @@ export default {
             }
         },
         {
-            path: '/register',
+            path: '/registrovat',
             name: 'register',
             component: Register
         },
         {
-            path: '/login',
+            path: '/prihlasit',
             name: 'login',
             component: Login
         },
         {
-            path: '/password',
+            path: '/heslo',
             name: 'password',
             component: ForgotPassword
         },
         {
-            path: '/administration',
+            path: '/admin',
             name: 'administration',
             component: Administration
         },
         {
-            path: '/settings',
+            path: '/nastaveni',
             name: 'settings',
             component: Settings
+        },
+        {
+            path: '/filmy',
+            name: 'movies',
+            component: Movies
+        },
+        {
+            path: '/filmy/:movieGenre',
+            name: 'movies',
+            component: Movies
+        },
+        {
+            path: '/serialy',
+            name: 'series',
+            component: Series
+        },
+        {
+            path: '/serialy/:serialGenre',
+            name: 'series',
+            component: Series
         },
         {
             path: "*",
