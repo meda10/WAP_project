@@ -52,6 +52,19 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose run --rm php /var/www/html/artisan key:generate
 ```
 
+After install npm dependencies.
+
+``` bash
+sudo docker-compose run --rm npm install
+```
+
+
+If you want to change .vue files, you have to run this:
+
+``` bash
+sudo docker-compose run --rm npm run watch
+```
+
 <!--
 Next you must install the frontend scaffolding (Bootstrap and Vue.js). ("Yes" for commands with `--auth`):
 ``` bash
