@@ -43,19 +43,19 @@
                     </ul>
                     <form class="form-inline col-auto">
                         <input class="form-control " type="text" placeholder="Search">
-                        <button class="btn btn-secondary" type="submit">Search</button>
+                        <button class="btn btn-secondary">Search</button>
                     </form>
 <!--                    <div class="input-group col-auto">-->
 <!--                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">-->
 <!--                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>-->
 <!--                    </div>-->
 
-                    <ul id="login-nav" class="navbar-nav col col-sm-2" v-if="!user">
+                    <ul id="login-nav" class="navbar-nav col col-sm-3" v-if="!user">
                         <li class="nav-item">
-                            <router-link :to="{ name: 'login' }" class="dropdown-item">Přihlásit se</router-link>
+                            <router-link :to="{ name: 'login' }" class="nav-link">Přihlásit se</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'register' }" class="dropdown-item">Registrace</router-link>
+                            <router-link :to="{ name: 'register' }" class="nav-link">Registrace</router-link>
                         </li>
                     </ul>
 
@@ -123,7 +123,7 @@ export default {
     methods: {
         logout() {
             this.isLoading = true;
-            
+
             axios.post('/api/logout').then(() => {
                 this.$router.push({ name: 'login' });
                 this.user = null;
@@ -143,6 +143,6 @@ export default {
         emitIsLoadingHandler(isLoading) {
             this.isLoading = isLoading;
         }
-    }   
+    }
 }
 </script>
