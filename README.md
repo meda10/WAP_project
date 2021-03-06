@@ -114,4 +114,5 @@ To initialize tables and data in PhpMyAdmin run command:
 ``` bash
 sudo docker-compose run --rm php /var/www/html/artisan migrate
 sudo docker-compose run --rm php /var/www/html/artisan db:seed --class=GenreTableSeeder
+sudo docker-compose run --rm php /var/www/html/artisan db:seed --class=TitleTableSeeder
 ```
