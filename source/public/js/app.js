@@ -1984,7 +1984,37 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getGenres();
-    this.getUser();
+    this.getUser(); // TODO DELETE THIS AFTER UCHYLE_Z_VOKUREK
+    // USAGE
+    // type : ['type', 'serial']
+    // number_of_titles - number of titles on one page
+    // page_number - actual page number
+    // order : ['asc', 'desc']
+
+    var request = {
+      type: 'movie',
+      genre_url: 'krimi',
+      number_of_titles: 2,
+      page_number: 1,
+      order: 'asc'
+    };
+    axios.post('/api/get_titles', request).then(function (res) {
+      console.log(res.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+    var request = {
+      type: 'movie',
+      genre_url: 'krimi',
+      number_of_titles: 2,
+      page_number: 2,
+      order: 'asc'
+    };
+    axios.post('/api/get_titles', request).then(function (res) {
+      console.log(res.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
   },
   methods: {
     logout: function logout() {

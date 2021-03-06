@@ -20,10 +20,18 @@ class Title extends Model
         return static::query()->create($attributes);
     }
 
-    public static function filterTitles($type, $numberOfTitles, $genre, $pageNumber, $order)
+    public static function filterTitles($type, $genre_url, $numberOfTitles, $pageNumber, $order)
     {
-        Title::select(['title_name', 'description', 'year', 'url', 'type'])
-        ->where('type', $type)->where('')->first();
+        try {
+            return Title::select(['title_name', 'description', 'url', 'type', 'year'])
+                            ->whereHas('genres', function($query) use($genre_url) { $query->where('url', 'like', "{$genre_url}%"); })
+                            ->where('type', 'like', "{$type}%")
+                            ->skip($numberOfTitles * ($pageNumber - 1))
+                            ->take($numberOfTitles)
+                            ->orderBy('created_at', $order)->get();
+        } catch (\InvalidArgumentException $e) {
+            return abort(400, 'Bad use of API');
+        }
     }
 
     public function genres()
