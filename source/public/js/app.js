@@ -2174,6 +2174,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 //
 //
 //
@@ -2250,6 +2262,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['user'],
   data: function data() {
     return {
+      key: 0,
       form: {
         email: '',
         password: ''
@@ -2266,13 +2279,17 @@ __webpack_require__.r(__webpack_exports__);
     this.registered = this.$route.params.registration;
   },
   watch: {
+    immediate: true,
     'form.email': {
-      handler: function handler() {
-        this.formValid.email = this.validateEmail();
+      handler: function handler(val) {
+        this.form.email = val;
+        this.formValid.email = this.validateEmail() && this.errors.email === undefined;
       }
     },
     'form.password': {
-      handler: function handler() {
+      immediate: true,
+      handler: function handler(val) {
+        this.form.password = val;
         this.formValid.password = this.form.password !== '';
       }
     },
@@ -2298,16 +2315,27 @@ __webpack_require__.r(__webpack_exports__);
     loginUser: function loginUser() {
       var _this = this;
 
-      if (this.formValid.email && this.formValid.password) {
-        this.$emit('emitIsLoading', true);
-        axios.post('/api/login', this.form).then(function () {
-          _this.$router.push({
-            name: 'home'
-          });
-        })["catch"](function (error) {
-          _this.errors = error.response.data.errors;
+      // if (this.formValid.email && this.formValid.password) {
+      this.$emit('emitIsLoading', true);
+      axios.post('/api/login', this.form).then(function () {
+        _this.$router.push({
+          name: 'home'
         });
-      }
+      })["catch"](function (error) {
+        _this.errors = error.response.data.errors;
+
+        for (var _i = 0, _Object$entries = Object.entries(_this.errors); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              key = _Object$entries$_i[0],
+              value = _Object$entries$_i[1];
+
+          if (Object.keys(_this.errors).length !== 0) {
+            _this.formValid.email = false;
+            _this.formValid.password = false;
+            _this.form.password = '';
+          }
+        }
+      }); // }
     }
   }
 });
@@ -2702,7 +2730,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.axios = (axios__WEBPACK_IMPORTED_MODULE_3___default());
-(axios__WEBPACK_IMPORTED_MODULE_3___default().defaults.baseURL) = 'http://localhost:8080/';
+(axios__WEBPACK_IMPORTED_MODULE_3___default().defaults.baseURL) = 'http://localhost:8000/';
 vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_5__.default);
 vue__WEBPACK_IMPORTED_MODULE_4__.default.mixin(_titles__WEBPACK_IMPORTED_MODULE_2__.default);
 var app = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
@@ -39481,7 +39509,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    administrace\n")])
+  return _c("div", [_vm._v("\r\n    administrace\r\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39753,7 +39781,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "container" },
+        { staticClass: "container", staticStyle: { "margin-top": "100px" } },
         [
           _c("router-view", {
             attrs: { user: _vm.user },
@@ -39884,7 +39912,7 @@ var staticRenderFns = [
                     },
                     [
                       _vm._v(
-                        "\n                                Odeslat odkaz na e-mail\n                            "
+                        "\r\n                                Odeslat odkaz na e-mail\r\n                            "
                       )
                     ]
                   )
@@ -40149,6 +40177,7 @@ var render = function() {
             _c(
               "form",
               {
+                attrs: { method: "post" },
                 on: {
                   submit: function($event) {
                     $event.preventDefault()

@@ -74,7 +74,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container" style="margin-top: 100px;">
             <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
         </div>
 

@@ -13,7 +13,7 @@
                 <div class="card-header">Přihlášení</div>
 
                 <div class="card-body">
-                    <form v-on:submit.prevent="loginUser">
+                    <form v-on:submit.prevent="loginUser" method="post">
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">E-mail</label>
                             <div class="col-md-6">
@@ -75,6 +75,7 @@ export default {
     props: ['user'],
     data() {
         return {
+            key: 0,
             form: {
                 email: '',
                 password: ''
@@ -91,13 +92,17 @@ export default {
         this.registered = this.$route.params.registration;
     },
     watch: {
+        immediate: true,
         'form.email': {
-            handler: function () {
-                this.formValid.email = this.validateEmail();
+            handler: function (val) {
+                this.form.email = val;
+                this.formValid.email = this.validateEmail() && this.errors.email === undefined;
             }
         },
         'form.password': {
-            handler: function () {
+            immediate: true,
+            handler: function (val) {
+                this.form.password = val;
                 this.formValid.password = this.form.password !== '';
             }
         },
@@ -119,15 +124,22 @@ export default {
             return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.form.email);
         },
         loginUser() {
-            if (this.formValid.email && this.formValid.password) {
+            // if (this.formValid.email && this.formValid.password) {
                 this.$emit('emitIsLoading', true);
 
                 axios.post('/api/login', this.form).then(() => {
                     this.$router.push({name: 'home'});
                 }).catch((error) => {
                     this.errors = error.response.data.errors;
+                    for (const [key, value] of Object.entries(this.errors)) {
+                        if (Object.keys(this.errors).length !== 0) {
+                            this.formValid.email = false;
+                            this.formValid.password = false;
+                            this.form.password = '';
+                        }
+                    }
                 });
-            }
+            // }
         }
     }
 }

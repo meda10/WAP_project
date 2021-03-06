@@ -8,7 +8,7 @@ import titleMixin from './titles'
 import axios from 'axios'
 
 window.axios = axios
-axios.defaults.baseURL = 'http://localhost:8080/'
+axios.defaults.baseURL = 'http://localhost:8000/'
 
 
 Vue.use(VueRouter);
