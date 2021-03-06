@@ -2575,16 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
         gridView: false,
         listView: true
       },
-      moviesGenres: [{
-        name: 'Akční',
-        url: 'akcni'
-      }, {
-        name: 'Komedie',
-        url: 'komedie'
-      }, {
-        name: 'Dokumentární',
-        url: 'dokumentarni'
-      }]
+      moviesGenres: []
     };
   },
   watch: {
@@ -2594,6 +2585,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getGenreByUrl();
+    this.getGenres();
     if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
   },
   methods: {
@@ -2623,10 +2615,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.$emit('emitIsLoading', false);
       });
     },
-    getGenres: function getGenres() {// TODO: Api
-      // axios.get('/api/genres_movies').then((res) => {
-      //     this.moviesGenres = res.data.movies;
-      // });
+    getGenres: function getGenres() {
+      var _this2 = this;
+
+      // TODO - same you can use '/api/get_genres_series'
+      axios.get('/api/get_genres_movies').then(function (res) {
+        _this2.moviesGenres = res.data;
+      });
     }
   }
 });

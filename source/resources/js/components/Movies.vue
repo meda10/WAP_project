@@ -191,11 +191,7 @@ export default {
                 gridView: false,
                 listView: true
             },
-            moviesGenres: [
-                {name: 'Akční', url: 'akcni'},
-                {name: 'Komedie', url: 'komedie'},
-                {name: 'Dokumentární', url: 'dokumentarni'}
-            ]
+            moviesGenres: []
         }
     },
     watch: {
@@ -205,6 +201,7 @@ export default {
     },
     mounted() {
         this.getGenreByUrl();
+        this.getGenres();
 
         if (this.$route.params.genre != null)
             this.genre.url = this.$route.params.genre;
@@ -233,10 +230,10 @@ export default {
             });
         },
         getGenres() {
-            // TODO: Api
-            // axios.get('/api/genres_movies').then((res) => {
-            //     this.moviesGenres = res.data.movies;
-            // });
+            // TODO - same you can use '/api/get_genres_series'
+            axios.get('/api/get_genres_movies').then((res) => {
+                this.moviesGenres = res.data;
+            });
         }
     }
 }

@@ -41,4 +41,22 @@ class Genre extends Model
     {
         return $this->belongsToMany(Title::class, 'title_genre');
     }
+
+    public static function getAllGenres($type)
+    {
+        return Genre::select(['genre_name AS name', 'url'])
+                        ->whereHas('titles', function($query) use($type) { $query->where('type', $type); })
+                        ->orderBy('name', 'asc')
+                        ->get();
+    }
+
+    public static function getAllMoviesGenres()
+    {
+        return Genre::getAllGenres('movie');
+    }
+
+    public static function getAllSeriesGenres()
+    {
+        return Genre::getAllGenres('serial');
+    }
 }

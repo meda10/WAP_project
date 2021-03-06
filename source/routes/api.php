@@ -26,6 +26,9 @@ Route::post('/login', [App\Http\Controllers\Api\LoginController::class, 'login']
 Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
 Route::post('/password', [App\Http\Controllers\Api\ForgotPasswordController::class, 'reset']);
-Route::get('/genres_menu', [App\Http\Controllers\Api\TitlesController::class, 'genresMenu']);
 Route::post('/genre_info_from_url', [App\Http\Controllers\Api\TitlesController::class, 'getGenreInfoFromUrl']);
 Route::post('/get_titles', [App\Http\Controllers\Api\TitlesController::class, 'getTitles']);
+
+Route::get('/genres_menu', [App\Http\Controllers\Api\TitlesController::class, 'genresMenu']);
+Route::get('/get_genres_movies', [App\Http\Controllers\Api\TitlesController::class, 'getGenresMovies']);
+Route::get('/get_genres_series', [App\Http\Controllers\Api\TitlesController::class, 'getGenresSeries']);
