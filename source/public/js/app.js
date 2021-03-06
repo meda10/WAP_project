@@ -39654,7 +39654,7 @@ var render = function() {
                                     staticClass: "dropdown-item",
                                     attrs: { to: { name: "settings" } }
                                   },
-                                  [_vm._v("Nastevení")]
+                                  [_vm._v("Nastavení")]
                                 ),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "dropdown-divider" }),

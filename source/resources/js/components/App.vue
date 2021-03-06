@@ -65,7 +65,7 @@
                                 {{ user.name }} {{ user.surname }}
                             </a>
                             <div class="dropdown-menu">
-                                <router-link :to="{ name: 'settings' }" class="dropdown-item">Nastevení</router-link>
+                                <router-link :to="{ name: 'settings' }" class="dropdown-item">Nastavení</router-link>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
                             </div>
