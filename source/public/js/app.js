@@ -39540,7 +39540,7 @@ var render = function() {
       _c("loading", { attrs: { active: _vm.isLoading, "is-full-page": true } }),
       _vm._v(" "),
       _c(
-        "div",
+        "nav",
         { staticClass: "navbar navbar-expand-lg navbar-dark bg-primary" },
         [
           _c(

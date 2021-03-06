@@ -13,7 +13,7 @@
 
         <loading :active='isLoading' :is-full-page="true" />
 
-        <div class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
                 <router-link :to="{ name: 'home' }" class="navbar-brand">Wap-projekt</router-link>
 <!--                <a class="navbar-brand" href="#">Navbar</a>-->
@@ -73,7 +73,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </nav>
         <div class="container" style="margin-top: 100px;">
             <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
         </div>
