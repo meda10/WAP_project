@@ -1961,8 +1961,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       user: null,
       isLoading: false,
-      seriesGenres: [],
-      moviesGenres: []
+      hotSeriesGenres: [],
+      hotMoviesGenres: []
     };
   },
   watch: {
@@ -2040,8 +2040,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.get('/api/genres_menu').then(function (res) {
-        _this3.moviesGenres = res.data.movies;
-        _this3.seriesGenres = res.data.series;
+        _this3.hotMoviesGenres = res.data.movies;
+        _this3.hotSeriesGenres = res.data.series;
       });
     },
     emitIsLoadingHandler: function emitIsLoadingHandler(isLoading) {
@@ -2388,6 +2388,181 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Filmy',
   data: function data() {
@@ -2395,7 +2570,21 @@ __webpack_require__.r(__webpack_exports__);
       genre: {
         name: '',
         url: this.$route.params.movieGenre
-      }
+      },
+      renderView: {
+        gridView: false,
+        listView: true
+      },
+      moviesGenres: [{
+        name: 'Akční',
+        url: 'akcni'
+      }, {
+        name: 'Komedie',
+        url: 'komedie'
+      }, {
+        name: 'Dokumentární',
+        url: 'dokumentarni'
+      }]
     };
   },
   watch: {
@@ -2408,6 +2597,15 @@ __webpack_require__.r(__webpack_exports__);
     if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
   },
   methods: {
+    toggleView: function toggleView(val) {
+      if (val === 'list') {
+        this.renderView.gridView = false;
+        this.renderView.listView = true;
+      } else if (val === 'grid') {
+        this.renderView.gridView = true;
+        this.renderView.listView = false;
+      }
+    },
     getGenreByUrl: function getGenreByUrl() {
       var _this = this;
 
@@ -2424,6 +2622,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$emit('emitIsLoading', false);
       });
+    },
+    getGenres: function getGenres() {// TODO: Api
+      // axios.get('/api/genres_movies').then((res) => {
+      //     this.moviesGenres = res.data.movies;
+      // });
     }
   }
 });
@@ -39615,7 +39818,7 @@ var render = function() {
                         "div",
                         { staticClass: "dropdown-menu" },
                         [
-                          _vm._l(_vm.moviesGenres, function(genre) {
+                          _vm._l(_vm.hotMoviesGenres, function(genre) {
                             return _c(
                               "router-link",
                               {
@@ -39661,7 +39864,7 @@ var render = function() {
                         "div",
                         { staticClass: "dropdown-menu" },
                         [
-                          _vm._l(_vm.seriesGenres, function(genre) {
+                          _vm._l(_vm.hotSeriesGenres, function(genre) {
                             return _c(
                               "router-link",
                               {
@@ -39836,8 +40039,8 @@ var staticRenderFns = [
         attrs: {
           type: "button",
           "data-toggle": "collapse",
-          "data-target": "#navbarColor01",
-          "aria-controls": "navbarColor01",
+          "data-target": "#navbar",
+          "aria-controls": "navbar",
           "aria-expanded": "false",
           "aria-label": "Toggle navigation"
         }
@@ -40439,9 +40642,421 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("h1", [_vm._v(_vm._s(_vm.genre.name))])])
+  return _c("div", [
+    _c("h1", [_vm._v(_vm._s(_vm.genre.name))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-10" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleSelect1" } }, [
+            _vm._v("Výběr žánru:")
+          ]),
+          _vm._v(" "),
+          _c(
+            "select",
+            { staticClass: "form-control", attrs: { id: "exampleSelect1" } },
+            _vm._l(_vm.moviesGenres, function(genre) {
+              return _c("option", [_vm._v(_vm._s(genre.name))])
+            }),
+            0
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2 align-self-end mb-3" }, [
+        _c("div", { staticClass: "d-flex justify-content-center" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary mr-2",
+              class: _vm.renderView.listView ? "active" : "",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.toggleView("list")
+                }
+              }
+            },
+            [_c("i", { staticClass: "fas fa-list fa-lg" })]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              class: _vm.renderView.gridView ? "active" : "",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.toggleView("grid")
+                }
+              }
+            },
+            [_c("i", { staticClass: "fas fa-th fa-lg" })]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.renderView.gridView && !_vm.renderView.listView
+      ? _c("div", [_vm._m(0), _vm._v(" "), _vm._m(1)])
+      : _vm._e(),
+    _vm._v(" "),
+    !_vm.renderView.gridView && _vm.renderView.listView
+      ? _c("table", { staticClass: "table table-hover" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3)
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm._m(4)
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Tady by mohl být název filmu velky")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Tady by mohl být název filmu velky")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card border-primary mb-3",
+            staticStyle: { "max-width": "20rem" }
+          },
+          [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Primary card title")
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Some quick example text to build on the card title and make up the bulk of the card's content."
+                )
+              ])
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Type")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tbody", [
+      _c("tr", { staticClass: "table-dark" }, [
+        _c("th", [_vm._v("Default")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", [_vm._v("Default")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")])
+      ]),
+      _vm._v(" "),
+      _c("tr", { staticClass: "table-dark" }, [
+        _c("th", [_vm._v("Dark")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", [_vm._v("Default")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")])
+      ]),
+      _vm._v(" "),
+      _c("tr", { staticClass: "table-dark" }, [
+        _c("th", [_vm._v("Dark")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Column content")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-center mt-4" }, [
+      _c("ul", { staticClass: "pagination" }, [
+        _c("li", { staticClass: "page-item disabled" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("«")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item active" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("1")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("2")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("3")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("4")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("5")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("»")
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

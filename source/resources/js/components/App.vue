@@ -17,7 +17,7 @@
             <div class="container">
                 <router-link :to="{ name: 'home' }" class="navbar-brand">Wap-projekt</router-link>
 <!--                <a class="navbar-brand" href="#">Navbar</a>-->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -26,7 +26,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filmy</a>
                             <div class="dropdown-menu">
-                                <router-link class="dropdown-item" v-for="genre in moviesGenres" v-bind:key="genre.name" :to="'/filmy/' + genre.url">{{ genre.name }}</router-link>
+                                <router-link class="dropdown-item" v-for="genre in hotMoviesGenres" v-bind:key="genre.name" :to="'/filmy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'movies' }" class="dropdown-item">Jiné</router-link>
                             </div>
@@ -35,7 +35,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Seriály</a>
                             <div class="dropdown-menu">
-                                <router-link class="dropdown-item" v-for="genre in seriesGenres" v-bind:key="genre.name" :to="'/serialy/' + genre.url">{{ genre.name }}</router-link>
+                                <router-link class="dropdown-item" v-for="genre in hotSeriesGenres" v-bind:key="genre.name" :to="'/serialy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'series' }" class="dropdown-item">Jiné</router-link>
                             </div>
@@ -93,8 +93,8 @@ export default {
         return {
             user: null,
             isLoading: false,
-            seriesGenres: [],
-            moviesGenres: []
+            hotSeriesGenres: [],
+            hotMoviesGenres: []
         }
     },
     watch: {
@@ -156,8 +156,8 @@ export default {
         },
         getGenres() {
             axios.get('/api/genres_menu').then((res) => {
-                this.moviesGenres = res.data.movies;
-                this.seriesGenres = res.data.series;
+                this.hotMoviesGenres = res.data.movies;
+                this.hotSeriesGenres = res.data.series;
             });
         },
         emitIsLoadingHandler(isLoading) {
