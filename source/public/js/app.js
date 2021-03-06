@@ -39540,7 +39540,7 @@ var render = function() {
       _c("loading", { attrs: { active: _vm.isLoading, "is-full-page": true } }),
       _vm._v(" "),
       _c(
-        "nav",
+        "div",
         { staticClass: "navbar navbar-expand-lg navbar-dark bg-primary" },
         [
           _c(
@@ -39806,8 +39806,8 @@ var staticRenderFns = [
         attrs: {
           type: "button",
           "data-toggle": "collapse",
-          "data-target": "#navbarColor01",
-          "aria-controls": "navbarColor01",
+          "data-target": "#navbar",
+          "aria-controls": "navbar",
           "aria-expanded": "false",
           "aria-label": "Toggle navigation"
         }
