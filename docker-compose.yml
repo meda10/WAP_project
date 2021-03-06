@@ -1,16 +1,5 @@
 version: '3.8'
 
-#Docker Networks
-networks:
-  laravel:
-    driver: bridge
-
-#Volumes
-volumes:
-  dbdata:
-    driver: local
-
-# Workflow
 services:
   nginx:
     build:
@@ -37,12 +26,13 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME} 
-      MYSQL_PASSWORD: ${DB_PASSWORD} 
+      MYSQL_DATABASE: laravel_db
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./compose/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - laravel
 
@@ -126,3 +116,11 @@ services:
     entrypoint: ['php', '/var/www/html/artisan']
     networks:
       - laravel
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local

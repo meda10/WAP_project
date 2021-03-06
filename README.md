@@ -92,6 +92,25 @@ phpmyadmin | localhost:8081
 
 In phpmyadmin leave **Server** field empty. Default **Name** is *root* and default **Password** is *secret* (from **.env** file).
 
+
+## MySQL configuration
+
+Open MySQL container
+``` bash
+docker-compose exec mysql bash
+```
+
+Create user
+``` bash
+mysql -u root -p
+show databases;
+GRANT ALL ON laravel_db.* TO 'username'@'%' IDENTIFIED BY 'secret';
+FLUSH PRIVILEGES;
+EXIT;
+exit
+```
+
+
 ## Delete docker containers and images
 
 In case there was any problem and you wish to delete docker containers and images.
