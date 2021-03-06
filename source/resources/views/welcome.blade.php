@@ -25,6 +25,7 @@
         <div id="app">
             <app></app>
         </div>
-    <script src="{{ mix('js/app.js') }}"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AfXYdQoUcswgI0alGokJ-SaxrwIQzD3geOqYoG3ub_rG8KpCcMj0u40-NiGiWECJA3MjXjVYcRsnPfwa"></script>
+        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

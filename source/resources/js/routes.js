@@ -8,6 +8,7 @@ import Settings from './components/Settings';
 import Administration from './components/Administration';
 import Series from './components/Series';
 import Movies from './components/Movies';
+import Checkout from './components/Checkout';
 import axios from 'axios';
 
 
@@ -75,6 +76,11 @@ export default {
             path: '/serialy/:serialGenre',
             name: 'series',
             component: Series
+        },
+        {
+            path: '/platba',
+            name: 'checkout',
+            component: Checkout
         },
         {
             path: "*",
