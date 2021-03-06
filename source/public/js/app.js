@@ -2730,7 +2730,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.axios = (axios__WEBPACK_IMPORTED_MODULE_3___default());
-(axios__WEBPACK_IMPORTED_MODULE_3___default().defaults.baseURL) = 'http://localhost:8000/';
+(axios__WEBPACK_IMPORTED_MODULE_3___default().defaults.baseURL) = 'http://localhost:8080/';
 vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_5__.default);
 vue__WEBPACK_IMPORTED_MODULE_4__.default.mixin(_titles__WEBPACK_IMPORTED_MODULE_2__.default);
 var app = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
@@ -39509,7 +39509,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\r\n    administrace\r\n")])
+  return _c("div", [_vm._v("\n    administrace\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39912,7 +39912,7 @@ var staticRenderFns = [
                     },
                     [
                       _vm._v(
-                        "\r\n                                Odeslat odkaz na e-mail\r\n                            "
+                        "\n                                Odeslat odkaz na e-mail\n                            "
                       )
                     ]
                   )
