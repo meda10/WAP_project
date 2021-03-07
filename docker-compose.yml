@@ -102,20 +102,20 @@ services:
     working_dir: /var/www/html
     entrypoint: ['npm']
 
-  artisan:
-    build:
-      context: .
-      dockerfile: ./compose/php/Dockerfile
-    container_name: artisan
-    volumes:
-      - ./source:/var/www/html:delegated
-    depends_on:
-      - mysql
-    working_dir: /var/www/html
-    user: laravel
-    entrypoint: ['php', '/var/www/html/artisan']
-    networks:
-      - laravel
+#  artisan:
+#    build:
+#      context: .
+#      dockerfile: ./compose/php/Dockerfile
+#    container_name: artisan
+#    volumes:
+#      - ./source:/var/www/html:delegated
+#    depends_on:
+#      - mysql
+#    working_dir: /var/www/html
+#    user: laravel
+#    entrypoint: ['php', '/var/www/html/artisan']
+#    networks:
+#      - laravel
 
 networks:
   laravel:
