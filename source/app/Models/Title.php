@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Helpers\AppHelper;
 
 use App\Models\Genre;
+use App\Models\State;
 
 class Title extends Model
 {
@@ -23,20 +24,28 @@ class Title extends Model
     public static function filterTitles($type, $genre_url, $numberOfTitles, $pageNumber, $order)
     {
         try {
-            return Title::select(['title_name', 'description', 'url', 'type', 'year'])
+            $filteredTitles = Title::select(['title_name', 'description', 'url', 'type', 'year'])
                             ->whereHas('genres', function($query) use($genre_url) { $query->where('url', 'like', "{$genre_url}%"); })
                             ->where('type', 'like', "{$type}%")
-                            ->skip($numberOfTitles * ($pageNumber - 1))
-                            ->take($numberOfTitles)
-                            ->orderBy('created_at', $order)->get();
+                            ->orderBy('created_at', $order);
+            
+            $response['titles_count'] = $filteredTitles->get()->count();
+            $response['titles'] = $filteredTitles->skip($numberOfTitles * ($pageNumber - 1))
+                                    ->take($numberOfTitles)
+                                    ->get();
+            return $response;
+
         } catch (\InvalidArgumentException $e) {
             return abort(400, 'Bad use of API');
         }
     }
 
-    public static function getTitgle($type, $name)
+    public static function getTitle($type, $name)
     {
-        return Title::where('type', 'like', "{$type}%")->where('url', $name)->first();
+        return Title::where('type', 'like', "{$type}%")
+                        ->where('url', $name)
+                        ->with('states')
+                        ->first();
     }
 
     public function genres()
@@ -47,5 +56,10 @@ class Title extends Model
     public static function getAllCount()
     {
         return Title::get()->count();
+    }
+
+    public function states()
+    {
+        return $this->hasOne(State::class, 'id', 'state_id');
     }
 }

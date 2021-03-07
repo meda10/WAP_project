@@ -1,6 +1,13 @@
 <template>
     <div>
-        <h1>Title</h1>
+        <h1>{{ titleInfo.title_name }}</h1>
+
+        <div style="width: 700px">{{ titleInfo.description }}</div>
+        <div style="width: 700px">{{ titleInfo.year }}</div>
+        <div style="width: 700px">{{ titleInfo.price }} Kc</div>
+        <div style="width: 700px">Zeme puvodu: {{ titleInfo.states.state_name }}</div>
+        
+        <button type="button" class="btn btn-primary">Přidat do košíku</button>
     </div>
 </template>
 
@@ -10,21 +17,19 @@
         data() {
             return {
                 titleName: '',
-                type: ''
+                titleType: '',
+                titleInfo: {
+                    title_name: '',
+                    description: '',
+                    price: '',
+                    year: '',
+                    states: {state_name: ''}
+                }
             }
         },
         watch: {
-            titleName: {
-                handler: function (user) {
-                    this.$forceUpdate();
-                },
-                immediate: true
-            },
-            type: {
-                handler: function (isLoading) {
-                    this.$forceUpdate();
-                },
-                immediate: true
+            $route (to, from) {
+                this.getTitleInfo();
             }
         },
         mounted() {
@@ -37,9 +42,12 @@
         },
         methods: {
             getTitleInfo() {
-                axios.post('/api/get_title', {'url' : this.$route.params.movieGenre}).then((res) => {
-                    this.genre.name = res.data.name;
-                    this.$emit('emitIsLoading', false);
+                this.$emit('emitIsLoading', true);
+
+                axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName}).then((res) => {
+                    this.titleInfo = res.data;
+                    this.title = this.titleInfo.title_name;
+
                 }).catch((error) => {
                     // TODO handle this error
                     console.log(error);

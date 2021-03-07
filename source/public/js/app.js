@@ -2961,26 +2961,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: '',
   data: function data() {
     return {
       titleName: '',
-      type: ''
+      titleType: '',
+      titleInfo: {
+        title_name: '',
+        description: '',
+        price: '',
+        year: '',
+        states: {
+          state_name: ''
+        }
+      }
     };
   },
   watch: {
-    titleName: {
-      handler: function handler(user) {
-        this.$forceUpdate();
-      },
-      immediate: true
-    },
-    type: {
-      handler: function handler(isLoading) {
-        this.$forceUpdate();
-      },
-      immediate: true
+    $route: function $route(to, from) {
+      this.getTitleInfo();
     }
   },
   mounted: function mounted() {
@@ -2992,12 +2999,13 @@ __webpack_require__.r(__webpack_exports__);
     getTitleInfo: function getTitleInfo() {
       var _this = this;
 
+      this.$emit('emitIsLoading', true);
       axios.post('/api/get_title', {
-        'url': this.$route.params.movieGenre
+        'type': this.titleType,
+        'name': this.titleName
       }).then(function (res) {
-        _this.genre.name = res.data.name;
-
-        _this.$emit('emitIsLoading', false);
+        _this.titleInfo = res.data;
+        _this.title = _this.titleInfo.title_name;
       })["catch"](function (error) {
         // TODO handle this error
         console.log(error);
@@ -41700,16 +41708,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("h1", [_vm._v(_vm._s(_vm.titleInfo.title_name))]),
+    _vm._v(" "),
+    _c("div", { staticStyle: { width: "700px" } }, [
+      _vm._v(_vm._s(_vm.titleInfo.description))
+    ]),
+    _vm._v(" "),
+    _c("div", { staticStyle: { width: "700px" } }, [
+      _vm._v(_vm._s(_vm.titleInfo.year))
+    ]),
+    _vm._v(" "),
+    _c("div", { staticStyle: { width: "700px" } }, [
+      _vm._v(_vm._s(_vm.titleInfo.price) + " Kc")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticStyle: { width: "700px" } }, [
+      _vm._v("Zeme puvodu: " + _vm._s(_vm.titleInfo.states.state_name))
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      { staticClass: "btn btn-primary", attrs: { type: "button" } },
+      [_vm._v("Přidat do košíku")]
+    )
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Title")])])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
