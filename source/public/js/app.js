@@ -2988,6 +2988,12 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     $route: function $route(to, from) {
       this.getTitleInfo();
+    },
+    titleInfo: {
+      handler: function handler(isLoading) {
+        this.$emit('emitIsLoading', false);
+      },
+      immediate: true
     }
   },
   mounted: function mounted() {

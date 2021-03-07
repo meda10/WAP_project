@@ -30,6 +30,12 @@
         watch: {
             $route (to, from) {
                 this.getTitleInfo();
+            },
+            titleInfo: {
+                handler: function (isLoading) {
+                    this.$emit('emitIsLoading', false);
+                },
+                immediate: true
             }
         },
         mounted() {
