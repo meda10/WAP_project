@@ -22,9 +22,9 @@ Route::middleware('auth:sanctum')->get('/authenticated', function () {
     return true;
 });
 
-Route::post('/genre_info_from_url', [App\Http\Controllers\Api\TitlesController::class, 'getGenreInfoFromUrl']);
-Route::post('/get_titles', [App\Http\Controllers\Api\TitlesController::class, 'getTitles']);
+Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
+Route::post('/get_titles', 'Api\TitlesController@getTitles');
 
-Route::get('/genres_menu', [App\Http\Controllers\Api\TitlesController::class, 'genresMenu']);
-Route::get('/get_genres_movies', [App\Http\Controllers\Api\TitlesController::class, 'getGenresMovies']);
-Route::get('/get_genres_series', [App\Http\Controllers\Api\TitlesController::class, 'getGenresSeries']);
+Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
+Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
+Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');
