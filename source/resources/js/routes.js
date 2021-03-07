@@ -1,5 +1,5 @@
 import Home from './components/Home';
-import Titles from './components/Titles';
+import Title from './components/Title';
 import NotFound from './components/NotFound';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -19,18 +19,6 @@ export default {
             path: '/',
             name: 'home',
             component: Home
-        },
-        {
-            path: '/tituly',
-            name: 'titles',
-            component: Titles,
-            beforeEnter: (to, from, next) => {
-                axios.get('/api/authenticated').then(() => {
-                    next();
-                }).catch(() => {
-                    return next( {name: 'login'} );
-                });
-            }
         },
         {
             path: '/registrovat',
@@ -68,6 +56,16 @@ export default {
             component: Movies
         },
         {
+            path: '/film/',
+            name: 'movie',
+            component: Title
+        },
+        {
+            path: '/film/:titleName',
+            name: 'movie',
+            component: Title
+        },
+        {
             path: '/serialy',
             name: 'series',
             component: Series
@@ -76,6 +74,16 @@ export default {
             path: '/serialy/:serialGenre',
             name: 'series',
             component: Series
+        },
+        {
+            path: '/serial',
+            name: 'serial',
+            component: Title
+        },
+        {
+            path: '/serial/:titleName',
+            name: 'serial',
+            component: Title
         },
         {
             path: '/platba',

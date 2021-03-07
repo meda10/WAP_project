@@ -74,6 +74,11 @@
                 </div>
             </div>
         </nav>
+
+        <div class="alert alert-danger" role="alert" v-if="user && !user.confirmed">
+            <strong>Váš účet není ověřený.</strong> Ověřte své údaje na některé z našich prodejen.
+        </div>
+
         <div class="container" style="margin-top: 100px;">
             <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
         </div>
@@ -145,8 +150,8 @@ export default {
             this.isLoading = true;
 
             axios.post('/logout').then(() => {
-                this.$router.push({ name: 'login' });
                 this.user = null;
+                this.$router.push({ name: 'login' });
             });
         },
         getUser() {

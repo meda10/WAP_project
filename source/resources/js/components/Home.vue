@@ -53,10 +53,7 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
-        </div>
-        
-        <router-link :to="{ name: 'checkout' }" class="nav-link">Platba</router-link>
-        
+        </div>        
 <!--        <div class="row">-->
 <!--            <div class="col-lg-4">jo</div>-->
 <!--            <div class="col-lg-4">ne</div>-->

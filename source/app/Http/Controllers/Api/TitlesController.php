@@ -29,6 +29,11 @@ class TitlesController extends Controller
         return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);
     }
 
+    public function getTitle(Request $request)
+    {
+        return getTitgle($request->type, $request->name);
+    }
+
     public function getGenresMovies()
     {
         return Genre::getAllMoviesGenres();

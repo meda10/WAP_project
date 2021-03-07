@@ -34,6 +34,11 @@ class Title extends Model
         }
     }
 
+    public static function getTitgle($type, $name)
+    {
+        return Title::where('type', 'like', "{$type}%")->where('url', $name)->first();
+    }
+
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'title_genre');
