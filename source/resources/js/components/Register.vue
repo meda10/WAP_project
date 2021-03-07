@@ -154,7 +154,7 @@ export default {
                 this.formValid.password && this.formValid.password_confirmation) {
                 this.$emit('emitIsLoading', true);
 
-                axios.post('/api/register', this.form).then(() => {
+                axios.post('/register', this.form).then(() => {
                     this.$router.push({name: 'login', params: {registration: true}});
                 }).catch((error) => {
                     this.errors = error.response.data.errors;

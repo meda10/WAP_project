@@ -15,11 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/{any}', [App\Http\Controllers\AppController::class, 'index'])->where('any', '.*');
 
-/*Route::get('/', function () {
-    return view('welcome', ['name' => 'Kokos']);
-});
-
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/titles', [App\Http\Controllers\TitleContoller::class, 'index']);*/

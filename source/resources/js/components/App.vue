@@ -144,7 +144,7 @@ export default {
         logout() {
             this.isLoading = true;
 
-            axios.post('/api/logout').then(() => {
+            axios.post('/logout').then(() => {
                 this.$router.push({ name: 'login' });
                 this.user = null;
             });

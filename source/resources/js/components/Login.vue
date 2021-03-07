@@ -127,17 +127,19 @@ export default {
             // if (this.formValid.email && this.formValid.password) {
                 this.$emit('emitIsLoading', true);
 
-                axios.post('/api/login', this.form).then(() => {
-                    this.$router.push({name: 'home'});
-                }).catch((error) => {
-                    this.errors = error.response.data.errors;
-                    for (const [key, value] of Object.entries(this.errors)) {
-                        if (Object.keys(this.errors).length !== 0) {
-                            this.formValid.email = false;
-                            this.formValid.password = false;
-                            this.form.password = '';
+                axios.get('/sanctum/csrf-cookie').then(response => {
+                    axios.post('/login', this.form).then((res) => {
+                        this.$router.push({name: 'home'});
+                    }).catch((error) => {
+                        this.errors = error.response.data.errors;
+                        for (const [key, value] of Object.entries(this.errors)) {
+                            if (Object.keys(this.errors).length !== 0) {
+                                this.formValid.email = false;
+                                this.formValid.password = false;
+                                this.form.password = '';
+                            }
                         }
-                    }
+                    });
                 });
             // }
         }

@@ -5,11 +5,6 @@ import VueRouter from 'vue-router'
 import App from './components/App'
 import router from './routes'
 import titleMixin from './titles'
-import axios from 'axios'
-
-window.axios = axios
-axios.defaults.baseURL = 'http://localhost:8080/'
-
 
 Vue.use(VueRouter);
 Vue.mixin(titleMixin);

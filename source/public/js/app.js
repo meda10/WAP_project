@@ -2021,7 +2021,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.isLoading = true;
-      axios.post('/api/logout').then(function () {
+      axios.post('/logout').then(function () {
         _this.$router.push({
           name: 'login'
         });
@@ -2347,24 +2347,26 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
       // if (this.formValid.email && this.formValid.password) {
       this.$emit('emitIsLoading', true);
-      axios.post('/api/login', this.form).then(function () {
-        _this.$router.push({
-          name: 'home'
-        });
-      })["catch"](function (error) {
-        _this.errors = error.response.data.errors;
+      axios.get('/sanctum/csrf-cookie').then(function (response) {
+        axios.post('/login', _this.form).then(function (res) {
+          _this.$router.push({
+            name: 'home'
+          });
+        })["catch"](function (error) {
+          _this.errors = error.response.data.errors;
 
-        for (var _i = 0, _Object$entries = Object.entries(_this.errors); _i < _Object$entries.length; _i++) {
-          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-              key = _Object$entries$_i[0],
-              value = _Object$entries$_i[1];
+          for (var _i = 0, _Object$entries = Object.entries(_this.errors); _i < _Object$entries.length; _i++) {
+            var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                key = _Object$entries$_i[0],
+                value = _Object$entries$_i[1];
 
-          if (Object.keys(_this.errors).length !== 0) {
-            _this.formValid.email = false;
-            _this.formValid.password = false;
-            _this.form.password = '';
+            if (Object.keys(_this.errors).length !== 0) {
+              _this.formValid.email = false;
+              _this.formValid.password = false;
+              _this.form.password = '';
+            }
           }
-        }
+        });
       }); // }
     }
   }
@@ -2816,7 +2818,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.formValid.name && this.formValid.surname && this.formValid.email && this.formValid.password && this.formValid.password_confirmation) {
         this.$emit('emitIsLoading', true);
-        axios.post('/api/register', this.form).then(function () {
+        axios.post('/register', this.form).then(function () {
           _this.$router.push({
             name: 'login',
             params: {
@@ -2942,13 +2944,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 /* harmony import */ var _titles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./titles */ "./resources/js/titles.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2956,17 +2956,14 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-
-window.axios = (axios__WEBPACK_IMPORTED_MODULE_3___default());
-(axios__WEBPACK_IMPORTED_MODULE_3___default().defaults.baseURL) = 'http://localhost:8080/';
-vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_5__.default);
-vue__WEBPACK_IMPORTED_MODULE_4__.default.mixin(_titles__WEBPACK_IMPORTED_MODULE_2__.default);
-var app = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
+vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_4__.default);
+vue__WEBPACK_IMPORTED_MODULE_3__.default.mixin(_titles__WEBPACK_IMPORTED_MODULE_2__.default);
+var app = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
   el: '#app',
   components: {
     App: _components_App__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  router: new vue_router__WEBPACK_IMPORTED_MODULE_5__.default(_routes__WEBPACK_IMPORTED_MODULE_1__.default)
+  router: new vue_router__WEBPACK_IMPORTED_MODULE_4__.default(_routes__WEBPACK_IMPORTED_MODULE_1__.default)
 });
 
 /***/ }),
@@ -2996,12 +2993,10 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-/*window.axios = require('axios');
 
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-window.axios.defaults.withCredentials = true;*/
-
+window.axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
