@@ -11,6 +11,18 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&
 
 .navbar {
   font-size: $font-size-sm;
+
+  #lblCartCount {
+    margin-left: $navbar-cart-badge-margin;
+  }
+
+  #infoCart {
+    font-size: $navbar-cart-info-font-size;
+  }
+
+  #navCartIcon {
+    margin-left: $navbar-cart-info-margin;
+  }
 }
 
 // Buttons =====================================================================

@@ -9,8 +9,7 @@ import Administration from './components/Administration';
 import Series from './components/Series';
 import Movies from './components/Movies';
 import Checkout from './components/Checkout';
-import axios from 'axios';
-
+import Cart from './components/Cart';
 
 export default {
     mode: 'history',
@@ -89,6 +88,12 @@ export default {
             path: '/platba',
             name: 'checkout',
             component: Checkout
+        },
+
+        {
+            path: '/kosik',
+            name: 'cart',
+            component: Cart
         },
         {
             path: "*",

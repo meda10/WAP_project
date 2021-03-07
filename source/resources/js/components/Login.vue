@@ -114,7 +114,7 @@ export default {
         },
         errors: {
             handler: function (errors) {
-                if (errors != null) this.$emit('emitIsLoading', false);
+                if (errors != null) this.$emit('emitHandler', {isLoading: false});
             },
             immediate: true
         }
@@ -125,7 +125,7 @@ export default {
         },
         loginUser() {
             // if (this.formValid.email && this.formValid.password) {
-                this.$emit('emitIsLoading', true);
+                this.$emit('emitHandler', {isLoading: true});
 
                 axios.get('/sanctum/csrf-cookie').then(response => {
                     axios.post('/login', this.form).then((res) => {

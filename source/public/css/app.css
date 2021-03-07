@@ -17056,6 +17056,18 @@ a.text-dark:focus {
   font-size: 0.875rem;
 }
 
+.navbar #lblCartCount {
+  margin-left: 0px;
+}
+
+.navbar #infoCart {
+  font-size: 16px;
+}
+
+.navbar #navCartIcon {
+  margin-left: 10px;
+}
+
 .btn-primary {
   background-color: #df691a;
 }

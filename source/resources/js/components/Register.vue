@@ -140,7 +140,7 @@ export default {
         },
         errors: {
             handler: function (errors) {
-                if (errors != null) this.$emit('emitIsLoading', false);
+                if (errors != null) this.$emit('emitHandler', {isLoading: false});
             },
             immediate: true
         }
@@ -152,7 +152,7 @@ export default {
         registerUser() {
             if (this.formValid.name && this.formValid.surname && this.formValid.email &&
                 this.formValid.password && this.formValid.password_confirmation) {
-                this.$emit('emitIsLoading', true);
+                this.$emit('emitHandler', {isLoading: true});
 
                 axios.post('/register', this.form).then(() => {
                     this.$router.push({name: 'login', params: {registration: true}});

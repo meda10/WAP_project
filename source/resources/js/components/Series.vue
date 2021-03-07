@@ -27,15 +27,15 @@ export default {
     },
     methods: {
         getGenreByUrl() {
-            this.$emit('emitIsLoading', true);
+            this.$emit('emitHandler', {isLoading: true});
 
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.serialGenre}).then((res) => {
                 this.genre.name = res.data.name;
-                this.$emit('emitIsLoading', false);
+                this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);
-                this.$emit('emitIsLoading', false);
+                this.$emit('emitHandler', {isLoading: false});
             });
         }
     }

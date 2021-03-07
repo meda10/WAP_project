@@ -50,17 +50,14 @@
 <!--                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>-->
 <!--                    </div>-->
 
-                    <ul id="login-nav" class="navbar-nav col col-sm-3" v-if="!user">
-                        <li class="nav-item">
+                    <ul id="login-nav" class="navbar-nav col col-sm-4">
+                        <li class="nav-item" v-if="!user">
                             <router-link :to="{ name: 'login' }" class="nav-link">Přihlásit se</router-link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="!user">
                             <router-link :to="{ name: 'register' }" class="nav-link">Registrace</router-link>
                         </li>
-                    </ul>
-
-                    <ul id="logout-nav" class="navbar-nav col col-sm-2" v-if="user">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" v-if="user">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                                 {{ user.name }} {{ user.surname }}
                             </a>
@@ -69,6 +66,18 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
                             </div>
+                        </li>
+                        <li class="nav-item dropdown nav-item-icon" id="navCartIcon">
+                            <router-link :to="{ name: 'cart' }" class="nav-link">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span v-if="cartItemsNumber != 0">
+                                    <span class='badge badge-warning' id='lblCartCount'>{{cartItemsNumber}}</span>
+                                    <span class='badge' id='infoCart'>{{cartItemsPrice}} Kč</span>
+                                </span>
+                                <span v-if="cartItemsNumber == 0">
+                                    <span class='badge' id='infoCart'>Košík</span>
+                                </span>
+                            </router-link>
                         </li>
                     </ul>
                 </div>
@@ -80,7 +89,8 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitIsLoading="emitIsLoadingHandler" :user="user"></router-view>
+            <router-view v-on:emitHandler="emitHandler" :user="user" 
+            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"></router-view>
         </div>
 
     </div>
@@ -99,7 +109,10 @@ export default {
             user: null,
             isLoading: false,
             hotSeriesGenres: [],
-            hotMoviesGenres: []
+            hotMoviesGenres: [],
+            cartCookies: [],
+            cartItemsNumber: 0,
+            cartItemsPrice: 0
         }
     },
     watch: {
@@ -117,9 +130,23 @@ export default {
                 this.$forceUpdate();
             },
             immediate: true
+        },
+        cartCookies: {
+            handler: function (cartCookies) {
+                this.cookiesItemsCount();
+                this.$forceUpdate();
+            },
+            immediate: true
+        },
+        cartItemsNumber: {
+            handler: function (cartItemsNumber) {
+                this.$forceUpdate();
+            },
+            immediate: true
         }
     },
     mounted() {
+        this.loadCookies();
         this.getGenres();
         this.getUser();
 
@@ -165,8 +192,27 @@ export default {
                 this.hotSeriesGenres = res.data.series;
             });
         },
-        emitIsLoadingHandler(isLoading) {
-            this.isLoading = isLoading;
+        loadCookies(){
+            this.cartCookies = JSON.parse($cookies.get('wap-cart')) || [];
+            this.cookiesItemsCount();
+        },
+        cookiesItemsCount() {
+            this.cartItemsNumber = 0;
+            this.cartItemsPrice = 0;
+            this.cartCookies.forEach(element => {
+                this.cartItemsNumber += Number(element.quantity);
+                this.cartItemsPrice += Number(element.quantity) * Number(element.price);
+            });  
+        },
+        emitHandler(values) {
+            if (values.isLoading != undefined) this.isLoading = values.isLoading;
+
+            if (values.cartCookies != undefined) {
+                this.cartCookies = values.cartCookies;
+                this.$cookies.set('wap-cart', JSON.stringify(this.cartCookies));
+                this.isLoading = false;
+                this.cookiesItemsCount();
+            }
         }
     }
 }
