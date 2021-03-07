@@ -112,7 +112,7 @@
     </div>
     <!--  END GRID VIEW  -->
     <!--  LIST VIEW  -->
-    <table class="table table-hover" v-if="!renderView.gridView && renderView.listView">
+    <table class="table table-hover" v-if="!renderView.gridView && renderView.listView" id="titlesTable">
         <thead>
         <tr>
             <th scope="col">No.</th>
@@ -122,13 +122,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(title, key) in titles.list"
-            v-bind:class="!(key%2) ? 'table-dark' : ''" v-bind:key="key">
-            <td>{{ key+1 }}</td>
-            <th>{{ title.title_name }}</th>
-            <td>{{ title.year }}</td>
-            <td>{{ title.description.substring(0, 300)+"..." }}</td>
-        </tr>
+        <router-link  v-for="(title, key) in titles.list" class="titleLink"
+            v-bind:class="!(key%2) ? 'table-dark' : ''" v-bind:key="key" tag="tr" :to="'/film/' + title.url">
+                <td>{{ key+1 }}</td>
+                <th>{{ title.title_name }}</th>
+                <td>{{ title.year }}</td>
+                <td>{{ title.description.substring(0, 300)+"..." }}</td>
+        </router-link >
         </tbody>
     </table>
     <!--  ENDLIST VIEW  -->

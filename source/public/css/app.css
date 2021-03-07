@@ -17068,6 +17068,10 @@ a.text-dark:focus {
   margin-left: 10px;
 }
 
+#titlesTable .titleLink {
+  cursor: pointer;
+}
+
 .btn-primary {
   background-color: #df691a;
 }

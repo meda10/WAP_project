@@ -41743,31 +41743,42 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     !_vm.renderView.gridView && _vm.renderView.listView
-      ? _c("table", { staticClass: "table table-hover" }, [
-          _vm._m(2),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.titles.list, function(title, key) {
-              return _c(
-                "tr",
-                { key: key, class: !(key % 2) ? "table-dark" : "" },
-                [
-                  _c("td", [_vm._v(_vm._s(key + 1))]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v(_vm._s(title.title_name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(title.year))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(title.description.substring(0, 300) + "..."))
-                  ])
-                ]
-              )
-            }),
-            0
-          )
-        ])
+      ? _c(
+          "table",
+          { staticClass: "table table-hover", attrs: { id: "titlesTable" } },
+          [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.titles.list, function(title, key) {
+                return _c(
+                  "router-link",
+                  {
+                    key: key,
+                    staticClass: "titleLink",
+                    class: !(key % 2) ? "table-dark" : "",
+                    attrs: { tag: "tr", to: "/film/" + title.url }
+                  },
+                  [
+                    _c("td", [_vm._v(_vm._s(key + 1))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(title.title_name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(title.year))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(title.description.substring(0, 300) + "...")
+                      )
+                    ])
+                  ]
+                )
+              }),
+              1
+            )
+          ]
+        )
       : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center mt-4" }, [

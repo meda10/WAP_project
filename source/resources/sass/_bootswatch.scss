@@ -25,6 +25,12 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&
   }
 }
 
+#titlesTable {
+  .titleLink {
+    cursor: pointer;
+  }
+}
+
 // Buttons =====================================================================
 
 .btn {
