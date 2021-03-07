@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Genre;
-
-use Illuminate\Support\Facades\Log;
-
+use App\Models\Title;
 
 
 class TitlesController extends Controller
@@ -19,22 +17,25 @@ class TitlesController extends Controller
         return ['movies' => $genres, 'series' => $genres];
     }
 
-    public function filterMoviesByGenre(Request $request)
-    {
-        // TODO
-        return null;
-    }
-
-    public function filterSeriesByGenre(Request $request)
-    {
-        // TODO
-        return null;
-    }
-
     public function getGenreInfoFromUrl(Request $request)
     {
         $genre = Genre::getGenreByUrl($request->url);
-        if ($genre != null) {Log::info($genre); return $genre;}
+        if ($genre != null) return $genre;
         abort(404);
+    }
+
+    public function getTitles(Request $request)
+    {
+        return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);
+    }
+
+    public function getGenresMovies()
+    {
+        return Genre::getAllMoviesGenres();
+    }
+
+    public function getGenresSeries()
+    {
+        return Genre::getAllSeriesGenres();
     }
 }

@@ -1984,7 +1984,37 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getGenres();
-    this.getUser();
+    this.getUser(); // TODO DELETE THIS AFTER UCHYLE_Z_VOKUREK
+    // USAGE
+    // type : ['type', 'serial']
+    // number_of_titles - number of titles on one page
+    // page_number - actual page number
+    // order : ['asc', 'desc']
+
+    var request = {
+      type: 'movie',
+      genre_url: 'krimi',
+      number_of_titles: 2,
+      page_number: 1,
+      order: 'asc'
+    };
+    axios.post('/api/get_titles', request).then(function (res) {
+      console.log(res.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+    var request = {
+      type: 'movie',
+      genre_url: 'krimi',
+      number_of_titles: 2,
+      page_number: 2,
+      order: 'asc'
+    };
+    axios.post('/api/get_titles', request).then(function (res) {
+      console.log(res.data);
+    })["catch"](function (error) {
+      console.log(error);
+    });
   },
   methods: {
     logout: function logout() {
@@ -2545,16 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
         gridView: false,
         listView: true
       },
-      moviesGenres: [{
-        name: 'Akční',
-        url: 'akcni'
-      }, {
-        name: 'Komedie',
-        url: 'komedie'
-      }, {
-        name: 'Dokumentární',
-        url: 'dokumentarni'
-      }]
+      moviesGenres: []
     };
   },
   watch: {
@@ -2564,6 +2585,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getGenreByUrl();
+    this.getGenres();
     if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
   },
   methods: {
@@ -2593,10 +2615,13 @@ __webpack_require__.r(__webpack_exports__);
         _this.$emit('emitIsLoading', false);
       });
     },
-    getGenres: function getGenres() {// TODO: Api
-      // axios.get('/api/genres_movies').then((res) => {
-      //     this.moviesGenres = res.data.movies;
-      // });
+    getGenres: function getGenres() {
+      var _this2 = this;
+
+      // TODO - same you can use '/api/get_genres_series'
+      axios.get('/api/get_genres_movies').then(function (res) {
+        _this2.moviesGenres = res.data;
+      });
     }
   }
 });
@@ -39712,7 +39737,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\r\n    administrace\r\n")])
+  return _c("div", [_vm._v("\n    administrace\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39948,7 +39973,7 @@ var render = function() {
                                     staticClass: "dropdown-item",
                                     attrs: { to: { name: "settings" } }
                                   },
-                                  [_vm._v("Nastevení")]
+                                  [_vm._v("Nastavení")]
                                 ),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "dropdown-divider" }),
@@ -40115,7 +40140,7 @@ var staticRenderFns = [
                     },
                     [
                       _vm._v(
-                        "\r\n                                Odeslat odkaz na e-mail\r\n                            "
+                        "\n                                Odeslat odkaz na e-mail\n                            "
                       )
                     ]
                   )
