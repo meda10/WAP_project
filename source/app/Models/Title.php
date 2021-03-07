@@ -43,4 +43,9 @@ class Title extends Model
     {
         return $this->belongsToMany(Genre::class, 'title_genre');
     }
+
+    public static function getAllCount()
+    {
+        return Title::get()->count();
+    }
 }
