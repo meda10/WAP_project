@@ -22,11 +22,9 @@ Route::middleware('auth:sanctum')->get('/authenticated', function () {
     return true;
 });
 
-Route::post('/login', [App\Http\Controllers\Api\LoginController::class, 'login']);
-Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
-Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
-Route::post('/password', [App\Http\Controllers\Api\ForgotPasswordController::class, 'reset']);
-Route::get('/genres_menu', [App\Http\Controllers\Api\TitlesController::class, 'genresMenu']);
-Route::post('/filter_movies_by_genre', [App\Http\Controllers\Api\TitlesController::class, 'filterMoviesByGenre']);
-Route::post('/filter_series_by_genre', [App\Http\Controllers\Api\TitlesController::class, 'filterSeriesByGenre']);
-Route::post('/genre_info_from_url', [App\Http\Controllers\Api\TitlesController::class, 'getGenreInfoFromUrl']);
+Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
+Route::post('/get_titles', 'Api\TitlesController@getTitles');
+
+Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
+Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
+Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');

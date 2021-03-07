@@ -17,8 +17,7 @@ class CreateTitlesTable extends Migration
             $table->id();
             $table->string('title_name');
             $table->integer('price');
-            $table->string('cover_path');
-            $table->string('description');
+            $table->longText('description');
             $table->year('year');
             $table->dateTime('created_at');
             $table->enum('type', ['serial', 'movie']);
