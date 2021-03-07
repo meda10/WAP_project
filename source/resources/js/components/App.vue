@@ -158,19 +158,20 @@ export default {
         // number_of_titles - number of titles on one page
         // page_number - actual page number
         // order : ['asc', 'desc']
-        var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 1, order: 'asc'};
-        axios.post('/api/get_titles', request).then((res) => {
-            console.log(res.data);
-        }).catch((error) => {
-            console.log(error);
-        });
 
-        var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 2, order: 'asc'};
-        axios.post('/api/get_titles', request).then((res) => {
-            console.log(res.data);
-        }).catch((error) => {
-            console.log(error);
-        });
+        // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 1, order: 'asc'};
+        // axios.post('/api/get_titles', request).then((res) => {
+        //     console.log(res.data);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
+        //
+        // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 2, order: 'asc'};
+        // axios.post('/api/get_titles', request).then((res) => {
+        //     console.log(res.data);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
     },
     methods: {
         logout() {

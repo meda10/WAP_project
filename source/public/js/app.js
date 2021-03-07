@@ -2022,31 +2022,19 @@ __webpack_require__.r(__webpack_exports__);
     // number_of_titles - number of titles on one page
     // page_number - actual page number
     // order : ['asc', 'desc']
-
-    var request = {
-      type: 'movie',
-      genre_url: 'krimi',
-      number_of_titles: 2,
-      page_number: 1,
-      order: 'asc'
-    };
-    axios.post('/api/get_titles', request).then(function (res) {
-      console.log(res.data);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-    var request = {
-      type: 'movie',
-      genre_url: 'krimi',
-      number_of_titles: 2,
-      page_number: 2,
-      order: 'asc'
-    };
-    axios.post('/api/get_titles', request).then(function (res) {
-      console.log(res.data);
-    })["catch"](function (error) {
-      console.log(error);
-    });
+    // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 1, order: 'asc'};
+    // axios.post('/api/get_titles', request).then((res) => {
+    //     console.log(res.data);
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
+    //
+    // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 2, order: 'asc'};
+    // axios.post('/api/get_titles', request).then((res) => {
+    //     console.log(res.data);
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
   },
   methods: {
     logout: function logout() {
@@ -2742,6 +2730,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Filmy',
   data: function data() {
@@ -2754,20 +2789,69 @@ __webpack_require__.r(__webpack_exports__);
         gridView: false,
         listView: true
       },
-      moviesGenres: []
+      moviesGenres: [],
+      titles: {
+        /** Example: [{title_name: 'Kmotr',
+         *  description: 'Text...',
+         *  type: 'movie',
+         *  url: 'kmotr',
+         *  year: 1972}] **/
+        list: [],
+        ordering: 'asc',
+        pageNumber: 1,
+        titlesToPage: 2,
+        numberOfGenreTitles: 0,
+        pageNumbers: 0
+      }
     };
   },
   watch: {
     $route: function $route(to, from) {
       this.getGenreByUrl();
+      this.getTitles(to.params.movieGenre);
     }
   },
   mounted: function mounted() {
     this.getGenreByUrl();
     this.getGenres();
+    this.getTitles(this.genre.url);
     if (this.$route.params.genre != null) this.genre.url = this.$route.params.genre;
   },
   methods: {
+    changePageNum: function changePageNum(val) {
+      if (val >= 1 && val <= this.titles.pageNumbers && this.titles.pageNumber !== val) {
+        this.titles.pageNumber = val;
+        this.getTitles(this.genre.url);
+      }
+    },
+    changeGenre: function changeGenre(val) {
+      this.titles.pageNumber = 1;
+      this.$router.push({
+        path: '/filmy/' + val.target.value
+      });
+    },
+    countNumOfPages: function countNumOfPages() {
+      this.titles.pageNumbers = Math.ceil(this.titles.numberOfGenreTitles / this.titles.titlesToPage);
+    },
+    getTitles: function getTitles(url) {
+      var _this = this;
+
+      var request = {
+        type: 'movie',
+        genre_url: url,
+        number_of_titles: this.titles.titlesToPage,
+        page_number: this.titles.pageNumber,
+        order: this.titles.ordering
+      };
+      axios.post('/api/get_titles', request).then(function (res) {
+        _this.titles.list = res.data.titles;
+        _this.titles.numberOfGenreTitles = res.data.titles_count;
+
+        _this.countNumOfPages();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     toggleView: function toggleView(val) {
       if (val === 'list') {
         this.renderView.gridView = false;
@@ -2778,7 +2862,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getGenreByUrl: function getGenreByUrl() {
-      var _this = this;
+      var _this2 = this;
 
       this.$emit('emitHandler', {
         isLoading: true
@@ -2786,26 +2870,29 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/genre_info_from_url', {
         'url': this.$route.params.movieGenre
       }).then(function (res) {
-        _this.genre.name = res.data.name;
+        _this2.genre.name = res.data.name;
+        _this2.genre.url = _this2.$route.params.movieGenre;
+        console.log(_this2.genre.name);
+        console.log(_this2.genre.url);
 
-        _this.$emit('emitHandler', {
+        _this2.$emit('emitHandler', {
           isLoading: false
         });
       })["catch"](function (error) {
         // TODO handle this error
         console.log(error);
 
-        _this.$emit('emitHandler', {
+        _this2.$emit('emitHandler', {
           isLoading: false
         });
       });
     },
     getGenres: function getGenres() {
-      var _this2 = this;
+      var _this3 = this;
 
       // TODO - same you can use '/api/get_genres_series'
       axios.get('/api/get_genres_movies').then(function (res) {
-        _this2.moviesGenres = res.data;
+        _this3.moviesGenres = res.data;
       });
     }
   }
@@ -41581,15 +41668,35 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-10" }, [
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleSelect1" } }, [
+          _c("label", { attrs: { for: "genresSelect" } }, [
             _vm._v("Výběr žánru:")
           ]),
           _vm._v(" "),
           _c(
             "select",
-            { staticClass: "form-control", attrs: { id: "exampleSelect1" } },
-            _vm._l(_vm.moviesGenres, function(genre) {
-              return _c("option", [_vm._v(_vm._s(genre.name))])
+            {
+              staticClass: "form-control",
+              attrs: { id: "genresSelect" },
+              on: { change: _vm.changeGenre }
+            },
+            _vm._l(_vm.moviesGenres, function(ge, key) {
+              return _c(
+                "option",
+                {
+                  key: key,
+                  domProps: {
+                    selected: _vm.genre.name === ge.name,
+                    value: ge.url
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(ge.name) +
+                      "\n                    "
+                  )
+                ]
+              )
             }),
             0
           )
@@ -41639,11 +41746,316 @@ var render = function() {
       ? _c("table", { staticClass: "table table-hover" }, [
           _vm._m(2),
           _vm._v(" "),
-          _vm._m(3)
+          _c(
+            "tbody",
+            _vm._l(_vm.titles.list, function(title, key) {
+              return _c(
+                "tr",
+                { key: key, class: !(key % 2) ? "table-dark" : "" },
+                [
+                  _c("td", [_vm._v(_vm._s(key + 1))]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v(_vm._s(title.title_name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(title.year))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(title.description.substring(0, 300) + "..."))
+                  ])
+                ]
+              )
+            }),
+            0
+          )
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm._m(4)
+    _c("div", { staticClass: "row justify-content-center mt-4" }, [
+      _vm.titles.pageNumbers < 8
+        ? _c(
+            "ul",
+            { staticClass: "pagination" },
+            [
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: _vm.titles.pageNumber <= 1 ? "disabled" : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumber - 1)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v("«")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.titles.pageNumbers, function(num) {
+                return _c(
+                  "li",
+                  {
+                    key: num,
+                    staticClass: "page-item",
+                    class: _vm.titles.pageNumber === num ? "active" : "",
+                    on: {
+                      click: function($event) {
+                        return _vm.changePageNum(num)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "a",
+                      { staticClass: "page-link", attrs: { href: "#" } },
+                      [_vm._v(_vm._s(num))]
+                    )
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class:
+                    _vm.titles.pageNumber >= _vm.titles.pageNumbers
+                      ? "disabled"
+                      : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumber + 1)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v("»")
+                  ])
+                ]
+              )
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.titles.pageNumbers >= 8
+        ? _c(
+            "ul",
+            { staticClass: "pagination" },
+            [
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: _vm.titles.pageNumber <= 1 ? "disabled" : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumber - 1)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v("«")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm._l(2, function(num) {
+                return _c(
+                  "li",
+                  {
+                    key: num,
+                    staticClass: "page-item",
+                    class: _vm.titles.pageNumber === num ? "active" : "",
+                    on: {
+                      click: function($event) {
+                        return _vm.changePageNum(num)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "a",
+                      { staticClass: "page-link", attrs: { href: "#" } },
+                      [_vm._v(_vm._s(num))]
+                    )
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _vm.titles.pageNumber > 4
+                ? _c("li", { staticClass: "page-item disabled" }, [
+                    _c("a", { staticClass: "page-link" }, [_vm._v("...")])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(3, function(num) {
+                return _vm.titles.pageNumber <= 4
+                  ? _c(
+                      "li",
+                      {
+                        key: num,
+                        staticClass: "page-item",
+                        class:
+                          _vm.titles.pageNumber === num + 2 ? "active" : "",
+                        on: {
+                          click: function($event) {
+                            return _vm.changePageNum(num + 2)
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          { staticClass: "page-link", attrs: { href: "#" } },
+                          [_vm._v(_vm._s(num + 2))]
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              }),
+              _vm._v(" "),
+              _vm._l(3, function(num) {
+                return _vm.titles.pageNumber > 4 &&
+                  _vm.titles.pageNumber < _vm.titles.pageNumbers - 3
+                  ? _c(
+                      "li",
+                      {
+                        key: num,
+                        staticClass: "page-item",
+                        class:
+                          _vm.titles.pageNumber ===
+                          _vm.titles.pageNumber - 2 + num
+                            ? "active"
+                            : "",
+                        on: {
+                          click: function($event) {
+                            return _vm.changePageNum(
+                              _vm.titles.pageNumber - 2 + num
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          { staticClass: "page-link", attrs: { href: "#" } },
+                          [_vm._v(_vm._s(_vm.titles.pageNumber - 2 + num))]
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              }),
+              _vm._v(" "),
+              _vm.titles.pageNumber < _vm.titles.pageNumbers - 3
+                ? _c("li", { staticClass: "page-item disabled" }, [
+                    _c("a", { staticClass: "page-link" }, [_vm._v("...")])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(3, function(num) {
+                return _vm.titles.pageNumber >= _vm.titles.pageNumbers - 3
+                  ? _c(
+                      "li",
+                      {
+                        key: num,
+                        staticClass: "page-item",
+                        class:
+                          _vm.titles.pageNumber ===
+                          _vm.titles.pageNumbers - 5 + num
+                            ? "active"
+                            : "",
+                        on: {
+                          click: function($event) {
+                            return _vm.changePageNum(
+                              _vm.titles.pageNumbers - 5 + num
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          { staticClass: "page-link", attrs: { href: "#" } },
+                          [_vm._v(_vm._s(_vm.titles.pageNumbers - 5 + num))]
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              }),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class:
+                    _vm.titles.pageNumber === _vm.titles.pageNumbers - 1
+                      ? "active"
+                      : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumbers - 1)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v(_vm._s(_vm.titles.pageNumbers - 1))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class:
+                    _vm.titles.pageNumber === _vm.titles.pageNumbers
+                      ? "active"
+                      : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumbers)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v(_vm._s(_vm.titles.pageNumbers))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class:
+                    _vm.titles.pageNumber >= _vm.titles.pageNumbers
+                      ? "disabled"
+                      : "",
+                  on: {
+                    click: function($event) {
+                      return _vm.changePageNum(_vm.titles.pageNumber + 1)
+                    }
+                  }
+                },
+                [
+                  _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                    _vm._v("»")
+                  ])
+                ]
+              )
+            ],
+            2
+          )
+        : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = [
@@ -41873,119 +42285,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Type")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("No.")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Název")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Rok vydání")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Column heading")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", { staticClass: "table-dark" }, [
-        _c("th", [_vm._v("Default")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", [_vm._v("Default")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")])
-      ]),
-      _vm._v(" "),
-      _c("tr", { staticClass: "table-dark" }, [
-        _c("th", [_vm._v("Dark")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", [_vm._v("Default")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")])
-      ]),
-      _vm._v(" "),
-      _c("tr", { staticClass: "table-dark" }, [
-        _c("th", [_vm._v("Dark")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Column content")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center mt-4" }, [
-      _c("ul", { staticClass: "pagination" }, [
-        _c("li", { staticClass: "page-item disabled" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("«")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item active" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("1")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("2")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("3")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("4")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("5")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("»")
-          ])
-        ])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Popisek")])
       ])
     ])
   }
