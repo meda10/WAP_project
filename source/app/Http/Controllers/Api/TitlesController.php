@@ -26,9 +26,7 @@ class TitlesController extends Controller
 
     public function getTitles(Request $request)
     {
-        $response['titles'] = Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);
-        $response['titles_count'] = Title::getAllCount();
-        return $response;
+        return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);
     }
 
     public function getGenresMovies()
