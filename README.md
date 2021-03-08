@@ -49,7 +49,7 @@ sudo chmod -R 777 storage bootstrap/cache
 After that Laravel wants to generate key for *php artisan*.
 
 ``` bash
-sudo docker-compose run --rm php /var/www/html/artisan key:generate
+sudo docker-compose exec php php artisan key:generate
 ```
 
 After install npm dependencies.
