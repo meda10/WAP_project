@@ -3257,8 +3257,10 @@ __webpack_require__.r(__webpack_exports__);
       this.getTitleInfo();
     },
     titleInfo: {
-      handler: function handler(isLoading) {
-        this.$emit('emitIsLoading', false);
+      handler: function handler(titleInfo) {
+        this.$emit('emitHandler', {
+          isLoading: false
+        });
       },
       immediate: true
     },
