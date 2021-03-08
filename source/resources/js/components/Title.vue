@@ -50,8 +50,8 @@
                 this.getTitleInfo();
             },
             titleInfo: {
-                handler: function (isLoading) {
-                    this.$emit('emitIsLoading', false);
+                handler: function (titleInfo) {
+                    this.$emit('emitHandler', {isLoading: false});
                 },
                 immediate: true
             },

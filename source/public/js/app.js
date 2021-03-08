@@ -3257,8 +3257,10 @@ __webpack_require__.r(__webpack_exports__);
       this.getTitleInfo();
     },
     titleInfo: {
-      handler: function handler(isLoading) {
-        this.$emit('emitIsLoading', false);
+      handler: function handler(titleInfo) {
+        this.$emit('emitHandler', {
+          isLoading: false
+        });
       },
       immediate: true
     },
@@ -58274,7 +58276,7 @@ Vue.compile = compileToFunctions;
 /******/ 			return checkDeferredModules();
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkhtml"] = self["webpackChunkhtml"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 		
