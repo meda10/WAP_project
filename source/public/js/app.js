@@ -2157,9 +2157,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Košík',
   props: ['cartCookiesProps', 'cartItemsPriceProps'],
+  data: function data() {
+    return {
+      isLoggedIn: true
+    };
+  },
   computed: {
     cartCookies: function cartCookies() {
       return this.cartCookiesProps || [];
@@ -2180,6 +2192,26 @@ __webpack_require__.r(__webpack_exports__);
     changeItemQuantity: function changeItemQuantity(quantity, url) {
       if (quantity == 0) this.removeFromCart(url);else this.$emit('emitHandler', {
         cartCookies: this.cartCookies
+      });
+    },
+    checkout: function checkout() {
+      var _this = this;
+
+      this.$emit('emitHandler', {
+        isLoading: true
+      });
+      axios.get('/api/user').then(function (res) {
+        _this.$router.push({
+          name: 'checkout'
+        });
+      })["catch"](function (error) {
+        _this.$emit('emitHandler', {
+          isLoading: false
+        });
+
+        _this.isLoggedIn = false;
+
+        _this.$forceUpdate();
       });
     }
   }
@@ -2206,8 +2238,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  title: 'Pokladna',
+  props: ['cartCookiesProps', 'cartItemsPriceProps'],
   mounted: function mounted() {
     paypal.Buttons().render('#paypal-button');
+    this.$emit('emitHandler', {
+      isLoading: false
+    });
   }
 });
 
@@ -3516,7 +3553,7 @@ __webpack_require__.r(__webpack_exports__);
     name: 'serial',
     component: _components_Title__WEBPACK_IMPORTED_MODULE_1__.default
   }, {
-    path: '/platba',
+    path: '/pokladna',
     name: 'checkout',
     component: _components_Checkout__WEBPACK_IMPORTED_MODULE_10__.default
   }, {
@@ -40864,6 +40901,26 @@ var render = function() {
   return _c("div", [
     _c("h1", [_vm._v("Košík")]),
     _vm._v(" "),
+    !_vm.isLoggedIn
+      ? _c(
+          "div",
+          {
+            staticClass: "alert alert-warning alert-dismissible fade show",
+            attrs: { role: "alert" }
+          },
+          [
+            _c("strong", [_vm._v("Nejste přihlášen(a)!")]),
+            _vm._v(" Musíte se "),
+            _c("router-link", { attrs: { to: { name: "login" } } }, [
+              _vm._v("přihlásit.")
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _vm.cartCookies.length !== 0
       ? _c(
           "table",
@@ -40872,7 +40929,7 @@ var render = function() {
             attrs: { id: "cart" }
           },
           [
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c(
               "tbody",
@@ -40880,7 +40937,7 @@ var render = function() {
                 return _c("tr", { key: item.url }, [
                   _c("td", { attrs: { "data-th": "Product" } }, [
                     _c("div", { staticClass: "row" }, [
-                      _vm._m(1, true),
+                      _vm._m(2, true),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-sm-10" }, [
                         _c("h4", { staticClass: "nomargin" }, [
@@ -40989,7 +41046,23 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(2)
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success btn-block",
+                      on: {
+                        click: function($event) {
+                          return _vm.checkout()
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("Do pokladny "),
+                      _c("i", { staticClass: "fa fa-angle-right" })
+                    ]
+                  )
+                ])
               ])
             ])
           ]
@@ -41002,6 +41075,23 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -41033,18 +41123,6 @@ var staticRenderFns = [
         staticClass: "img-responsive",
         attrs: { src: "http://placehold.it/100x100", alt: "..." }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c(
-        "a",
-        { staticClass: "btn btn-success btn-block", attrs: { href: "#" } },
-        [_vm._v("Checkout "), _c("i", { staticClass: "fa fa-angle-right" })]
-      )
     ])
   }
 ]
@@ -41078,7 +41156,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("h1", [_vm._v("Platba")]),
+      _c("h1", [_vm._v("Pokladna")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "paypal-button" } })
     ])

@@ -2,6 +2,13 @@
     <div>
         <h1>Košík</h1>
 
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" v-if="!isLoggedIn">
+            <strong>Nejste přihlášen(a)!</strong> Musíte se <router-link :to="{ name: 'login' }">přihlásit.</router-link>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <table id="cart" class="table table-hover table-condensed" v-if="cartCookies.length !== 0">
             <thead>
                 <tr>
@@ -40,7 +47,7 @@
                     <td><router-link :to="{ name: 'home' }" class="btn btn-warning"><i class="fa fa-angle-left"></i> Pokračovat v nákupu</router-link></td>
                     <td colspan="2" class="hidden-xs"></td>
                     <td class="hidden-xs text-center"><strong>Celková cena: {{ cartItemsPrice }} Kč</strong></td>
-                    <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+                    <td><button @click="checkout()" class="btn btn-success btn-block" >Do pokladny <i class="fa fa-angle-right"></i></button></td>
                 </tr>
             </tfoot>
         </table>
@@ -55,6 +62,11 @@
 export default {
     title: 'Košík',
     props: ['cartCookiesProps', 'cartItemsPriceProps'],
+    data() {
+        return {
+            isLoggedIn: true,
+        }
+    },
     computed: {
         cartCookies: function () {
             return this.cartCookiesProps || [];
@@ -73,6 +85,16 @@ export default {
         changeItemQuantity(quantity, url) {
             if (quantity == 0) this.removeFromCart(url);
             else this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+        },
+        checkout() {
+            this.$emit('emitHandler',  {isLoading: true});
+            axios.get('/api/user').then((res) => {
+                this.$router.push({ name: 'checkout' });
+            }).catch(error => {
+                this.$emit('emitHandler',  {isLoading: false});
+                this.isLoggedIn = false;
+                this.$forceUpdate();
+            });
         }
     }
 }

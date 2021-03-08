@@ -85,7 +85,7 @@ export default {
             component: Title
         },
         {
-            path: '/platba',
+            path: '/pokladna',
             name: 'checkout',
             component: Checkout
         },
