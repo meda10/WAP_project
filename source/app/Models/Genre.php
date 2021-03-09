@@ -23,8 +23,13 @@ class Genre extends Model
 
     public static function getGenresMenu() 
     {
-        // TODO when there will be titles administration change this to something better
-        return Genre::select(['genre_name AS name', 'url'])->orderBy('genre_name', 'ASC')->take(5)->get();
+        return Genre::select(['genre_name AS name', 'url'])
+                        ->withCount(['titles AS total' => function($query) {
+                                return $query->groupBy('type');
+                            }])
+                        ->orderBy('total', 'DESC')
+                        ->take(5)
+                        ->get();
     }
 
     public static function getGenreByUrl($genreUrl) 
