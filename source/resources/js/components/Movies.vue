@@ -30,63 +30,20 @@
         </div>
     </div>
     <!--  GRID VIEW  -->
-    <div v-if="renderView.gridView && !renderView.listView">
-        <div class="row">
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Tady by mohl být název filmu velky</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div id="gridViewCard" v-if="renderView.gridView && !renderView.listView">
+        <div class="row" v-for="(rowList,rowKey) in titles.gridList" :key="rowKey">
+            <div class="col-4" v-for="(title, tiKey) in rowList" :key="tiKey">
+                <h4>{{ title.title_name }}</h4>
+                <router-link class="card border-primary mb-4" style="max-width: 20rem;" tag="div" :to="'/film/' + title.url">
+                    <img class="card-img" :src="'/img/movies/'+title.url+'.jpg'">
+                    <div class="card-img-overlay">
+                        <div class="card-body">
+                            <h5>{{ title.year }}</h5>
+                            <hr>
+                            <p class="card-text">{{ title.description.substring(0, 320)+"..." }}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Tady by mohl být název filmu velky</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card border-primary mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Primary card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
+                </router-link>
             </div>
         </div>
     </div>
@@ -104,7 +61,7 @@
         <tbody>
         <router-link  v-for="(title, key) in titles.list" class="titleLink"
             v-bind:class="!(key%2) ? 'table-dark' : ''" :key="key" tag="tr" :to="'/film/' + title.url">
-                <td>{{ key+1 }}</td>
+                <td>{{ ((titles.pageNumber-1)*titles.titlesToPage)+key+1 }}</td>
                 <th>{{ title.title_name }}</th>
                 <td>{{ title.year }}</td>
                 <td>{{ title.description.substring(0, 300)+"..." }}</td>
@@ -226,12 +183,14 @@ export default {
                  *  url: 'kmotr',
                  *  year: 1972}] **/
                 list: [],
+                gridList: [],
                 ordering: 'asc',
                 pageNumber: 1,
-                titlesToPage : 2,
+                titlesToPage : 6,
                 numberOfGenreTitles: 0,
                 pageNumbers: 0,
-                numRows: 0
+                numRows: 0,
+                titlesToRow: 3
             }
         }
     },
@@ -261,7 +220,14 @@ export default {
             this.$router.push({path: '/filmy/' + val.target.value});
         },
         countNumOfPages() {
+            // Compute number of pages
             this.titles.pageNumbers = Math.ceil(this.titles.numberOfGenreTitles / this.titles.titlesToPage);
+            // Compute number of rows in grid view
+            this.titles.numRows = Math.ceil(this.titles.titlesToPage / this.titles.titlesToRow);
+            // Compute list of titles for grid view
+            for (let i=0; i < this.titles.list.length; i += this.titles.titlesToRow) {
+                this.titles.gridList.push(this.titles.list.slice(i, i+this.titles.titlesToRow));
+            }
         },
         getTitles(url) {
             this.$emit('emitHandler', {isLoading: true});
@@ -271,6 +237,7 @@ export default {
             axios.post('/api/get_titles', request).then((res) => {
                 this.titles.list = res.data.titles;
                 this.titles.numberOfGenreTitles = res.data.titles_count;
+                this.titles.gridList = [];
                 this.countNumOfPages();
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
@@ -294,8 +261,6 @@ export default {
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.movieGenre}).then((res) => {
                 this.genre.name = res.data.name;
                 this.genre.url = this.$route.params.movieGenre
-                console.log(this.genre.name);
-                console.log(this.genre.url);
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error

@@ -316,3 +316,32 @@ label,
     background-color: $table-hover-bg;
   }
 }
+
+// Grid view card
+
+#gridViewCard {
+    .card {
+        cursor: pointer;
+    }
+    hr {
+        background-color: $white;
+    }
+    .card-img-overlay {
+        transition: background-color linear 0.2s
+    }
+
+    .card-body {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.3s, opacity linear 0.3s;
+    }
+
+    .card-img-overlay:hover {
+        background-color: rgba(#000, 0.7);
+
+        .card-body {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
