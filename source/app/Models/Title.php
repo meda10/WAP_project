@@ -49,6 +49,7 @@ class Title extends Model
         return Title::where('type', 'like', "{$type}%")
                         ->where('url', $name)
                         ->with('states')
+                        ->with('genres')
                         ->with('languages')
                         ->first();
     }

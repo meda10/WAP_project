@@ -13,6 +13,12 @@
         <div style="width: 700px">{{ titleInfo.year }}</div>
         <div style="width: 700px">{{ titleInfo.price }} Kc</div>
         <div style="width: 700px">Zeme puvodu: {{ titleInfo.states.state_name }}</div>
+
+        <div>
+            <h4>Zanry:</h4>
+            <p v-for="genre in titleInfo.genres" v-bind:key="genre.url">{{genre.genre_name}}</p>
+        </div>
+
         <div style="width: 150px">
             <select class="form-select" v-model="titleDabingName">
                 <option v-for="language in titleInfo.languages" v-bind:value="language.language_name" 
