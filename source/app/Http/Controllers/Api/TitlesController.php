@@ -13,8 +13,7 @@ class TitlesController extends Controller
 {
     public function genresMenu()
     {
-        $genres = Genre::getGenresMenu();
-        return ['movies' => $genres, 'series' => $genres];
+        return ['movies' => Genre::getGenresMoviesMenu(), 'series' => Genre::getGenresSeriesMenu()];
     }
 
     public function getGenreInfoFromUrl(Request $request)

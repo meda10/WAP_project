@@ -21,15 +21,25 @@ class Genre extends Model
         return static::query()->create($attributes);
     }
 
-    public static function getGenresMenu() 
+    public static function getGenresMenu($type)
     {
         return Genre::select(['genre_name AS name', 'url'])
-                        ->withCount(['titles AS total' => function($query) {
-                                return $query->groupBy('type');
+                        ->withCount(['titles AS total' => function($query) use($type) {
+                                return $query->where('type', $type)->groupBy('type');
                             }])
                         ->orderBy('total', 'DESC')
                         ->take(5)
                         ->get();
+    }
+
+    public static function getGenresMoviesMenu() 
+    {
+        return Genre::getGenresMenu('movie');
+    }
+
+    public static function getGenresSeriesMenu() 
+    {
+        return Genre::getGenresMenu('serial');
     }
 
     public static function getGenreByUrl($genreUrl) 
