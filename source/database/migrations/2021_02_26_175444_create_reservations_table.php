@@ -19,6 +19,7 @@ class CreateReservationsTable extends Migration
             $table->dateTime('reservation_till');
             $table->integer('fine');
             $table->integer('invoice_id');
+            $table->integer('price');
             $table->boolean('returned');
             $table->boolean('paid');
             $table->boolean('issued');
