@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in cartCookies" v-bind:key="item.url + '-' + item.language">
+                <tr v-for="item in cartCookies" v-bind:key="item.url + '-' + item.language_name">
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
@@ -33,13 +33,13 @@
                     <td data-th="Price">{{item.price}} Kč</td>
                     <td data-th="Quantity">
                         <input type="number" class="form-control text-center" value="0"
-                        v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url, item.language_name)"
-                        v-on:keyup="changeItemQuantity(item.quantity, item.url, item.language_name)"
+                        v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url, item.language)"
+                        v-on:keyup="changeItemQuantity(item.quantity, item.url, item.language)"
                         :max="item.maxItemCount">
                     </td>
                     <td data-th="Subtotal" class="text-center">{{item.quantity * item.price}} Kč</td>
                     <td class="actions" data-th="">
-                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item.url, item.language_name)"><i class="fas fa-trash"></i></button>								
+                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item.url, item.language)"><i class="fas fa-trash"></i></button>								
                     </td>
                 </tr>
             </tbody>
@@ -74,7 +74,7 @@ export default {
             isLoggedIn: true,
             modalRemoveFromCart: false,
             urlToRemove: '', 
-            language_nameToRemove: '',
+            languageToRemove: '',
             countOfItemToRemove: 1
         }
     },
@@ -90,8 +90,8 @@ export default {
         handleDontRemoveFromCart() {
             this.cartCookies.forEach(item => {
                 if (item.url === this.urlToRemove && 
-                    item.language_name === this.language_nameToRemove) {
-                        if (item.quantity === 0) item.quantity = 1;
+                    item.language === this.languageToRemove) {
+                        if (Number(item.quantity) === 0) item.quantity = 1;
                         this.$forceUpdate();
                 }
             });
@@ -99,23 +99,23 @@ export default {
         },
         handleRemoveFromCart() {
             var newCart = this.cartCookies.filter(item => {
-                return item.url !== this.urlToRemove || item.language_name !== this.language_nameToRemove;
+                return item.url !== this.urlToRemove || item.language !== this.languageToRemove;
             });
             this.$emit('emitHandler',  {cartCookies: newCart});
         },
-        removeFromCart(url, language_name) {
+        removeFromCart(url, language) {
             this.urlToRemove = url;
-            this.language_nameToRemove = language_name;
+            this.languageToRemove = language;
             this.modalRemoveFromCart = true;
         },
-        changeItemQuantity(quantity, url, language_name) {
+        changeItemQuantity(quantity, url, language) {
             if (quantity !== '' && Number(quantity) === 0)
-                this.removeFromCart(url, language_name);
+                this.removeFromCart(url, language);
 
             else {
                 this.cartCookies.forEach(item => {
                     if (item.url === url && 
-                        item.language_name === language_name && 
+                        item.language === language && 
                         Number(quantity) > Number(item.maxItemCount)) {
                             item.quantity = item.maxItemCount;
                             this.$forceUpdate();
