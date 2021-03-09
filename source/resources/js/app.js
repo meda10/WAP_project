@@ -7,11 +7,13 @@ import App from './components/App'
 import router from './routes'
 import titleMixin from './titles'
 import { ModalPlugin } from 'bootstrap-vue'
+import VueCalendar from 'v-calendar'
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
-Vue.mixin(titleMixin);
 Vue.use(ModalPlugin);
+Vue.use(VueCalendar);
+Vue.mixin(titleMixin);
 
 const app = new Vue({
     el: '#app',

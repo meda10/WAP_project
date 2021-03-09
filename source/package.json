@@ -30,7 +30,8 @@
     },
     "dependencies": {
         "@braid/vue-formulate": "^2.5.2",
-        "bootstrap-vue": "^2.21.2"
+        "bootstrap-vue": "^2.21.2",
+        "v-calendar": "^2.2.4"
     },
     "name": "html"
 }
