@@ -21,7 +21,7 @@ class CreateTitlesTable extends Migration
             $table->year('year');
             $table->dateTime('created_at');
             $table->enum('type', ['serial', 'movie']);
-            $table->string('url');
+            $table->string('url')->unique();
             $table->bigInteger('state_id')->unsigned();
             $table->foreign('state_id')->references('id')->on('states');
         });
