@@ -35,7 +35,7 @@
                         <input type="number" class="form-control text-center" value="0"
                         v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url, item.language_name)"
                         v-on:keyup="changeItemQuantity(item.quantity, item.url, item.language_name)"
-                        :max="item.maxItemNumber">
+                        :max="item.maxItemCount">
                     </td>
                     <td data-th="Subtotal" class="text-center">{{item.quantity * item.price}} Kč</td>
                     <td class="actions" data-th="">
@@ -61,7 +61,7 @@
 
         <b-modal id="modal-remove-from-cart" title="Položka bude odebrána"
                 v-model="modalRemoveFromCart" @hidden="handleDontRemoveFromCart" @ok="handleRemoveFromCart">
-            <p class="my-4">Hello from modal!</p>
+            <p class="my-4">Potvrzením odeberete položku z košíku!</p>
         </b-modal>
     </div>
 </template>
@@ -116,8 +116,8 @@ export default {
                 this.cartCookies.forEach(item => {
                     if (item.url === url && 
                         item.language_name === language_name && 
-                        Number(quantity) > Number(item.maxItemNumber)) {
-                            item.quantity = item.maxItemNumber;
+                        Number(quantity) > Number(item.maxItemCount)) {
+                            item.quantity = item.maxItemCount;
                             this.$forceUpdate();
                     }
                 });

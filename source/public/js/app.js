@@ -2226,8 +2226,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (quantity !== '' && Number(quantity) === 0) this.removeFromCart(url, language_name);else {
         this.cartCookies.forEach(function (item) {
-          if (item.url === url && item.language_name === language_name && Number(quantity) > Number(item.maxItemNumber)) {
-            item.quantity = item.maxItemNumber;
+          if (item.url === url && item.language_name === language_name && Number(quantity) > Number(item.maxItemCount)) {
+            item.quantity = item.maxItemCount;
 
             _this3.$forceUpdate();
           }
@@ -3336,11 +3336,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       titleName: '',
       titleType: '',
-      titleDabing: '',
-      titleDaging_name: '',
-      itemNumber: 0,
-      maxItemNumber: 0,
-      maxPossibleItemNumber: 0,
+      titleDabingName: '',
+      titleDabingId: '',
+      itemCount: 0,
+      maxItemCount: 0,
+      maxPossibleItemCount: 0,
       titleInfo: {
         title_name: '',
         description: '',
@@ -3372,16 +3372,16 @@ __webpack_require__.r(__webpack_exports__);
       },
       immediate: true
     },
-    itemNumber: {
-      handler: function handler(itemNumber) {
-        if (itemNumber < 0) this.itemNumber = 0;
-        if (itemNumber > this.maxItemNumber) this.itemNumber = this.maxItemNumber;
+    itemCount: {
+      handler: function handler(itemCount) {
+        if (itemCount < 0) this.itemCount = 0;
+        if (itemCount > this.maxItemCount) this.itemCount = this.maxItemCount;
         this.$forceUpdate();
       },
       immediate: true
     },
-    titleDabing: {
-      handler: function handler(titleDabing) {
+    titleDabingName: {
+      handler: function handler(titleDabingName) {
         this.countMaxItemInCart();
         this.$forceUpdate();
       },
@@ -3393,9 +3393,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       immediate: true
     },
-    maxItemNumber: {
-      handler: function handler(maxItemNumber) {
-        if (maxItemNumber > 0) this.itemNumber = 1;else this.itemNumber = 0;
+    maxItemCount: {
+      handler: function handler(maxItemCount) {
+        if (maxItemCount > 0) this.itemCount = 1;else this.itemCount = 0;
         this.$forceUpdate();
       },
       immediate: true
@@ -3411,13 +3411,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.titleInfo.languages.forEach(function (lang) {
-        if (lang.language_name === _this.titleDabing) _this.maxPossibleItemNumber = lang.total;
+        if (lang.language_name === _this.titleDabingName) _this.maxPossibleItemCount = lang.total;
       });
       var coockieItemCount = 0;
       this.cartCookies.forEach(function (item) {
-        if (item.language_name === _this.titleDabing && item.url === _this.titleInfo.url) coockieItemCount = item.quantity;
+        if (item.language_name === _this.titleDabingName && item.url === _this.titleInfo.url) coockieItemCount = item.quantity;
       });
-      this.maxItemNumber = this.maxPossibleItemNumber - coockieItemCount;
+      this.maxItemCount = this.maxPossibleItemCount - coockieItemCount;
     },
     getTitleInfo: function getTitleInfo() {
       var _this2 = this;
@@ -3431,8 +3431,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this2.titleInfo = res.data;
         _this2.title = _this2.titleInfo.title_name;
-        _this2.titleDabing = _this2.titleInfo.languages[0].language_name;
-        _this2.maxItemNumber = _this2.titleInfo.languages[0].total;
+        _this2.titleDabingName = _this2.titleInfo.languages[0].language_name;
+        _this2.maxItemCount = _this2.titleInfo.languages[0].total;
 
         _this2.countMaxItemInCart();
       })["catch"](function (error) {
@@ -3455,25 +3455,25 @@ __webpack_require__.r(__webpack_exports__);
       });
       var addItem = true;
       this.cartCookies.forEach(function (element) {
-        if (element.url === _this3.titleInfo.url && element.language_name === _this3.titleDabing) {
-          _this3.titleDaging_name = element.language;
+        if (element.url === _this3.titleInfo.url && element.language_name === _this3.titleDabingName) {
+          _this3.titleDabingId = element.language;
           addItem = false;
-          element.quantity = Number(element.quantity) + Number(_this3.itemNumber);
+          element.quantity = Number(element.quantity) + Number(_this3.itemCount);
         }
       });
 
       if (addItem) {
         this.titleInfo.languages.forEach(function (lang) {
-          if (lang.language_name === _this3.titleDabing) _this3.titleDaging_name = lang.language;
+          if (lang.language_name === _this3.titleDabingName) _this3.titleDabingId = lang.language;
         });
         var item = {
           name: this.titleInfo.title_name,
           price: this.titleInfo.price,
-          quantity: this.itemNumber,
+          quantity: this.itemCount,
           url: this.titleInfo.url,
-          language_name: this.titleDabing,
-          language: this.titleDaging_name,
-          maxItemNumber: this.maxPossibleItemNumber
+          language_name: this.titleDabingName,
+          language: this.titleDabingId,
+          maxItemCount: this.maxPossibleItemCount
         };
         this.cartCookies.push(item);
       }
@@ -3483,8 +3483,8 @@ __webpack_require__.r(__webpack_exports__);
         cartCookies: this.cartCookies
       });
       this.addedItem = true;
-      this.itemCountAdded = this.itemNumber;
-      this.itemNumber = 1;
+      this.itemCountAdded = this.itemCount;
+      this.itemCount = 1;
     }
   }
 });
@@ -47655,7 +47655,7 @@ var render = function() {
                         attrs: {
                           type: "number",
                           value: "0",
-                          max: item.maxItemNumber
+                          max: item.maxItemCount
                         },
                         domProps: { value: item.quantity },
                         on: {
@@ -47797,7 +47797,11 @@ var render = function() {
             expression: "modalRemoveFromCart"
           }
         },
-        [_c("p", { staticClass: "my-4" }, [_vm._v("Hello from modal!")])]
+        [
+          _c("p", { staticClass: "my-4" }, [
+            _vm._v("Potvrzením odeberete položku z košíku!")
+          ])
+        ]
       )
     ],
     1
@@ -49527,7 +49531,7 @@ var render = function() {
                 "x " +
                 _vm._s(_vm.titleInfo.title_name) +
                 " (" +
-                _vm._s(_vm.titleDaging_name) +
+                _vm._s(_vm.titleDabingId) +
                 " dabing)\n        "
             ),
             _c(
@@ -49573,8 +49577,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.titleDabing,
-              expression: "titleDabing"
+              value: _vm.titleDabingName,
+              expression: "titleDabingName"
             }
           ],
           staticClass: "form-select",
@@ -49588,7 +49592,7 @@ var render = function() {
                   var val = "_value" in o ? o._value : o.value
                   return val
                 })
-              _vm.titleDabing = $event.target.multiple
+              _vm.titleDabingName = $event.target.multiple
                 ? $$selectedVal
                 : $$selectedVal[0]
             }
@@ -49612,8 +49616,8 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.itemNumber,
-            expression: "itemNumber"
+            value: _vm.itemCount,
+            expression: "itemCount"
           }
         ],
         staticClass: "form-control",
@@ -49622,15 +49626,15 @@ var render = function() {
           name: "optionsRadios",
           value: "1",
           min: "1",
-          max: _vm.maxItemNumber
+          max: _vm.maxItemCount
         },
-        domProps: { value: _vm.itemNumber },
+        domProps: { value: _vm.itemCount },
         on: {
           input: function($event) {
             if ($event.target.composing) {
               return
             }
-            _vm.itemNumber = $event.target.value
+            _vm.itemCount = $event.target.value
           }
         }
       }),
@@ -49639,14 +49643,14 @@ var render = function() {
         "button",
         {
           staticClass: "btn btn-primary",
-          attrs: { disabled: _vm.itemNumber === 0, type: "button" },
+          attrs: { disabled: _vm.itemCount === 0, type: "button" },
           on: { click: _vm.addItemToCart }
         },
         [_vm._v("Přidat do košíku")]
       ),
       _vm._v(
         "\n        Celkem za titul: " +
-          _vm._s(_vm.itemNumber * _vm.titleInfo.price) +
+          _vm._s(_vm.itemCount * _vm.titleInfo.price) +
           " Kc\n    "
       )
     ])

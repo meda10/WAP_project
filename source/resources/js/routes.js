@@ -90,7 +90,6 @@ export default {
             name: 'checkout',
             component: Checkout,
         },
-
         {
             path: '/kosik',
             name: 'cart',
