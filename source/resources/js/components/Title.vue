@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="addedItem">
-            <strong>Položka přidána do košíku!</strong>
+            <strong>Položka přidána do košíku!</strong> - {{itemCountAdded}}x {{titleInfo.title_name}} ({{titleDaging_name}} dabing)
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="closedMessage">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -14,8 +14,12 @@
         <div style="width: 700px">{{ titleInfo.price }} Kc</div>
         <div style="width: 700px">Zeme puvodu: {{ titleInfo.states.state_name }}</div>
         <div style="width: 150px">
-            <input type="number" class="form-control" name="optionsRadios" value="1" min="1" v-model="itemNumber">
-            <button type="button" class="btn btn-primary" v-on:click="addItemToCart">Přidat do košíku</button>
+            <select class="form-select" v-model="titleDabing">
+                <option v-for="language in titleInfo.languages" v-bind:value="language.language_name" 
+                v-bind:key="language.language_name">{{language.language}}</option>
+            </select>
+            <input type="number" class="form-control" name="optionsRadios" value="1" min="1" :max="maxItemNumber" v-model="itemNumber">
+            <button :disabled="itemNumber === 0" type="button" class="btn btn-primary" v-on:click="addItemToCart">Přidat do košíku</button>
             Celkem za titul: {{ itemNumber * titleInfo.price }} Kc
         </div>
     </div>
@@ -29,15 +33,21 @@
             return {
                 titleName: '',
                 titleType: '',
-                itemNumber: 1,
+                titleDabing: '',
+                titleDaging_name: '',
+                itemNumber: 0,
+                maxItemNumber: 0,
+                maxPossibleItemNumber: 0,
                 titleInfo: {
                     title_name: '',
                     description: '',
                     price: '',
                     year: '',
-                    states: {state_name: ''}
+                    states: {state_name: ''},
+                    languages: []
                 },
-                addedItem: false
+                addedItem: false,
+                itemCountAdded: 0
             }
         },
         computed: {
@@ -57,7 +67,16 @@
             },
             itemNumber: {
                 handler: function (itemNumber) {
-                    if (itemNumber < 1) this.itemNumber = 1;
+                    if (itemNumber < 0) this.itemNumber = 0;
+                    if (itemNumber > this.maxItemNumber) this.itemNumber = this.maxItemNumber;
+                    this.$forceUpdate();
+                },
+                immediate: true
+            },
+            titleDabing: {
+                handler: function (titleDabing) {
+                    this.countMaxItemInCart();
+                    this.$forceUpdate();
                 },
                 immediate: true
             },
@@ -66,24 +85,47 @@
                     this.$forceUpdate();
                 },
                 immediate: true
+            },
+            maxItemNumber: {
+                handler: function (maxItemNumber) {
+                    if (maxItemNumber > 0) this.itemNumber = 1;
+                    else this.itemNumber = 0;
+                    this.$forceUpdate();
+                },
+                immediate: true
             }
         },
         mounted() {
-            if (this.$route.params.titleName != null)
-                this.titleName = this.$route.params.titleName;
-            if (this.$route.name != null)
-                this.type = this.$route.name;
+            if (this.$route.params.titleName != null) this.titleName = this.$route.params.titleName;
+            if (this.$route.name != null) this.type = this.$route.name;
 
             this.getTitleInfo();
         },
         methods: {
+            countMaxItemInCart() {
+                this.titleInfo.languages.forEach(lang => {
+                    if (lang.language_name === this.titleDabing)
+                        this.maxPossibleItemNumber = lang.total;
+                });
+
+                var coockieItemCount = 0;
+
+                this.cartCookies.forEach(item => {
+                    if (item.language_name === this.titleDabing && item.url === this.titleInfo.url)
+                        coockieItemCount = item.quantity;
+                });
+
+                this.maxItemNumber = this.maxPossibleItemNumber - coockieItemCount;
+            },
             getTitleInfo() {
                 this.$emit('emitHandler',  {isLoading: true});
 
                 axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName}).then((res) => {
                     this.titleInfo = res.data;
                     this.title = this.titleInfo.title_name;
-
+                    this.titleDabing = this.titleInfo.languages[0].language_name;
+                    this.maxItemNumber = this.titleInfo.languages[0].total;
+                    this.countMaxItemInCart();
                 }).catch((error) => {
                     // TODO handle this error
                     console.log(error);
@@ -98,24 +140,37 @@
                 
                 var addItem = true;
                 this.cartCookies.forEach(element => {
-                    if (element.url == this.titleInfo.url) {
+                    if (element.url === this.titleInfo.url && element.language_name === this.titleDabing) {
+                        this.titleDaging_name = element.language;
                         addItem = false;
                         element.quantity = Number(element.quantity) + Number(this.itemNumber);
                     }
                 });
 
                 if (addItem) {
+                    this.titleInfo.languages.forEach(lang => {
+                        if (lang.language_name === this.titleDabing)
+                            this.titleDaging_name = lang.language;
+                    });
+
                     var item = {
                         name: this.titleInfo.title_name,
                         price: this.titleInfo.price,
                         quantity: this.itemNumber,
-                        url: this.titleInfo.url
-                    };  
+                        url: this.titleInfo.url,
+                        language_name: this.titleDabing,
+                        language: this.titleDaging_name,
+                        maxItemNumber: this.maxPossibleItemNumber,
+                    };
+
                     this.cartCookies.push(item);
                 }
                 
-                this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+                this.countMaxItemInCart();
+                this.$emit('emitHandler', {cartCookies: this.cartCookies});
                 this.addedItem = true;
+                this.itemCountAdded = this.itemNumber;
+                this.itemNumber = 1;
             }
         }
     }

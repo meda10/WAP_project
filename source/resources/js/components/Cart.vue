@@ -20,24 +20,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in cartCookies" v-bind:key="item.url">
+                <tr v-for="item in cartCookies" v-bind:key="item.url + '-' + item.language">
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
                             <div class="col-sm-10">
-                                <h4 class="nomargin">{{item.name}}</h4>
+                                <h4 class="nomargin">{{item.name}} ({{item.language}} dabing)</h4>
                                 <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
                             </div>
                         </div>
                     </td>
                     <td data-th="Price">{{item.price}} Kč</td>
                     <td data-th="Quantity">
-                        <input type="number" class="form-control text-center" min="0" value="0"
-                        v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url)">
+                        <input type="number" class="form-control text-center" value="0"
+                        v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url, item.language_name)"
+                        v-on:keyup="changeItemQuantity(item.quantity, item.url, item.language_name)"
+                        :max="item.maxItemNumber">
                     </td>
                     <td data-th="Subtotal" class="text-center">{{item.quantity * item.price}} Kč</td>
                     <td class="actions" data-th="">
-                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item.url)"><i class="fas fa-trash"></i></button>								
+                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item.url, item.language_name)"><i class="fas fa-trash"></i></button>								
                     </td>
                 </tr>
             </tbody>
@@ -56,6 +58,11 @@
             <!-- TODO -->
             Jsem tak prázdný ;(
         </div>
+
+        <b-modal id="modal-remove-from-cart" title="Položka bude odebrána"
+                v-model="modalRemoveFromCart" @hidden="handleDontRemoveFromCart" @ok="handleRemoveFromCart">
+            <p class="my-4">Hello from modal!</p>
+        </b-modal>
     </div>
 </template>
 <script>
@@ -65,6 +72,10 @@ export default {
     data() {
         return {
             isLoggedIn: true,
+            modalRemoveFromCart: false,
+            urlToRemove: '', 
+            language_nameToRemove: '',
+            countOfItemToRemove: 1
         }
     },
     computed: {
@@ -76,15 +87,42 @@ export default {
         }
     },
     methods: {
-        removeFromCart(url) {
+        handleDontRemoveFromCart() {
+            this.cartCookies.forEach(item => {
+                if (item.url === this.urlToRemove && 
+                    item.language_name === this.language_nameToRemove) {
+                        if (item.quantity === 0) item.quantity = 1;
+                        this.$forceUpdate();
+                }
+            });
+            this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+        },
+        handleRemoveFromCart() {
             var newCart = this.cartCookies.filter(item => {
-                return item.url !== url;
+                return item.url !== this.urlToRemove || item.language_name !== this.language_nameToRemove;
             });
             this.$emit('emitHandler',  {cartCookies: newCart});
         },
-        changeItemQuantity(quantity, url) {
-            if (quantity == 0) this.removeFromCart(url);
-            else this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+        removeFromCart(url, language_name) {
+            this.urlToRemove = url;
+            this.language_nameToRemove = language_name;
+            this.modalRemoveFromCart = true;
+        },
+        changeItemQuantity(quantity, url, language_name) {
+            if (quantity !== '' && Number(quantity) === 0)
+                this.removeFromCart(url, language_name);
+
+            else {
+                this.cartCookies.forEach(item => {
+                    if (item.url === url && 
+                        item.language_name === language_name && 
+                        Number(quantity) > Number(item.maxItemNumber)) {
+                            item.quantity = item.maxItemNumber;
+                            this.$forceUpdate();
+                    }
+                });
+                this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+            }
         },
         checkout() {
             this.$emit('emitHandler',  {isLoading: true});

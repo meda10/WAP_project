@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoresTable extends Migration
+class CreateLanguagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateStoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('stores', function (Blueprint $table) {
+        Schema::create('languages', function (Blueprint $table) {
             $table->id();
-            $table->longText('description');
-            $table->string('address');
-            $table->string('reference_number');
-            $table->string('zip_code');
-            $table->string('city');
+            $table->string('language');
+            $table->string('language_name');
         });
     }
 
@@ -30,6 +27,6 @@ class CreateStoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stores');
+        Schema::dropIfExists('languages');
     }
 }

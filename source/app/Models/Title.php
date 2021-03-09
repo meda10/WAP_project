@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\AppHelper;
 
 use App\Models\Genre;
 use App\Models\State;
+use App\Models\Language;
+use App\Models\Item;
+
 
 class Title extends Model
 {
@@ -45,6 +49,7 @@ class Title extends Model
         return Title::where('type', 'like', "{$type}%")
                         ->where('url', $name)
                         ->with('states')
+                        ->with('languages')
                         ->first();
     }
 
@@ -61,5 +66,12 @@ class Title extends Model
     public function states()
     {
         return $this->hasOne(State::class, 'id', 'state_id');
+    }
+
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class, 'items', 'title_id', 'language_id')
+                    ->select(['languages.language', 'languages.language_name', DB::raw('count(*) as total')])
+                    ->groupBy('language_id');
     }
 }

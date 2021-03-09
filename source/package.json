@@ -12,7 +12,7 @@
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
         "axios": "^0.21",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^4.3.1",
         "jquery": "^3.2",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
@@ -29,7 +29,8 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "@braid/vue-formulate": "^2.5.2"
+        "@braid/vue-formulate": "^2.5.2",
+        "bootstrap-vue": "^2.21.2"
     },
     "name": "html"
 }

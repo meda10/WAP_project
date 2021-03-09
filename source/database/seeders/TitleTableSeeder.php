@@ -6,6 +6,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Title;
 use App\Models\State;
 use App\Models\Genre;
+use App\Models\Language;
+use App\Models\Item;
+use App\Models\Store;
 
 class TitleTableSeeder extends Seeder
 {
@@ -18,6 +21,7 @@ class TitleTableSeeder extends Seeder
     public function run()
     {
         State::create(['state_name' => 'USA']);
+        // TODO
         
         $title = Title::create(['title_name' => 'Vykoupení z věznice Shawshank', 'price' => 200, 'description' => 'Strach dělá z lidí vězně. Naděje jim dává křídla. Film natočený podle novely Stephena Kinga. Strhující příběh o přátelství, naději a moudrosti s velmi výraznými hereckými i charakterovými osobnostmi. Andy Dufresne (Tim Robbins) přichází do vězení v Shawshanku jako nový vězeň podezřelý z vraždy. Spřátelí se s doživotně odsouzeným Redem (Morgan Freeman) a společně se snaží přežít v nelidském prostředí vězeňského systému. Odmítají upadnout do rezignace a dodávají naději sobě i spoluvězňům. Film získal mnoho ocenění filmové kritiky a díky svému hluboce humánnímu poselství, skvělým hereckým výkonům a působivému zpracování byl 7 x nominován na Oscara - za nejlepší film, herce v hlavní roli (Morgan Freeman), nejlepší scénář, kameru, hudbu, střih a zvuk.', 'year' => '1994', 'type' => 'movie', 'state_id' => 1]);
         $title->genres()->sync([Genre::getGenreIdByUrl('drama'), Genre::getGenreIdByUrl('krimi')]);
@@ -78,5 +82,30 @@ class TitleTableSeeder extends Seeder
         
         $title = Title::create(['title_name' => 'Matrix', 'price' => 200, 'description' => 'Uvěříte neuvěřitelnému! Představte si, že vaše realita je jen iluzí a vaše nejtemnější noční můry jsou ve skutečnosti pravdivé. Představte si, že vaše současnost je vlastně minulostí a to budoucí se děje právě teď. Když si to dokážete představit, potom se budete cítit jako hrdina snímku Matrix Thomas Anderson (Keanu Reeves). A věřte, že to nebude příjemný pocit. Anderson je normální mladý muž, který se jen snaží přežít v každodenním shonu moderního velkoměsta. A má všechny předpoklady aby se mu to povedlo: dobré přátele, milující rodinu a perspektivní práci v multinárodní počítačové společnosti Meta Cortech. Jednoho dne, nebo lépe řečeno noci, se však do jeho spokojeného mozku zakousne strašlivá noční můra. Zdá se mu, že byl proti své vůli vložen v podobě dat do počítače a všechno to, co až dosud považoval za svůj osud, je jen vírem dat okolo několika tištěných spojů. Má pocit, že mu byla jeho mysl ukradena a uvězněna v obřím Matrix počítače budoucnosti. Začíná vážně pochybovat o své každodenní skutečnosti. Byl skutečně vhozen do stroje? Kdo je za to zodpovědný? Je tam s ním zavřeno i těch několik stovek lidí, které zná? Nebo jsou to jen projekce, které mají udržet zdání reality? A pak je tu otázka nejdůležitější: pokud je to všechno pravda, co se stane, až jeho věznitelé přijdou na to, že ji zná?', 'year' => 1999, 'type' => 'movie', 'state_id' => 1]);
         $title->genres()->sync([Genre::getGenreIdByUrl('akcni'),Genre::getGenreIdByUrl('sci-fy')]);
+
+
+        Language::create(['language' => 'Český']);
+        Language::create(['language' => 'Anglický']);
+        Language::create(['language' => 'Francouzský']);
+        Language::create(['language' => 'Slovenský']);
+
+
+        $titles = Title::get();
+        $languages = Language::get();
+        $stores = Store::get();
+
+        foreach ($titles as $title) {
+            foreach ($stores as $store) {
+                foreach ($languages as $language) {
+                    for ($i = 0; $i < 5; $i++) {
+                        Item::create([
+                            'language_id' => $language->id,
+                            'store_id' => $store->id,
+                            'title_id' => $title->id
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }

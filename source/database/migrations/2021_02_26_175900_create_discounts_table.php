@@ -16,7 +16,7 @@ class CreateDiscountsTable extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->id('code');
             $table->integer('percent');
-            $table->bigInteger('reservation_id')->unsigned();
+            $table->bigInteger('reservation_id')->unsigned()->nullable(true);
             $table->foreign('reservation_id')->references('id')->on('reservations');
         });
     }

@@ -11,6 +11,7 @@ import Movies from './components/Movies';
 import Checkout from './components/Checkout';
 import Cart from './components/Cart';
 
+
 export default {
     mode: 'history',
     routes: [
@@ -87,7 +88,7 @@ export default {
         {
             path: '/pokladna',
             name: 'checkout',
-            component: Checkout
+            component: Checkout,
         },
 
         {

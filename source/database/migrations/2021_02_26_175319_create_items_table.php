@@ -18,7 +18,7 @@ class CreateItemsTable extends Migration
             $table->bigInteger('language_id')->unsigned();
             $table->bigInteger('store_id')->unsigned();
             $table->bigInteger('title_id')->unsigned();
-            $table->foreign('language_id')->references('id')->on('states');
+            $table->foreign('language_id')->references('id')->on('languages');
             $table->foreign('store_id')->references('id')->on('stores');
             $table->foreign('title_id')->references('id')->on('titles');
         });
