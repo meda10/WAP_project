@@ -2863,26 +2863,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   title: 'Filmy',
   data: function data() {
@@ -2907,7 +2887,8 @@ __webpack_require__.r(__webpack_exports__);
         pageNumber: 1,
         titlesToPage: 2,
         numberOfGenreTitles: 0,
-        pageNumbers: 0
+        pageNumbers: 0,
+        numRows: 0
       }
     };
   },
@@ -2942,6 +2923,9 @@ __webpack_require__.r(__webpack_exports__);
     getTitles: function getTitles(url) {
       var _this = this;
 
+      this.$emit('emitHandler', {
+        isLoading: true
+      });
       var request = {
         type: 'movie',
         genre_url: url,
@@ -2954,8 +2938,16 @@ __webpack_require__.r(__webpack_exports__);
         _this.titles.numberOfGenreTitles = res.data.titles_count;
 
         _this.countNumOfPages();
+
+        _this.$emit('emitHandler', {
+          isLoading: false
+        });
       })["catch"](function (error) {
         console.log(error);
+
+        _this.$emit('emitHandler', {
+          isLoading: false
+        });
       });
     },
     toggleView: function toggleView(val) {
@@ -48727,7 +48719,7 @@ var render = function() {
                   ? _c(
                       "li",
                       {
-                        key: num,
+                        key: num + 2,
                         staticClass: "page-item",
                         class:
                           _vm.titles.pageNumber === num + 2 ? "active" : "",
@@ -48754,7 +48746,7 @@ var render = function() {
                   ? _c(
                       "li",
                       {
-                        key: num,
+                        key: _vm.titles.pageNumber - 2 + num,
                         staticClass: "page-item",
                         class:
                           _vm.titles.pageNumber ===
@@ -48791,7 +48783,7 @@ var render = function() {
                   ? _c(
                       "li",
                       {
-                        key: num,
+                        key: _vm.titles.pageNumbers - 5 + num,
                         staticClass: "page-item",
                         class:
                           _vm.titles.pageNumber ===
@@ -48892,7 +48884,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -48919,7 +48911,7 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -48944,7 +48936,7 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -48958,33 +48950,6 @@ var staticRenderFns = [
               _c("h4", { staticClass: "card-title" }, [
                 _vm._v("Primary card title")
               ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _vm._v(
-                  "Some quick example text to build on the card title and make up the bulk of the card's content."
-                )
-              ])
-            ])
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card border-primary mb-3",
-            staticStyle: { "max-width": "20rem" }
-          },
-          [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("h4", { staticClass: "card-title" }, [
-                _vm._v("Primary card title")
-              ]),
-              _vm._v(" "),
-              _c("hr"),
               _vm._v(" "),
               _c("p", { staticClass: "card-text" }, [
                 _vm._v(
@@ -49002,7 +48967,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -49029,7 +48994,7 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -49054,7 +49019,7 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-4" }, [
         _c(
           "div",
           {
@@ -49068,33 +49033,6 @@ var staticRenderFns = [
               _c("h4", { staticClass: "card-title" }, [
                 _vm._v("Primary card title")
               ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _vm._v(
-                  "Some quick example text to build on the card title and make up the bulk of the card's content."
-                )
-              ])
-            ])
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card border-primary mb-3",
-            staticStyle: { "max-width": "20rem" }
-          },
-          [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Header")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("h4", { staticClass: "card-title" }, [
-                _vm._v("Primary card title")
-              ]),
-              _vm._v(" "),
-              _c("hr"),
               _vm._v(" "),
               _c("p", { staticClass: "card-text" }, [
                 _vm._v(
