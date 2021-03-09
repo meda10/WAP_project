@@ -1,32 +1,97 @@
 <template>
-    <div>
+    <div >
         <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="addedItem">
             <strong>Položka přidána do košíku!</strong> - {{itemCountAdded}}x {{titleInfo.title_name}} ({{titleDabingId}} dabing)
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="closedMessage">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-
-        <h1>{{ titleInfo.title_name }}</h1>
-
-        <div style="width: 700px">{{ titleInfo.description }}</div>
-        <div style="width: 700px">{{ titleInfo.year }}</div>
-        <div style="width: 700px">{{ titleInfo.price }} Kc</div>
-        <div style="width: 700px">Zeme puvodu: {{ titleInfo.states.state_name }}</div>
-
-        <div>
-            <h4>Zanry:</h4>
-            <p v-for="genre in titleInfo.genres" v-bind:key="genre.url">{{genre.genre_name}}</p>
+        <div class="row mb-2">
+            <div class="col">
+                <h1>{{ titleInfo.title_name }}</h1>
+                <hr style="background-color: white;">
+            </div>
         </div>
+        <div class="row mb-3">
+            <div class="col-4">
+                <img :src="'/img/movies/' + titleInfo.url+'.jpg'" style="width: 100%;">
+            </div>
+            <div class="col-8">
+                <div class="row mb-1">
+                    <div class="col-2 justify-content-right">
+                        <h5>Rok:</h5>
+                    </div>
+                    <div class="col-auto justify-content-left my-auto">
+                        <h5>{{ titleInfo.year }}</h5>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-2 justify-content-right">
+                        <h5>Cena za kus:</h5>
+                    </div>
+                    <div class="col-auto justify-content-left my-auto">
+                        <h5>{{ titleInfo.price }} Kč</h5>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-2 justify-content-right">
+                        <h5>Země původu:</h5>
+                    </div>
+                    <div class="col-auto justify-content-left my-auto">
+                        <h5>{{ titleInfo.states.state_name }}</h5>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-2 justify-content-right">
+                        <h5>Žánry</h5>
+                    </div>
+                    <div class="col-auto justify-content-left my-auto">
+                        <h5><span v-for="(genre, key) in titleInfo.genres" :key="genre.url">{{genre.genre_name}} / </span></h5>
+                    </div>
+                </div>
 
-        <div style="width: 150px">
-            <select class="form-select" v-model="titleDabingName">
-                <option v-for="language in titleInfo.languages" v-bind:value="language.language_name" 
-                v-bind:key="language.language_name">{{language.language}}</option>
-            </select>
-            <input type="number" class="form-control" name="optionsRadios" value="1" min="1" :max="maxItemCount" v-model="itemCount">
-            <button :disabled="itemCount === 0" type="button" class="btn btn-primary" v-on:click="addItemToCart">Přidat do košíku</button>
-            Celkem za titul: {{ itemCount * titleInfo.price }} Kc
+                <div class="row">
+                    <div class="col-4">
+                        <h3>Rezervace</h3>
+                        <div class="row mb-1">
+                            <div class="col-5 my-auto">
+                                <h5>Dabing:</h5>
+                            </div>
+                            <div class="col-7">
+                                <select class="form-select" v-model="titleDabingName">
+                                    <option v-for="language in titleInfo.languages" v-bind:value="language.language_name"
+                                            v-bind:key="language.language_name">{{language.language}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-5 my-auto">
+                                <h5>Kusů:</h5>
+                            </div>
+                            <div class="col-7">
+                                <input type="number" class="form-control" name="optionsRadios" value="1" min="1" :max="maxItemCount" v-model="itemCount">
+                            </div>
+                        </div>
+                        <hr style="background-color: white;">
+                        <div class="row mb-1">
+                            <div class="col-5 my-auto">
+                                <h5>Celkem:</h5>
+                            </div>
+                            <div class="col-7">
+                                {{ itemCount * titleInfo.price }} Kč
+                            </div>
+                        </div>
+                        <button :disabled="itemCount === 0" type="button" class="btn btn-primary" v-on:click="addItemToCart">Přidat do košíku</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3>Popisek</h3>
+                <hr style="background-color: white;">
+                <div>{{ titleInfo.description }}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -46,6 +111,7 @@
                 maxPossibleItemCount: 0,
                 titleInfo: {
                     title_name: '',
+                    url: '',
                     description: '',
                     price: '',
                     year: '',
@@ -143,7 +209,7 @@
             },
             addItemToCart() {
                 this.$emit('emitHandler',  {isLoading: true});
-                
+
                 var addItem = true;
                 this.cartCookies.forEach(element => {
                     if (element.url === this.titleInfo.url && element.language_name === this.titleDabingName) {
@@ -171,7 +237,7 @@
 
                     this.cartCookies.push(item);
                 }
-                
+
                 this.countMaxItemInCart();
                 this.$emit('emitHandler', {cartCookies: this.cartCookies});
                 this.addedItem = true;
