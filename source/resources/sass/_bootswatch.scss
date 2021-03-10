@@ -345,3 +345,30 @@ label,
         }
     }
 }
+
+// Search bar
+.search-dropdown {
+    position: relative;
+    width: 100%;
+    //max-width: 400px;
+    margin: 0 auto;
+
+    .search-dropdown-list {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        background-color: $white;
+        z-index: 9999;
+        overflow-y: auto;
+
+        .search-dropdown-item {
+            padding: 11px 16px;
+            cursor: pointer;
+            color: $gray-700;
+
+            &:hover {
+                background-color: $gray-100;
+            }
+        }
+    }
+}
