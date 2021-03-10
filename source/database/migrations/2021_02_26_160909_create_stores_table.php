@@ -17,7 +17,6 @@ class CreateStoresTable extends Migration
             $table->id();
             $table->longText('description');
             $table->string('address');
-            $table->string('reference_number');
             $table->string('zip_code');
             $table->string('city');
         });
