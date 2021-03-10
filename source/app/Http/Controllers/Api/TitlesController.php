@@ -27,6 +27,11 @@ class TitlesController extends Controller
         abort(404);
     }
 
+    public function getAllTitlesSearch()
+    {
+        return Title::getAllTitles();
+    }
+
     public function getTitles(Request $request)
     {
         return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);

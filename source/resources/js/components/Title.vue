@@ -128,7 +128,8 @@
             }
         },
         watch: {
-            $route (to, from) {
+            beforeRouterUpdate (to, from) {
+                console.log("jo");
                 this.getTitleInfo();
             },
             titleInfo: {

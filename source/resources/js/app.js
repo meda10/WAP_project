@@ -31,7 +31,6 @@ Vue.use(VueFormulate, {
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 Vue.use(ModalPlugin);
-Vue.use(VueCalendar);
 Vue.mixin(titleMixin);
 
 const i18n = new VueI18n({
