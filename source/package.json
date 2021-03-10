@@ -18,7 +18,7 @@
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
         "postcss": "^8.1.14",
-        "resolve-url-loader": "^2.3.1",
+        "resolve-url-loader": "^3.1.2",
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
         "vue": "^2.6.12",
@@ -30,8 +30,11 @@
     },
     "dependencies": {
         "@braid/vue-formulate": "^2.5.2",
+        "@braid/vue-formulate-i18n": "^1.16.0",
+        "@cone2875/vue-formulate-select": "^0.1.4",
         "bootstrap-vue": "^2.21.2",
-        "v-calendar": "^2.2.4"
+        "v-calendar": "^2.2.4",
+        "vue-i18n": "^8.23.0"
     },
     "name": "html"
 }

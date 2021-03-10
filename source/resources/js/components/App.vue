@@ -89,7 +89,7 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :user="user" 
+            <router-view v-on:emitHandler="emitHandler" :user="user"
             :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"></router-view>
         </div>
 
@@ -203,12 +203,12 @@ export default {
             this.cartCookies.forEach(element => {
                 this.cartItemsNumber += Number(element.quantity);
                 this.cartItemsPrice += Number(element.quantity) * Number(element.price);
-            });  
+            });
         },
         emitHandler(values) {
-            if (values.isLoading != undefined) this.isLoading = values.isLoading;
+            if (values.isLoading !== undefined) this.isLoading = values.isLoading;
 
-            if (values.cartCookies != undefined) {
+            if (values.cartCookies !== undefined) {
                 this.cartCookies = values.cartCookies;
                 this.$cookies.set('wap-cart', JSON.stringify(this.cartCookies));
                 this.isLoading = false;

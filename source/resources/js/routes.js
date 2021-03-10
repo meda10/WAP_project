@@ -10,6 +10,8 @@ import Series from './components/Series';
 import Movies from './components/Movies';
 import Checkout from './components/Checkout';
 import Cart from './components/Cart';
+import TitleAdd from "./components/TitleAdd";
+import ActorAdd from "./components/ActorAdd";
 
 
 export default {
@@ -39,6 +41,16 @@ export default {
             path: '/admin',
             name: 'administration',
             component: Administration
+        },
+        {
+            path: '/admin/pridat_titul',
+            name: 'titleadd',
+            component: TitleAdd
+        },
+        {
+            path: '/admin/pridat_herce',
+            name: 'actoradd',
+            component: ActorAdd
         },
         {
             path: '/nastaveni',

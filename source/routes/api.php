@@ -29,3 +29,9 @@ Route::post('/get_title', 'Api\TitlesController@getTitle');
 Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
 Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
 Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');
+
+
+Route::get('/get_actors', 'Api\ParticipantController@get_items_select');
+Route::get('/get_states', 'Api\StateController@get_items_select');
+Route::post('/set_titles', 'Api\TitlesController@store');
+Route::post('/set_actor', 'Api\ParticipantController@store');
