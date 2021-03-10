@@ -27,5 +27,7 @@ class GenreTableSeeder extends Seeder
         Genre::create(['genre_name' => 'Mysteriózní']);
         Genre::create(['genre_name' => 'Western']);
         Genre::create(['genre_name' => 'Dobrodružný']);
+        Genre::create(['genre_name' => 'Válečný']);
+        Genre::create(['genre_name' => 'Historický']);
     }
 }

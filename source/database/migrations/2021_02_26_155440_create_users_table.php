@@ -21,6 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('qr_code')->nullable();
             $table->string('password');
             $table->enum('role', ['director', 'manager', 'employee', 'customer'])->default('customer');
+            $table->string('address')->nullable(true);
+            $table->string('reference_number')->nullable(true);
+            $table->string('zip_code')->nullable(true);
+            $table->string('city')->nullable(true);
             $table->boolean('confirmed')->default(false);
         });
     }
