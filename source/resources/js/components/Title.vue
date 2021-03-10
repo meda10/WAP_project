@@ -93,11 +93,19 @@
                 <div>{{ titleInfo.description }}</div>
             </div>
         </div>
+
+          <div>
+            <date-picker v-model="reservationTime" range :disabled-date="disabledBeforeTodayAndAfterAWeek"></date-picker>
+        </div>
     </div>
 </template>
 
 <script>
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
+
     export default {
+        components: { DatePicker },
         title: '',
         props: ['cartCookiesProps'],
         data() {
@@ -119,7 +127,9 @@
                     languages: []
                 },
                 addedItem: false,
-                itemCountAdded: 0
+                itemCountAdded: 0,
+                reservationTime: null,
+                reservedDays: []
             }
         },
         computed: {
@@ -165,15 +175,39 @@
                     this.$forceUpdate();
                 },
                 immediate: true
+            },
+            reservationTime: {
+                handler: function (reservationTime) {
+                    console.log(reservationTime);
+                },
+                immediate: true
             }
         },
         mounted() {
+            const today = new Date()
+            today.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            tomorrow.setHours(0, 0, 0, 0);
+
+            this.reservedDays.push(today);
+            this.reservedDays.push(tomorrow);
+
+
             if (this.$route.params.titleName != null) this.titleName = this.$route.params.titleName;
             if (this.$route.name != null) this.type = this.$route.name;
 
             this.getTitleInfo();
         },
         methods: {
+            disabledBeforeTodayAndAfterAWeek(date) {
+                var disabled = false;
+                this.reservedDays.forEach(day => {
+                    if (new Date(day).getTime() === new Date(date).getTime()) disabled = true;
+                });
+
+                return disabled;               
+            },
             countMaxItemInCart() {
                 this.titleInfo.languages.forEach(lang => {
                     if (lang.language_name === this.titleDabingName)
