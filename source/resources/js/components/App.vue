@@ -1,16 +1,5 @@
 <template>
     <div>
-<!--        <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">-->
-<!--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
-<!--                <li class="nav-item">-->
-<!--                    <router-link :to="{ name: 'home' }" class="navbar-brand">Home</router-link>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <router-link :to="{ name: 'titles' }" class="navbar-brand">Titles</router-link>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-
         <loading :active='isLoading' :is-full-page="true" />
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -22,11 +11,11 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbar">
-                    <ul class="navbar-nav col">
+                    <ul class="navbar-nav col-2">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filmy</a>
                             <div class="dropdown-menu">
-                                <router-link class="dropdown-item" v-for="genre in hotMoviesGenres" v-bind:key="genre.name" :to="'/filmy/' + genre.url">{{ genre.name }}</router-link>
+                                <router-link class="dropdown-item" v-for="genre in hotMoviesGenres" :key="genre.name" :to="'/filmy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'movies' }" class="dropdown-item">Jiné</router-link>
                             </div>
@@ -35,22 +24,29 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Seriály</a>
                             <div class="dropdown-menu">
-                                <router-link class="dropdown-item" v-for="genre in hotSeriesGenres" v-bind:key="genre.name" :to="'/serialy/' + genre.url">{{ genre.name }}</router-link>
+                                <router-link class="dropdown-item" v-for="genre in hotSeriesGenres" :key="genre.name" :to="'/serialy/' + genre.url">{{ genre.name }}</router-link>
                                 <div class="dropdown-divider"></div>
                                 <router-link :to="{ name: 'series' }" class="dropdown-item">Jiné</router-link>
                             </div>
                         </li>
                     </ul>
-                    <form class="form-inline col-auto">
-                        <input class="form-control " type="text" placeholder="Search">
-                        <button class="btn btn-secondary">Search</button>
-                    </form>
+
+                    <div class="search-dropdown ml-auto" v-click-outside="lostFocus">
+                        <input v-model.trim="searchForm.inputValue" class="form-control search-dropdown-input" type="text" placeholder="Search" @click="searchForm.searchFocus = true">
+                        <div class="search-dropdown-list" v-show="searchForm.searchFocus">
+                            <div v-for="title in searchForm.itemList" :key="title.title_name" class="search-dropdown-item"
+                                 v-show="searchItemVisible(title)" @click="routeToTitle(title)">
+                                {{ title.title_name }} - {{ title.type }}
+                            </div>
+                        </div>
+<!--                            <button class="btn btn-secondary">Search</button>-->
+                    </div>
 <!--                    <div class="input-group col-auto">-->
 <!--                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">-->
 <!--                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>-->
 <!--                    </div>-->
 
-                    <ul id="login-nav" class="navbar-nav col col-sm-4">
+                    <ul id="login-nav" class="navbar-nav col-4">
                         <li class="nav-item" v-if="!user">
                             <router-link :to="{ name: 'login' }" class="nav-link">Přihlásit se</router-link>
                         </li>
@@ -70,11 +66,11 @@
                         <li class="nav-item dropdown nav-item-icon" id="navCartIcon">
                             <router-link :to="{ name: 'cart' }" class="nav-link">
                                 <i class="fas fa-shopping-cart fa-lg"></i>
-                                <span v-if="cartItemsNumber != 0">
+                                <span v-if="cartItemsNumber !== 0">
                                     <span class='badge badge-warning' id='lblCartCount'>{{cartItemsNumber}}</span>
                                     <span class='badge' id='infoCart'>{{cartItemsPrice}} Kč</span>
                                 </span>
-                                <span v-if="cartItemsNumber == 0">
+                                <span v-if="cartItemsNumber === 0">
                                     <span class='badge' id='infoCart'>Košík</span>
                                 </span>
                             </router-link>
@@ -89,7 +85,7 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :user="user" 
+            <router-view v-on:emitHandler="emitHandler" :user="user"
             :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"></router-view>
         </div>
 
@@ -112,7 +108,37 @@ export default {
             hotMoviesGenres: [],
             cartCookies: [],
             cartItemsNumber: 0,
-            cartItemsPrice: 0
+            cartItemsPrice: 0,
+            searchForm: {
+                inputValue: '',
+                searchFocus: false,
+                itemList: [
+                    {title_name: 'Kmotr', url: 'kmotr', type: 'Film', typeUrl: 'film'},
+                    {title_name: 'Sedm', url: 'sedm', type: 'Film', typeUrl: 'film'},
+                    {title_name: 'Vykoupení z věznice Shawshank', url: "vykoupeni-z-veznice-shawshank", type: 'Film', typeUrl: 'film'},
+                    {title_name: "Forrest Gump", url: "forrest-gump", type: 'Film', typeUrl: 'film'},
+                    {title_name: "Zelená míle", url: "zelena-mile", type: 'Film', typeUrl: 'film'},
+                    {title_name: "Přelet nad kukaččím hnízdem", url: "prelet-nad-kukaccim-hnizdem", type: 'Film', typeUrl: 'film'},
+                    {title_name: "Schindlerův seznam", url: "schindleruv-seznam", type: 'Film', typeUrl: 'film'},
+                ]
+            }
+        }
+    },
+    directives: {
+        'click-outside': {
+            bind: function (el, binding, vnode) {
+                el.clickOutsideEvent = function (event) {
+                    // here I check that click was outside the el and his children
+                    if (!(el === event.target || el.contains(event.target))) {
+                        // and if it did, call method provided in attribute value
+                        vnode.context[binding.expression](event);
+                    }
+                };
+                document.body.addEventListener('click', el.clickOutsideEvent)
+            },
+            unbind: function (el) {
+                document.body.removeEventListener('click', el.clickOutsideEvent)
+            },
         }
     },
     watch: {
@@ -174,6 +200,19 @@ export default {
         // });
     },
     methods: {
+        lostFocus() {
+            this.searchForm.searchFocus = false;
+        },
+        routeToTitle(title) {
+            this.searchForm.searchFocus = false;
+            this.searchForm.inputValue = '';
+            this.$router.push({path: '/' + title.typeUrl + '/' + title.url});
+        },
+        searchItemVisible(title) {
+            let currentName = title.title_name.toLowerCase();
+            let currentInput = this.searchForm.inputValue.toLowerCase();
+            return currentName.includes(currentInput);
+        },
         logout() {
             this.isLoading = true;
 
@@ -203,7 +242,7 @@ export default {
             this.cartCookies.forEach(element => {
                 this.cartItemsNumber += Number(element.quantity);
                 this.cartItemsPrice += Number(element.quantity) * Number(element.price);
-            });  
+            });
         },
         emitHandler(values) {
             if (values.isLoading != undefined) this.isLoading = values.isLoading;
