@@ -44,6 +44,11 @@ class Title extends Model
         }
     }
 
+    public static function getAllTitles()
+    {
+        return Title::select(['title_name', 'url', 'type AS typeUrl'])->get();
+    }
+
     public static function getTitle($type, $name)
     {
         return Title::where('type', 'like', "{$type}%")

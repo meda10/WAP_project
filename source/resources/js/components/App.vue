@@ -85,7 +85,7 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :user="user"
+            <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
             :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"></router-view>
         </div>
 
@@ -113,13 +113,13 @@ export default {
                 inputValue: '',
                 searchFocus: false,
                 itemList: [
-                    {title_name: 'Kmotr', url: 'kmotr', type: 'Film', typeUrl: 'film'},
+/*                    {title_name: 'Kmotr', url: 'kmotr', type: 'Film', typeUrl: 'film'},
                     {title_name: 'Sedm', url: 'sedm', type: 'Film', typeUrl: 'film'},
                     {title_name: 'Vykoupení z věznice Shawshank', url: "vykoupeni-z-veznice-shawshank", type: 'Film', typeUrl: 'film'},
                     {title_name: "Forrest Gump", url: "forrest-gump", type: 'Film', typeUrl: 'film'},
                     {title_name: "Zelená míle", url: "zelena-mile", type: 'Film', typeUrl: 'film'},
                     {title_name: "Přelet nad kukaččím hnízdem", url: "prelet-nad-kukaccim-hnizdem", type: 'Film', typeUrl: 'film'},
-                    {title_name: "Schindlerův seznam", url: "schindleruv-seznam", type: 'Film', typeUrl: 'film'},
+                    {title_name: "Schindlerův seznam", url: "schindleruv-seznam", type: 'Film', typeUrl: 'film'},*/
                 ]
             }
         }
@@ -175,7 +175,7 @@ export default {
         this.loadCookies();
         this.getGenres();
         this.getUser();
-
+        this.getSeachTitles();
 
         // TODO DELETE THIS AFTER UCHYLE_Z_VOKUREK
 
@@ -200,6 +200,21 @@ export default {
         // });
     },
     methods: {
+        getSeachTitles() {
+            axios.get('/api/get_all_titles_search').then((res) => {
+                this.searchForm.itemList = res.data;
+
+                this.searchForm.itemList.forEach(item => {
+                    if (item.typeUrl === 'movie') {
+                        item.typeUrl = 'film';
+                        item.type = 'Film';
+                        return;
+                    }
+                    item.typeUrl = 'serial';
+                    item.type = 'Seriál';
+                });
+            });
+        },
         lostFocus() {
             this.searchForm.searchFocus = false;
         },
