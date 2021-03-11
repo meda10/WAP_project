@@ -16,8 +16,10 @@ use App\Models\Item;
 class Title extends Model
 {
     use HasFactory;
-    
+
     const UPDATED_AT = NULL;
+
+    protected $fillable = [ 'title_name', 'year', 'state_id', 'type', 'price', 'description', 'url', 'cover_path',];
 
     public static function create(array $attributes = [])
     {
@@ -32,7 +34,7 @@ class Title extends Model
                             ->whereHas('genres', function($query) use($genre_url) { $query->where('url', 'like', "{$genre_url}%"); })
                             ->where('type', 'like', "{$type}%")
                             ->orderBy('created_at', $order);
-            
+
             $response['titles_count'] = $filteredTitles->get()->count();
             $response['titles'] = $filteredTitles->skip($numberOfTitles * ($pageNumber - 1))
                                     ->take($numberOfTitles)
@@ -67,6 +69,10 @@ class Title extends Model
     public static function getAllCount()
     {
         return Title::get()->count();
+    }
+
+    public function participant(){
+        return $this->belongsToMany(Participant::class, 'participant_title');
     }
 
     public function states()

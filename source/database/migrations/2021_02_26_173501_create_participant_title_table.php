@@ -19,7 +19,7 @@ class CreateParticipantTitleTable extends Migration
             $table->bigInteger('title_id')->unsigned();
             $table->foreign('participant_id')->references('id')->on('participants');
             $table->foreign('title_id')->references('id')->on('titles');
-            $table->boolean('director');
+            $table->boolean('director')->default('0');;
         });
     }
 

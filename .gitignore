@@ -14,6 +14,8 @@
 /source/npm-debug.log
 /source/yarn-error.log
 /source/composer.lock
+/node_modules
+/TODO
 
 .env
 .vscode

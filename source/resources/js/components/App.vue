@@ -260,9 +260,9 @@ export default {
             });
         },
         emitHandler(values) {
-            if (values.isLoading != undefined) this.isLoading = values.isLoading;
+            if (values.isLoading !== undefined) this.isLoading = values.isLoading;
 
-            if (values.cartCookies != undefined) {
+            if (values.cartCookies !== undefined) {
                 this.cartCookies = values.cartCookies;
                 this.$cookies.set('wap-cart', JSON.stringify(this.cartCookies));
                 this.isLoading = false;
