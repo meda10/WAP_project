@@ -11,6 +11,8 @@ use App\Models\Genre;
 use App\Models\State;
 use App\Models\Language;
 use App\Models\Item;
+use App\Models\Reservation;
+use App\Models\Store;
 
 
 class Title extends Model
@@ -49,19 +51,24 @@ class Title extends Model
         return Title::select(['title_name', 'url', 'type AS typeUrl'])->get();
     }
 
-    public static function getTitle($type, $name)
+    public static function getTitle($type, $name, $store_id)
     {
         return Title::where('type', 'like', "{$type}%")
                         ->where('url', $name)
                         ->with('states')
                         ->with('genres')
-                        ->with('languages')
+                        ->with('languages', function($query) use($store_id) { $query->where('items.store_id', $store_id); })
                         ->first();
     }
 
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'title_genre');
+    }
+
+    public function stores()
+    {
+        return $this->hasOneThrough(Store::class, Item::class, 'title_id', 'id', 'id', 'store_id');
     }
 
     public static function getAllCount()
@@ -76,7 +83,7 @@ class Title extends Model
 
     public function languages()
     {
-        return $this->belongsToMany(Language::class, 'items', 'title_id', 'language_id')
+        return $this->belongsToMany(Language::class, Item::class, 'title_id', 'language_id')
                     ->select(['languages.language', 'languages.language_name', DB::raw('count(*) as total')])
                     ->groupBy('language_id');
     }

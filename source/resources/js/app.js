@@ -6,11 +6,14 @@ import VueCookies from 'vue-cookies'
 import App from './components/App'
 import router from './routes'
 import titleMixin from './titles'
-import { ModalPlugin } from 'bootstrap-vue'
+import { ModalPlugin, ButtonPlugin } from 'bootstrap-vue'
+import VueSessionStorage from 'vue-sessionstorage'
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 Vue.use(ModalPlugin);
+Vue.use(ButtonPlugin);
+Vue.use(VueSessionStorage);
 Vue.mixin(titleMixin);
 
 const app = new Vue({
