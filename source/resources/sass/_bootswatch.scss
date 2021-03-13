@@ -372,3 +372,16 @@ label,
         }
     }
 }
+
+// Edit icon (pencil)
+.edit-icon {
+    position: relative;
+    top: -5px;
+    left: 5px;
+    color: $cyan;
+    cursor: pointer;
+
+    &:hover {
+        color: $cyan-dark;
+    }
+}
