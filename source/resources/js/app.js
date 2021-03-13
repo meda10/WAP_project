@@ -9,10 +9,10 @@ import router from './routes';
 import titleMixin from './titles';
 import { ModalPlugin, ButtonPlugin } from 'bootstrap-vue';
 import VueSessionStorage from 'vue-sessionstorage';
-import VueFormulate from '@braid/vue-formulate';
-import { cs } from '@braid/vue-formulate-i18n';
-import FormulateVSelectPlugin from '@cone2875/vue-form  ulate-select';
-import FormulateAutocomplete from './components/FormulateAutocomplete';
+import VueFormulate from '@braid/vue-formulate'
+import { cs } from '@braid/vue-formulate-i18n'
+import FormulateVSelectPlugin from '@cone2875/vue-formulate-select'
+import FormulateAutocomplete from './components/FormulateAutocomplete'
 import 'vue-select/dist/vue-select.css';
 
 Vue.use(VueI18n)
