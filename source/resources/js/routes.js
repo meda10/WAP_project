@@ -97,6 +97,7 @@ export default {
         },
         {
             path: "*",
+            name: 'notfound',
             component: NotFound
         },
     ],

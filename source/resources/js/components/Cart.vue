@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Košík</h1>
+        <h1>Košík (prodejna {{store.address}})</h1>
 
         <div class="alert alert-warning alert-dismissible fade show" role="alert" v-if="!isLoggedIn">
             <strong>Nejste přihlášen(a)!</strong> Musíte se <router-link :to="{ name: 'login' }">přihlásit.</router-link>
@@ -20,26 +20,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in cartCookies" v-bind:key="item.url + '-' + item.language_name">
+                <tr v-for="(item, index) in cartCookies" v-bind:key="index">
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
                             <div class="col-sm-10">
                                 <h4 class="nomargin">{{item.name}} ({{item.language}} dabing)</h4>
-                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                                <p>{{dateFormat(new Date(item.reservationTimeRange[0]), 'dd. mm. yyyy')}} - {{dateFormat(new Date(item.reservationTimeRange[1]), 'dd. mm. yyyy')}}</p>
                             </div>
                         </div>
                     </td>
                     <td data-th="Price">{{item.price}} Kč</td>
                     <td data-th="Quantity">
                         <input type="number" class="form-control text-center" value="0"
-                        v-model="item.quantity" @change="changeItemQuantity(item.quantity, item.url, item.language)"
-                        v-on:keyup="changeItemQuantity(item.quantity, item.url, item.language)"
+                        v-model="item.quantity" @change="changeItemQuantity(item, index)"
+                        v-on:keyup="changeItemQuantity(item, index)"
                         :max="item.maxItemCount">
                     </td>
-                    <td data-th="Subtotal" class="text-center">{{item.quantity * item.price}} Kč</td>
+                    <td data-th="Subtotal" class="text-center">{{item.quantity * item.price * item.reservationNumberOfDays}} Kč</td>
                     <td class="actions" data-th="">
-                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item.url, item.language)"><i class="fas fa-trash"></i></button>								
+                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item, index)"><i class="fas fa-trash"></i></button>								
                     </td>
                 </tr>
             </tbody>
@@ -66,16 +66,24 @@
     </div>
 </template>
 <script>
+import dateFormat from 'dateformat';
+
 export default {
     title: 'Košík',
-    props: ['cartCookiesProps', 'cartItemsPriceProps'],
+    props: ['cartCookiesProps', 'cartItemsPriceProps', 'chosenStoreProps', 'storesProps'],
     data() {
         return {
             isLoggedIn: true,
             modalRemoveFromCart: false,
             urlToRemove: '', 
             languageToRemove: '',
-            countOfItemToRemove: 1
+            countOfItemToRemove: 1,
+            itemToBeRemoved: null,
+            itemIndexToBeRemoved: -1,
+            store: {
+                id: 0,
+                address: ''
+            },
         }
     },
     computed: {
@@ -84,43 +92,48 @@ export default {
         },
         cartItemsPrice: function () {
             return this.cartItemsPriceProps;
+        },
+        chosenStore: function () {
+            return this.chosenStoreProps;
+        },
+        stores: function () {
+            return this.storesProps;
+        }
+    },
+    watch: {
+        stores: {
+            handler: function (stores) {
+                stores.forEach(storeItem => {
+                    if (storeItem.id === this.chosenStore) {
+                        this.store = storeItem
+                        return;
+                    }
+                });
+            },
+            immediate: true
         }
     },
     methods: {
+        dateFormat: dateFormat,
         handleDontRemoveFromCart() {
-            this.cartCookies.forEach(item => {
-                if (item.url === this.urlToRemove && 
-                    item.language === this.languageToRemove) {
-                        if (Number(item.quantity) === 0) item.quantity = 1;
-                        this.$forceUpdate();
-                }
-            });
-            this.$emit('emitHandler',  {cartCookies: this.cartCookies});
+            if (Number(this.itemToBeRemoved.quantity) === 0) this.itemToBeRemoved.quantity = 1;
+            this.$emit('emitHandler', {cartCookies: this.cartCookies});
+            this.$forceUpdate();
         },
         handleRemoveFromCart() {
-            var newCart = this.cartCookies.filter(item => {
-                return item.url !== this.urlToRemove || item.language !== this.languageToRemove;
-            });
-            this.$emit('emitHandler',  {cartCookies: newCart});
+            this.cartCookies.splice(this.itemIndexToBeRemoved, 1);
+            this.$emit('emitHandler',  {cartCookies: this.cartCookies});
         },
-        removeFromCart(url, language) {
-            this.urlToRemove = url;
-            this.languageToRemove = language;
+        removeFromCart(item, itemIndex) {
+            this.itemToBeRemoved = item;
+            this.itemIndexToBeRemoved = itemIndex;
             this.modalRemoveFromCart = true;
         },
-        changeItemQuantity(quantity, url, language) {
-            if (quantity !== '' && Number(quantity) === 0)
-                this.removeFromCart(url, language);
-
+        changeItemQuantity(item, itemIndex) {
+            if (item.quantity !== '' && Number(item.quantity) === 0)
+                this.removeFromCart(item, itemIndex);
             else {
-                this.cartCookies.forEach(item => {
-                    if (item.url === url && 
-                        item.language === language && 
-                        Number(quantity) > Number(item.maxItemCount)) {
-                            item.quantity = item.maxItemCount;
-                            this.$forceUpdate();
-                    }
-                });
+                if (Number(item.quantity) > Number(item.maxItemCount)) item.quantity = item.maxItemCount;
                 this.$emit('emitHandler',  {cartCookies: this.cartCookies});
             }
         },
