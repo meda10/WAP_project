@@ -36,7 +36,6 @@
         "@braid/vue-formulate-i18n": "^1.16.0",
         "@cone2875/vue-formulate-select": "^0.1.4",
         "bootstrap-vue": "^2.21.2",
-        "v-calendar": "^2.2.4",
         "vue-i18n": "^8.23.0"
     },
     "name": "html"

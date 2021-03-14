@@ -268,7 +268,7 @@ export default {
             });
         },
         loadCookies(){
-            this.cartCookies = JSON.parse($cookies.get('wap-cart')) || [];
+            this.cartCookies = JSON.parse(this.$cookies.get('wap-cart')) || [];
             this.cookiesItemsCount();
         },
         cookiesItemsCount() {

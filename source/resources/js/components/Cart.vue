@@ -9,7 +9,7 @@
             </button>
         </div>
 
-        <table id="cart" class="table table-hover table-condensed" v-if="cartCookies.length !== 0">
+        <table id="cart" class="table table-condensed" v-if="cartCookies.length !== 0">
             <thead>
                 <tr>
                     <th style="width:50%">Položka</th>
@@ -43,12 +43,38 @@
                     </td>
                 </tr>
             </tbody>
-
+            <tbody v-if="!discountApplied">
+                <tr>
+                    <td data-th="DiscountCode">
+                        <input type="text" class="form-control text-center" value=""
+                        placeholder="Zadejte slevový kód" v-model="discountCode"
+                        :class="{ 'is-invalid' : discountCodeWrong}">
+                    </td>
+                    <td data-th="Button" colspan="2">
+                        <button @click="applyDiscount()" class="btn btn-success btn-block">Použij slevu  <i class="fas fa-percentage"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody v-if="discountApplied">
+                <tr>
+                    <td data-th="DiscountCode">
+                        <h4 class="nomargin">Slevový kupón <strong>W61K37I3T9</strong></h4>
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td class="text-center">
+                        - 30%
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @click="removeDiscount()"><i class="fas fa-times"></i></button>
+                    </td>
+                </tr>
+            </tbody>
             <tfoot>
                 <tr>
                     <td><router-link :to="{ name: 'home' }" class="btn btn-warning"><i class="fa fa-angle-left"></i> Pokračovat v nákupu</router-link></td>
                     <td colspan="2" class="hidden-xs"></td>
-                    <td class="hidden-xs text-center"><strong>Celková cena: {{ cartItemsPrice }} Kč</strong></td>
+                    <td class="hidden-xs text-center"><strong>Celková cena: {{ cartItemsPrice - (discountPercent * cartItemsPrice / 100) }} Kč</strong></td>
                     <td><button @click="checkout()" class="btn btn-success btn-block" >Do pokladny <i class="fa fa-angle-right"></i></button></td>
                 </tr>
             </tfoot>
@@ -80,6 +106,10 @@ export default {
             countOfItemToRemove: 1,
             itemToBeRemoved: null,
             itemIndexToBeRemoved: -1,
+            discountCode: '',
+            discountApplied: false,
+            discountCodeWrong: false,
+            discountPercent: 0,
             store: {
                 id: 0,
                 address: ''
@@ -113,8 +143,38 @@ export default {
             immediate: true
         }
     },
+    mounted() {
+        var cookiesDiscount = this.$cookies.get('wap-cart-discount') || {};
+        if (JSON.stringify(cookiesDiscount) !== JSON.stringify({})) {
+            this.discountCode = cookiesDiscount.discountCode;
+            this.discountPercent = Number(cookiesDiscount.discountPercent);
+            this.discountApplied = true;
+        }
+    },
     methods: {
         dateFormat: dateFormat,
+        applyDiscount() {
+            this.$emit('emitHandler', {isLoading: true});
+
+            axios.post('/api/check_discount_code', { code: this.discountCode }).then((res) => {
+                this.discountPercent = Number(res.data.percent);
+                this.discountApplied = true;
+                this.$cookies.set('wap-cart-discount', JSON.stringify({ code: this.discountCode, percent: this.discountPercent }));
+                this.$emit('emitHandler', {isLoading: false});
+            }).catch(error => {
+                if (Number(error.response.status) === 404) {
+                    $('#discountCodeInput').popover({ trigger: 'focus', title: 'Twitter Bootstrap Popover', content: "It's so simple to create a tooltop for my website!" });
+                    this.discountCodeWrong = true;
+                }
+                this.$emit('emitHandler', {isLoading: false});
+            });
+        },
+        removeDiscount() {
+            this.discountPercent = 0;
+            this.discountApplied = false;
+            this.discountCode = '';
+            this.$cookies.set('wap-cart-discount', JSON.stringify({}));
+        },
         handleDontRemoveFromCart() {
             if (Number(this.itemToBeRemoved.quantity) === 0) this.itemToBeRemoved.quantity = 1;
             this.$emit('emitHandler', {cartCookies: this.cartCookies});

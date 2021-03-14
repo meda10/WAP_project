@@ -40,3 +40,5 @@ Route::get('/get_actors', 'Api\ParticipantController@get_items_select');
 Route::get('/get_states', 'Api\StateController@get_items_select');
 Route::post('/set_titles', 'Api\TitlesController@store');
 Route::post('/set_actor', 'Api\ParticipantController@store');
+
+Route::post('/check_discount_code', 'Api\DiscountsController@checkDiscountCode');
