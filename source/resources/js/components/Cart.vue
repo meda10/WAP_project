@@ -121,7 +121,7 @@ export default {
             return this.cartCookiesProps || [];
         },
         cartItemsPrice: function () {
-            return this.cartItemsPriceProps;
+            return Number(this.cartItemsPriceProps);
         },
         chosenStore: function () {
             return this.chosenStoreProps;
@@ -146,8 +146,8 @@ export default {
     mounted() {
         var cookiesDiscount = this.$cookies.get('wap-cart-discount') || {};
         if (JSON.stringify(cookiesDiscount) !== JSON.stringify({})) {
-            this.discountCode = cookiesDiscount.discountCode;
-            this.discountPercent = Number(cookiesDiscount.discountPercent);
+            this.discountCode = cookiesDiscount.code;
+            this.discountPercent = Number(cookiesDiscount.percent);
             this.discountApplied = true;
         }
     },
