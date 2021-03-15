@@ -12,6 +12,7 @@ import Checkout from './components/Checkout';
 import Cart from './components/Cart';
 import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
+import EditTitle from "./components/EditTitle";
 
 
 export default {
@@ -46,6 +47,11 @@ export default {
             path: '/admin/pridat_titul',
             name: 'titleadd',
             component: TitleAdd
+        },
+        {
+            path: '/film/:titleName/upravit',
+            name: 'titleEdit',
+            component: EditTitle
         },
         {
             path: '/admin/pridat_herce',

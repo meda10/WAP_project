@@ -17,10 +17,9 @@ class ParticipantResource extends JsonResource
         return [
             'value' => strval($this->id),
             'label' => $this->name." ".$this->surname,
-            'id' => $this->id,
-//            'surname' => $this->surname,
-//            'birth' => $this->birth,
+            'herec' => strval($this->id),
         ];
     }
 
 }
+

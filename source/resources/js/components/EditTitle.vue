@@ -138,7 +138,9 @@
 export default {
     data() {
         return {
-            formValues: {},
+            formValues: {
+                // id: this.title_id,
+            },
             actors: [],
             states: [],
         }
@@ -146,14 +148,18 @@ export default {
     mounted() {
         this.get_actors();
         this.get_states();
+        if (this.$route.params.id != null){
+            this.title_id = this.$route.params.id;
+            this.get_title_by_id();
+        }
     },
     computed: {
 
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_titles', data).catch(error => {
-                // console.log(error.response)
+            await axios.put("/api/update_title/" + this.title_id, data).catch(error => {
+                console.log(error.response)
             });
             alert('Thank you')
         },
@@ -169,36 +175,55 @@ export default {
                 // console.log(this.states);
             });
         },
+        get_title_by_id() {
+            // this.$emit('emitHandler',  {isLoading: true});
+
+            axios.post('/api/get_title_by_id', {'id' : this.title_id }).then((res) => {
+                console.log(res);
+                console.log(res.data);
+                console.log(res.data.data);
+                this.formValues = res.data.data[0];
+                // this.titleInfo = res.data;
+                // this.title = this.titleInfo.title_name;
+                // this.titleDabingName = this.titleInfo.languages[0].language_name;
+                // this.maxItemCount = this.titleInfo.languages[0].total;
+                // this.countMaxItemInCart();
+            }).catch((error) => {
+                // TODO handle this error
+                console.log(error);
+                this.$emit('emitHandler',  {isLoading: false});
+            });
+        },
     }
 }
 </script>
 <style scoped>
-    .form {
-        padding: 2em;
-        border: 1px solid #a8a8a8;
-        border-radius: .5em;
-        max-width: 500px;
-        box-sizing: border-box;
+.form {
+    padding: 2em;
+    border: 1px solid #a8a8a8;
+    border-radius: .5em;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+.form-title {
+    margin-top: 0;
+}
+.form::v-deep .formulate-input .formulate-input-element {
+    max-width: none;
+}
+@media (min-width: 420px) {
+    .double-wide {
+        display: flex;
     }
-    .form-title {
-        margin-top: 0;
+    .double-wide .formulate-input {
+        flex-grow: 1;
+        width: calc(50% - .5em);
     }
-    .form::v-deep .formulate-input .formulate-input-element {
-        max-width: none;
+    .double-wide .formulate-input:first-child {
+        margin-right: .5em;
     }
-    @media (min-width: 420px) {
-        .double-wide {
-            display: flex;
-        }
-        .double-wide .formulate-input {
-            flex-grow: 1;
-            width: calc(50% - .5em);
-        }
-        .double-wide .formulate-input:first-child {
-            margin-right: .5em;
-        }
-        .double-wide .formulate-input:last-child {
-            margin-left: .5em;
-        }
+    .double-wide .formulate-input:last-child {
+        margin-left: .5em;
     }
+}
 </style>

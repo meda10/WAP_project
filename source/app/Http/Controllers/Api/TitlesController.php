@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\ParticipantController;
+use App\Http\Resources\TitleUpdateResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -81,8 +82,13 @@ class TitlesController extends Controller
             'url' => AppHelper::friendlyUrl($request['titul'])
         ]);
         $title->genres()->attach($request['zanr']);
-        $participant_id = (new \App\Models\Participant)->by_name($request['herci']);
-        $title->participant()->attach(array_keys($participant_id));
+
+        $actor_id_arr = [];
+        foreach ($request['herci'] as $value) {
+            array_push($actor_id_arr, $value['herec']);
+        }
+        $title->participant()->attach($actor_id_arr);
+
         foreach ($request['novy_herec'] as $herec){
             $participant = Participant::create([
                 'name' => $herec['jmeno'],
@@ -91,17 +97,15 @@ class TitlesController extends Controller
             ]);
             $title->participant()->attach($participant['id']);
         }
+        return response()->json($title, 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Title  $title
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Title $title)
+
+    public function show(Request $request)
     {
-        //
+//        return Title::get_by_id($request['id']);
+        return TitleUpdateResource::collection(Title::get_title_edit_by_id($request['id']));
+//        return Title::get_title_edit_by_id($request['id']);
     }
 
     /**
@@ -111,9 +115,37 @@ class TitlesController extends Controller
      * @param  \App\Models\Title  $title
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Title $title)
+    public function update(Request $request, $id)
     {
-        //
+        $title = Title::findOrFail($id);
+        $title->update([
+            'title_name' => $request['titul'],
+            'year' => $request['rok'],
+            'state_id' => $request['zeme_puvodu'],
+            'type' => $request['typ'],
+            'price' => $request['cena'],
+            'description' => $request['popis'],
+            'url' => AppHelper::friendlyUrl($request['titul'])
+        ]);
+        $title->genres()->sync($request['zanr']);
+
+        $actor_id_arr = [];
+        print_r($request['herci']);
+        foreach ($request['herci'] as $value) {
+            array_push($actor_id_arr, $value['herec']);
+        }
+        $title->participant()->sync(array_values($actor_id_arr));
+
+        foreach ($request['novy_herec'] as $herec){
+            $participant = Participant::create([
+                'name' => $herec['jmeno'],
+                'surname' => $herec['prijmeni'],
+                'birth' => $herec['datum_narozeni'],
+            ]);
+            $title->participant()->attach($participant['id']);
+        }
+        $title->save();
+        return response()->json($title, 200);
     }
 
     /**
@@ -122,9 +154,13 @@ class TitlesController extends Controller
      * @param  \App\Models\Title  $title
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Title $title)
+    public function destroy($id)
     {
-        //
+        $title = Title::findOrFail($id);
+        $title->genres()->detach();
+        $title->participant()->detach();
+        $title->delete();
+
     }
 
     protected function Title_validator(){

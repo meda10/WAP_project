@@ -25,6 +25,11 @@ Route::middleware('auth:sanctum')->get('/authenticated', function () {
 Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
 Route::post('/get_titles', 'Api\TitlesController@getTitles');
 Route::post('/get_title', 'Api\TitlesController@getTitle');
+Route::post('/get_title_by_id', 'Api\TitlesController@show');
+
+Route::put('/update_title/{id}', 'Api\TitlesController@update');
+Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
+
 Route::post('/update_user_name', 'Api\UsersController@updateName');
 Route::post('/update_user_surname', 'Api\UsersController@updateSurname');
 Route::post('/update_user_password', 'Api\UsersController@updatePassword');
