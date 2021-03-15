@@ -1,5 +1,12 @@
 <template>
     <div class="container">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="reservation">
+            <strong>Rezervace byla úspěšná!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <div id="carouselNews" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselNews" data-slide-to="0" class="active"></li>
@@ -71,6 +78,14 @@
 
 <script>
     export default {
-        title: 'Home Page'
+        title: 'Home Page',
+        data() {
+            return {
+                reservation: false
+            }
+        }, 
+        mounted() {
+            this.reservation = this.$route.params.reservation;
+        }
     }
 </script>

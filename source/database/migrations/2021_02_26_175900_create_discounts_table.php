@@ -17,8 +17,6 @@ class CreateDiscountsTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->integer('percent');
-            $table->bigInteger('reservation_id')->unsigned()->nullable(true);
-            $table->foreign('reservation_id')->references('id')->on('reservations');
         });
     }
 

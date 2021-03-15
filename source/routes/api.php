@@ -42,3 +42,5 @@ Route::post('/set_titles', 'Api\TitlesController@store');
 Route::post('/set_actor', 'Api\ParticipantController@store');
 
 Route::post('/check_discount_code', 'Api\DiscountsController@checkDiscountCode');
+Route::post('/make_reservation', 'Api\ReservationsController@makeReservation');
+Route::post('/get_my_reservations_filtered', 'Api\ReservationsController@getMyReservationsFiltered');

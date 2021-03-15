@@ -15,6 +15,10 @@ class Reservation extends Model
 
     const UPDATED_AT = NULL;
 
+    protected $fillable = ['reservation', 'reservation_till', 'invoice_id', 
+                            'price', 'returned', 'paid', 'issued', 'created_at', 
+                            'user_id', 'item_id', 'fine'];
+
     public static function getTitleReservations($titleUrl, $store_id)
     {
         $reservations = [];
@@ -63,5 +67,10 @@ class Reservation extends Model
     public function languages()
     {
         return $this->hasOneThrough(Language::class, Item::class, 'id', 'id', 'item_id', 'language_id');
+    }
+
+    public function discounts()
+    {
+        return $this->belongsToMany(Dicount::class, 'discount_reservation', 'reservation_id', 'discount_id');
     }
 }

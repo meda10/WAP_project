@@ -85,7 +85,7 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
+            <router-view v-on:emitHandler="emitHandler" :userProps="user" :key="$route.path"
             :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice" 
             :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
         </div>

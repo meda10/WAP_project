@@ -17,12 +17,12 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->date('reservation');
             $table->date('reservation_till');
-            $table->integer('fine');
+            $table->integer('fine')->default(0);
             $table->integer('invoice_id');
             $table->integer('price');
-            $table->boolean('returned');
+            $table->boolean('returned')->default(false);
             $table->boolean('paid');
-            $table->boolean('issued');
+            $table->boolean('issued')->default(false);
             $table->dateTime('created_at');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('item_id')->unsigned();

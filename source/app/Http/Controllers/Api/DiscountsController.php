@@ -13,6 +13,6 @@ class DiscountsController extends Controller
     {
         if ($response = Discount::checkCodeExistNotUsed($request->code))
             return $response;
-        abort(404);
+        abort(400);
     }
 }

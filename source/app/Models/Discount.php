@@ -19,6 +19,20 @@ class Discount extends Model
 
     public static function checkCodeExistNotUsed($code)
     {
-        return Discount::select(['percent'])->where(DB::raw('BINARY `code`'), $code)->where('reservation_id', null)->first();
+        $discount = Discount::with('reservations')->where(DB::raw('BINARY `code`'), $code)->first();
+        if (count($discount->reservations) == 0)
+            return ['percent' => $discount['percent']];
+        return [];
+    }
+
+    public function reservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'discount_reservation', 'discount_id', 'reservation_id');
+    }
+
+    public static function applyDiscountOnReservation($discountCode, $reservationId)
+    {
+        $discount = Discount::where('code', $discountCode)->first();
+        $discount->reservations()->attach($reservationId);
     }
 }

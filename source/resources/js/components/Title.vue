@@ -318,23 +318,21 @@
                 this.maxPossibleItemCartCount = this.maxPossibleItemCount - numberOfReservations;
             },
             countMaxItemInCart() {
-                var coockieItemCount = 0;
                 var skip = false;
                 var index = 0;
                 this.cartCookies.forEach(item => {
-                    var isIntersection = this.dateIntersection(item.reservationTimeRange, this.reservationTimeRange);
+                    if (item.language_name === this.titleDabingName && item.url === this.titleInfo.url) {
+                        var isIntersection = this.dateIntersection(item.reservationTimeRange, this.reservationTimeRange);
 
-                    if (isIntersection) {
-                        this.$refs['modal-change-date-range'].show();
-                        this.itemToDeleteFromCart = index;
-                        skip = true;
-                        return;
+                        if (isIntersection) {
+                            this.$refs['modal-change-date-range'].show();
+                            this.itemToDeleteFromCart = index;
+                            skip = true;
+                            return;
+                        }
+                        
+                        index++;
                     }
-
-                    if (item.language_name === this.titleDabingName && item.url === this.titleInfo.url)
-                        coockieItemCount = Number(item.quantity);
-                    
-                    index++;
                 });
 
                 if (!skip) {
@@ -344,7 +342,7 @@
                     });
 
                     this.countMaxPossibleItemCartCount();
-                    this.maxItemCount = this.maxPossibleItemCartCount - coockieItemCount;
+                    this.maxItemCount = this.maxPossibleItemCartCount;
                 }
             },
             dateIntersection(dateRange1, dateRange2) {
@@ -374,6 +372,7 @@
                     this.title = this.titleInfo.title_name;
                     this.titleDabingName = this.titleInfo.languages[0].language_name;
                     this.maxItemCount = this.titleInfo.languages[0].total;
+                    this.maxPossibleItemCount = this.titleInfo.languages[0].total;
                 }).catch((error) => {
                     this.$router.push({ name: 'notfound' });
                 });
@@ -402,13 +401,17 @@
 
                     var item = {
                         name: this.titleInfo.title_name,
+                        type: this.titleInfo.type,
                         price: this.titleInfo.price,
                         quantity: this.itemCount,
                         url: this.titleInfo.url,
                         language_name: this.titleDabingName,
                         language: this.titleDabingId,
                         maxItemCount: this.maxPossibleItemCartCount,
-                        reservationTimeRange: this.reservationTimeRange,
+                        reservationTimeRange: [
+                            dateFormat(new Date(this.reservationTimeRange[0]), 'yyyy-mm-dd'),
+                            dateFormat(new Date(this.reservationTimeRange[1]), 'yyyy-mm-dd'),
+                        ],
                         reservationNumberOfDays: this.reservationNumberOfDays
                     };
 
