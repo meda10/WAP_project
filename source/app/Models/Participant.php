@@ -31,4 +31,7 @@ class Participant extends Model
         return $this->belongsToMany(Title::class, 'participant_title');
     }
 
+    public static function get_actor_by_id($id){
+        return Participant::where('id', $id)->get();
+    }
 }

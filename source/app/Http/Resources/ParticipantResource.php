@@ -15,11 +15,9 @@ class ParticipantResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'value' => strval($this->id),
-            'label' => $this->name." ".$this->surname,
-            'herec' => strval($this->id),
+            'jmeno' => $this->name,
+            'prijmeni' => $this->surname,
+            'datum_narozeni' => $this->birth,
         ];
     }
-
 }
-

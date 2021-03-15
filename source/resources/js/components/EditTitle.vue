@@ -7,7 +7,7 @@
         <!--        #default="{ hasErrors }"-->
         <!--        #default="{isLoading}"-->
 
-        <h2 class="form-title">Tituly</h2>
+        <h2 class="form-title">Upravit titul</h2>
         <FormulateInput
             name="titul"
             type="text"
@@ -179,15 +179,7 @@ export default {
             // this.$emit('emitHandler',  {isLoading: true});
 
             axios.post('/api/get_title_by_id', {'id' : this.title_id }).then((res) => {
-                console.log(res);
-                console.log(res.data);
-                console.log(res.data.data);
                 this.formValues = res.data.data[0];
-                // this.titleInfo = res.data;
-                // this.title = this.titleInfo.title_name;
-                // this.titleDabingName = this.titleInfo.languages[0].language_name;
-                // this.maxItemCount = this.titleInfo.languages[0].total;
-                // this.countMaxItemInCart();
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);

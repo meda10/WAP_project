@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Http\Resources\GenreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ParticipantResource;
+use App\Http\Resources\ParticipantSelectResource;
 
 
 class TitleUpdateResource extends JsonResource
@@ -29,7 +29,7 @@ class TitleUpdateResource extends JsonResource
             'typ' => $this->type,
             'cena' => $this->price,
             'popis' => $this->description,
-            'herci' => ParticipantResource::collection($this->participant),
+            'herci' => ParticipantSelectResource::collection($this->participant),
             'zanr' => $genre_arr,
         ];
     }
