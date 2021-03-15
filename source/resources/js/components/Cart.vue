@@ -25,7 +25,10 @@
                 <tr v-for="(item, index) in cartCookies" v-bind:key="index">
                     <td data-th="Product">
                         <div class="row">
-                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                            <div class="col-sm-2 hidden-xs">
+                                <img :src="'./img/movies/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'movie'" />
+                                <img :src="'./img/series/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'serial'" />
+                            </div>
                             <div class="col-sm-10 cart-item-name">
                                 <h4 class="nomargin">{{item.name}} ({{item.language}} dabing)</h4>
                                 <p>{{dateFormat(new Date(item.reservationTimeRange[0]), 'dd. mm. yyyy')}} - {{dateFormat(new Date(item.reservationTimeRange[1]), 'dd. mm. yyyy')}}</p>
