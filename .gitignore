@@ -16,6 +16,7 @@
 /source/composer.lock
 /node_modules
 /TODO
+/.idea
 
 .env
 .vscode
