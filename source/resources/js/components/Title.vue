@@ -63,7 +63,7 @@
                                 <h5>Dabing:</h5>
                             </div>
                             <div class="col-7">
-                                <select class="form-select" v-model="titleDabingName">
+                                <select class="form-select title-reservation-item" v-model="titleDabingName">
                                     <option v-for="language in titleInfo.languages" v-bind:value="language.language_name"
                                             v-bind:key="language.language_name">{{language.language}}</option>
                                 </select>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="col-7">
                                 <date-picker v-model="reservationTimeRange" 
-                                range :disabled-date="disabledDays"
+                                range :disabled-date="disabledDays" class="title-reservation-item"
                                 :lang="datePickerLang" />
                             </div>
                         </div>
@@ -86,8 +86,8 @@
                                 <h5>Kusů:</h5>
                             </div>
                             <div class="col-7">
-                                <input type="number" class="form-control" name="optionsRadios" value="1" min="1" 
-                                :max="maxItemCount" v-model="itemCount" 
+                                <input type="number" class="form-control title-reservation-item" name="optionsRadios" value="1" min="1" 
+                                :max="maxItemCount" v-model="itemCount"
                                 data-toggle="tooltip" :disabled="itemCount === 0"
                                 data-placement="top" :title="itemCount === 0 ? 'Pro pokračování vyberte datum rezervace' : ''">
                             </div>

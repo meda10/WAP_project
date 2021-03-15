@@ -17,8 +17,8 @@
                     <th style="width:50%">Položka</th>
                     <th style="width:10%">Cena</th>
                     <th style="width:8%">Množství</th>
-                    <th style="width:22%" class="text-center">Mezisoučet</th>
-                    <th style="width:10%"></th>
+                    <th style="width:17%" class="text-center">Mezisoučet</th>
+                    <th style="width:15%" class="text-center">Odstranit</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10 cart-item-name">
                                 <h4 class="nomargin">{{item.name}} ({{item.language}} dabing)</h4>
                                 <p>{{dateFormat(new Date(item.reservationTimeRange[0]), 'dd. mm. yyyy')}} - {{dateFormat(new Date(item.reservationTimeRange[1]), 'dd. mm. yyyy')}}</p>
                             </div>
@@ -40,7 +40,7 @@
                         :max="item.maxItemCount">
                     </td>
                     <td data-th="Subtotal" class="text-center">{{item.quantity * item.price * item.reservationNumberOfDays}} Kč</td>
-                    <td class="actions" data-th="">
+                    <td class="actions text-center">
                         <button class="btn btn-danger btn-sm" @click="removeFromCart(item, index)"><i class="fas fa-trash"></i></button>								
                     </td>
                 </tr>
@@ -104,7 +104,7 @@
                     <td><router-link :to="{ name: 'home' }" class="btn btn-warning"><i class="fa fa-angle-left"></i> Pokračovat v nákupu</router-link></td>
                     <td colspan="2" class="hidden-xs"></td>
                     <td class="hidden-xs text-center"><strong>Celková cena: {{ cartItemsPrice - (discountPercent * cartItemsPrice / 100) }} Kč</strong></td>
-                    <td><button @click="reservation()" class="btn btn-success btn-block" >Závazně rezervovat <i class="fa fa-angle-right"></i></button></td>
+                    <td><button @click="reservation()" class="btn btn-success btn-block" >Rezervovat <i class="fa fa-angle-right"></i></button></td>
                 </tr>
             </tfoot>
         </table>

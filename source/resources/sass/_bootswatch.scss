@@ -244,6 +244,10 @@ label,
   font-size: $font-size-sm;
 }
 
+.title-reservation-item {
+  width: $input-title-reservation-width !important;
+}
+
 // Navs ========================================================================
 
 .nav-tabs,
@@ -388,4 +392,10 @@ label,
     &:hover {
         color: $cyan-dark;
     }
+}
+
+
+// Cart 
+.cart-item-name {
+  padding-left: $cart-item-name-padding
 }
