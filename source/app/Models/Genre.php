@@ -14,6 +14,7 @@ class Genre extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['genre_name', 'url'];
 
     public static function create(array $attributes = [])
     {
@@ -32,17 +33,17 @@ class Genre extends Model
                         ->get();
     }
 
-    public static function getGenresMoviesMenu() 
+    public static function getGenresMoviesMenu()
     {
         return Genre::getGenresMenu('movie');
     }
 
-    public static function getGenresSeriesMenu() 
+    public static function getGenresSeriesMenu()
     {
         return Genre::getGenresMenu('serial');
     }
 
-    public static function getGenreByUrl($genreUrl) 
+    public static function getGenreByUrl($genreUrl)
     {
         return Genre::select(['genre_name AS name'])->where('url', $genreUrl)->first();
     }

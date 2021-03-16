@@ -12,6 +12,8 @@ class Language extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['language', 'language_name'];
+
     public static function create(array $attributes = [])
     {
         $attributes['language_name'] = AppHelper::friendlyUrl($attributes['language']);

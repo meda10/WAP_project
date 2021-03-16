@@ -114,7 +114,8 @@ export default {
             await axios.post('/api/set_user', data).catch(error => { //todo
                 console.log(error.response)
             });
-            alert('Thank you')
+            // alert('Thank you')
+            await this.$router.push({path: '/admin/uzivatele'}); //todo redirect
         },
         get_stores() {
             axios.get('/api/get_stores_select').then((res) => {

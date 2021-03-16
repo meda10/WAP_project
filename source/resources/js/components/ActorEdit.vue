@@ -54,7 +54,8 @@ export default {
             await axios.put('/api/update_actor/' + this.actor_id, data).catch(error => {
                 console.log(error.response)
             });
-            alert('Thank you')
+            // alert('Thank you')
+            // await this.$router.push({path: '/admin/uzivatele'}); //todo redirect to actors
         },
         get_actor_by_id() {
             // this.$emit('emitHandler',  {isLoading: true});

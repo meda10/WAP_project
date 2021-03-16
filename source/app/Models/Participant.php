@@ -10,10 +10,10 @@ use App\Helpers\AppHelper;
 class Participant extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
 
-    protected $fillable = [ 'name', 'surname', 'birth'];
+    protected $fillable = ['name', 'surname', 'birth', 'created_at', 'updated_at'];
 
     public function by_name($value){
         $id_array = [];

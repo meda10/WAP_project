@@ -12,6 +12,7 @@ class Store extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['description', 'address', 'zip_code', 'city'];
 
     public function users()
     {

@@ -154,7 +154,7 @@ export default {
             await axios.post('/api/set_titles', data).catch(error => {
                 console.log(error.response)
             });
-            alert('Thank you')
+            await this.$router.push({path: '/film/'}); //todo redirect to current film
         },
         get_actors() {
             axios.get('/api/get_actors').then((res) => {

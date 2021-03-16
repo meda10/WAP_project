@@ -12,6 +12,8 @@ class State extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['state_name', 'icon_path'];
+
     public static function create(array $attributes = [])
     {
         $attributes['icon_path'] = AppHelper::friendlyUrl($attributes['state_name']);

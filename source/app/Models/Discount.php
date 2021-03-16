@@ -12,6 +12,8 @@ class Discount extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['code', 'percent'];
+
     public static function checkCodeNotExist($code)
     {
         return Discount::where('code', $code)->first() ? true : false;

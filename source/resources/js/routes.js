@@ -13,7 +13,7 @@ import Cart from './components/Cart';
 import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
 import Reservations from "./components/Reservations";
-import TitleEdit from "./components/EditTitle";
+import TitleEdit from "./components/TitleEdit";
 import ActorEdit from "./components/ActorEdit";
 import UserEdit from "./components/UserEdit";
 import UserAdd from "./components/UserAdd";
