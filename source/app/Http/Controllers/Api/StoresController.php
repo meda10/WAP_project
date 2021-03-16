@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreSelectResource;
+use App\Http\Resources\StoresResource;
 use Illuminate\Http\Request;
 use App\Models\Store;
 
@@ -25,7 +26,7 @@ class StoresController extends Controller
      */
     public function index()
     {
-
+        return StoresResource::collection(Store::all());
     }
 
     /**
@@ -36,18 +37,22 @@ class StoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->store_validator();
+        Store::create([
+            'description' => $request['popis'],
+            'address' => $request['adresa'],
+            'zip_code' => $request['psc'],
+            'city' => $request['mesto'],
+        ]);
+        //todo response
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        return new StoresResource(Store::findOrFail($request['id']));
     }
 
     /**
@@ -59,7 +64,17 @@ class StoresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $store = Store::findOrFail($id);
+        $this->store_validator();
+        $store->update([
+            'description' => $request['popis'],
+            'address' => $request['adresa'],
+            'zip_code' => $request['psc'],
+            'city' => $request['mesto'],
+        ]);
+        $store->save();
+        //todo response
+        return response()->json($store, 200);
     }
 
     /**
@@ -70,6 +85,16 @@ class StoresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $store = Store::findOrFail($id);
+        $store->delete();
+    }
+
+    protected function store_validator(){
+        return request()->validate([
+            'popis' => 'required|string|max:1000',
+            'adresa' => 'required|string|max:255',
+            'psc' => 'required|numeric', //todo number of digits
+            'mesto' => 'required|string|max:255',
+        ]);
     }
 }

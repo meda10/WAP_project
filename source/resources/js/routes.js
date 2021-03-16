@@ -19,6 +19,9 @@ import UserEdit from "./components/UserEdit";
 import UserAdd from "./components/UserAdd";
 import Users from "./components/Users";
 import Actors from "./components/Actors";
+import Stores from "./components/Stores";
+import StoreAdd from "./components/StoreAdd";
+import StoreEdit from "./components/StoreEdit";
 
 
 export default {
@@ -65,17 +68,32 @@ export default {
             component: TitleEdit
         },
         {
+            path: '/admin/obchody',
+            name: 'stores',
+            component: Stores
+        },
+        {
+            path: '/admin/obchody/pridat_obchod',
+            name: 'storeAdd',
+            component: StoreAdd
+        },
+        {
+            path: '/admin/obchody/upravit_obchod/:id',
+            name: 'storeEdit',
+            component: StoreEdit
+        },
+        {
             path: '/admin/herci',
             name: 'actors',
             component: Actors
         },
         {
-            path: '/admin/pridat_herce',
+            path: '/admin/herci/pridat_herce',
             name: 'actorAdd',
             component: ActorAdd
         },
         {
-            path: '/admin/upravit_herce/:id',
+            path: '/admin/herci/upravit_herce/:id',
             name: 'actorEdit',
             component: ActorEdit
         },

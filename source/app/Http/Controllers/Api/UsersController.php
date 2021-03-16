@@ -58,12 +58,10 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-
     }
 
     /**
-     * @param Request $request
-     * @return UserUpdateResource
+     * Display the specified resource.
      */
     public function show(Request $request)
     {
@@ -76,7 +74,7 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $this->User_validator();
+        $this->user_validator();
         $user->update([
             'name' => $request['jmeno'],
             'surname' => $request['prijmeni'],
@@ -93,7 +91,7 @@ class UsersController extends Controller
         return response()->json($user, 200);
     }
 
-    protected function User_validator(){
+    protected function user_validator(){
         return request()->validate([
             'jmeno' => 'required|string|max:255',
             'prijmeni' => 'required|string|max:255',

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Herci</h2>
         <b-button variant="success" size="sm" @click="add_actor()" class="mr-2" >Přidat herce</b-button>
         <b-table :items="actors" :fields="fields" striped responsive="sm">
             <template #cell(actions)="row">

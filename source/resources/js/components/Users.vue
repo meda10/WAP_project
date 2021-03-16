@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Uživatelé</h2>
         <b-button variant="success" size="sm" @click="add_user()" class="mr-2" >Přidat uživatele</b-button>
         <b-table :items="users" :fields="fields" striped responsive="sm">
             <template #cell(confirmed)="row">
@@ -35,7 +36,7 @@ export default {
         }
     },
     mounted() {
-        this.get_users();
+        this.get_stores();
     },
     methods: {
         get_users() {
@@ -48,13 +49,13 @@ export default {
             await axios.delete("/api/delete_user/" + $id).catch(error => {
                 console.log(error.response)
             });
-            this.get_users();
+            this.get_stores();
         },
         async confirm_user($id){
             await axios.post("/api/confirm_user/" + $id).catch(error => {
                 console.log(error.response)
             });
-            this.get_users();
+            this.get_stores();
         },
         async add_user(){
             await this.$router.push({name: 'userAdd'});

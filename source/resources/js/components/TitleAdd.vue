@@ -131,7 +131,9 @@
 
     </FormulateForm>
 </template>
-
+<!-- //todo add director -->
+<!-- //todo add items -->
+<!-- //todo add fix genres -->
 
 <script>
 export default {

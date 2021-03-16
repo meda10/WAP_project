@@ -45,15 +45,15 @@ Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user');
 
 //Title
 Route::get('/get_titles', 'Api\TitlesController@index');
-Route::post('/get_title_by_id', 'Api\TitlesController@show');
 Route::post('/set_titles', 'Api\TitlesController@store');
+Route::post('/get_title_by_id', 'Api\TitlesController@show');
 Route::put('/update_title/{id}', 'Api\TitlesController@update');
 Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
 
 //Participants
 Route::get('/get_actors', 'Api\ParticipantController@index');
-Route::post('/get_actor_by_id', 'Api\ParticipantController@show');
 Route::post('/set_actor', 'Api\ParticipantController@store');
+Route::post('/get_actor_by_id', 'Api\ParticipantController@show');
 Route::put('/update_actor/{id}', 'Api\ParticipantController@update');
 Route::delete('/delete_actor/{id}', 'Api\ParticipantController@destroy');
 
@@ -70,4 +70,9 @@ Route::put('/update_user/{id}', 'Api\UsersController@update');
 Route::delete('/delete_user/{id}', 'Api\UsersController@destroy');
 
 //Store
+Route::get('/get_stores', 'Api\StoresController@index');
+Route::post('/set_store', 'Api\StoresController@store');
+Route::post('/get_store_by_id', 'Api\StoresController@show');
+Route::put('/update_store/{id}', 'Api\StoresController@update');
+Route::delete('/delete_store/{id}', 'Api\StoresController@destroy');
 
