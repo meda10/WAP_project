@@ -84,7 +84,6 @@
                 name="herec"
                 label="Jmeno a prijmeni herce"
                 validation="required"
-                id="this.participants.id"
                 :options='this.actors'
             />
         </FormulateInput>
@@ -153,7 +152,7 @@ export default {
     methods: {
         async submitHandler (data) {
             await axios.post('/api/set_titles', data).catch(error => {
-                // console.log(error.response)
+                console.log(error.response)
             });
             alert('Thank you')
         },

@@ -104,8 +104,8 @@ class TitlesController extends Controller
     public function show(Request $request)
     {
 //        return Title::get_by_id($request['id']);
-        return TitleUpdateResource::collection(Title::get_title_edit_by_id($request['id']));
 //        return Title::get_title_edit_by_id($request['id']);
+        return TitleUpdateResource::collection(Title::get_title_edit_by_id($request['id']));
     }
 
     /**
@@ -118,6 +118,7 @@ class TitlesController extends Controller
     public function update(Request $request, $id)
     {
         $title = Title::findOrFail($id);
+        $this->Title_validator();
         $title->update([
             'title_name' => $request['titul'],
             'year' => $request['rok'],

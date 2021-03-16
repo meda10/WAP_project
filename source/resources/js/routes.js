@@ -14,6 +14,9 @@ import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
 import TitleEdit from "./components/EditTitle";
 import ActorEdit from "./components/ActorEdit";
+import UserEdit from "./components/UserEdit";
+import UserAdd from "./components/UserAdd";
+import Users from "./components/Users";
 
 
 export default {
@@ -63,6 +66,21 @@ export default {
             path: '/admin/upravit_herce/:id',
             name: 'actorEdit',
             component: ActorEdit
+        },
+        {
+            path: '/admin/uzivatele',
+            name: 'users',
+            component: Users
+        },
+        {
+            path: '/admin/uzivatele/pridat_uzivatele',
+            name: 'userAdd',
+            component: UserAdd
+        },
+        {
+            path: '/admin/uzivatele/upravit_uzivatele/:id',
+            name: 'userEdit',
+            component: UserEdit
         },
         {
             path: '/nastaveni',

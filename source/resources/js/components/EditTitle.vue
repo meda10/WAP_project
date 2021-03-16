@@ -180,6 +180,7 @@ export default {
 
             axios.post('/api/get_title_by_id', {'id' : this.title_id }).then((res) => {
                 this.formValues = res.data.data[0];
+                console.log(this.formValues);
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);

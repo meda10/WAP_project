@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('zip_code')->nullable(true);
             $table->string('city')->nullable(true);
             $table->boolean('confirmed')->default(false);
+            $table->bigInteger('store_id')->unsigned()->nullable();
+            $table->foreign('store_id')->references('id')->on('stores');
         });
     }
 

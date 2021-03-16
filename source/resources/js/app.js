@@ -7,7 +7,7 @@ import VueCookies from 'vue-cookies'
 import App from './components/App'
 import router from './routes'
 import titleMixin from './titles'
-import { ModalPlugin } from 'bootstrap-vue'
+import { BootstrapVue, ModalPlugin } from 'bootstrap-vue'
 import VueCalendar from 'v-calendar'
 import VueFormulate from '@braid/vue-formulate'
 import { cs } from '@braid/vue-formulate-i18n'
@@ -30,6 +30,7 @@ Vue.use(VueFormulate, {
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
+Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
 Vue.mixin(titleMixin);
 
