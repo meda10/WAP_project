@@ -70,7 +70,7 @@
                     <td class="text-center">
                         - 30%
                     </td>
-                    <td>
+                    <td class="text-center">
                         <button class="btn btn-danger btn-sm" @click="removeDiscount()"><i class="fas fa-times"></i></button>
                     </td>
                 </tr>
@@ -270,6 +270,7 @@ export default {
                 };
 
                 axios.post('/api/make_reservation', reservation).then((res) => {
+                    this.$cookies.set('wap-cart-discount', {});
                     this.$emit('emitHandler',  {cartCookies: []});
                     this.$emit('emitHandler',  {isLoading: false});
                     this.$router.push({ name: 'home', params: {reservation: true} });
@@ -295,7 +296,7 @@ export default {
                         }
 
                         if (error.response.data.error === 'discount_code') {
-                            this.modalDiscountError = true;
+                            return;
                         }
 
                         this.$emit('emitHandler',  {cartCookies: this.cartCookies});

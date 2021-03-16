@@ -53,6 +53,7 @@
                                 {{ user.name }} {{ user.surname }}
                             </a>
                             <div class="dropdown-menu">
+                                <router-link :to="{ name: 'reservations' }" class="dropdown-item">Mé rezervace</router-link>
                                 <router-link :to="{ name: 'settings' }" class="dropdown-item">Nastavení</router-link>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
@@ -259,6 +260,8 @@ export default {
         getUser() {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
+            }).catch(error => {
+                
             });
         },
         getGenres() {

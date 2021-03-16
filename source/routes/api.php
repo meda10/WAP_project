@@ -43,4 +43,5 @@ Route::post('/set_actor', 'Api\ParticipantController@store');
 
 Route::post('/check_discount_code', 'Api\DiscountsController@checkDiscountCode');
 Route::post('/make_reservation', 'Api\ReservationsController@makeReservation');
-Route::post('/get_my_reservations_filtered', 'Api\ReservationsController@getMyReservationsFiltered');
+Route::post('/get_user_reservations', 'Api\ReservationsController@getUserReservations');
+Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation');

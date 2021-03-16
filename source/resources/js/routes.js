@@ -12,6 +12,7 @@ import Checkout from './components/Checkout';
 import Cart from './components/Cart';
 import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
+import Reservations from "./components/Reservations";
 
 
 export default {
@@ -36,6 +37,11 @@ export default {
             path: '/heslo',
             name: 'password',
             component: ForgotPassword
+        },
+        {
+            path: '/rezervace',
+            name: 'reservations',
+            component: Reservations
         },
         {
             path: '/admin',

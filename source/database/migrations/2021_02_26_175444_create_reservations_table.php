@@ -25,8 +25,10 @@ class CreateReservationsTable extends Migration
             $table->boolean('issued')->default(false);
             $table->dateTime('created_at');
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('discount_id')->unsigned();
             $table->bigInteger('item_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('discount_id')->references('id')->on('discounts');
             $table->foreign('item_id')->references('id')->on('items');
         });
     }

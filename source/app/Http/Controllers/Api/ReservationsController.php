@@ -63,26 +63,43 @@ class ReservationsController extends Controller
         $invoiceId = 111;
         $paid = $request->paymentMethod == 'online' ? 1 : 0;
         
+
+        if ($request->discount == '')
+            $discountId = null;
+        else
+            $discountId = Discount::where('code', $request->discount)->first()->id;
+
+        
         foreach ($request->reservations as $reservation) {
             $freeItemsIds = Item::getFreeItemsIds($reservation['url'], $reservation['language_name'], $request['storeId']);
             
             for ($i = 0; $i < $reservation['quantity']; $i++) {
-                $newRes = Reservation::create([
+                Reservation::create([
                     'reservation' => $reservation['reservationTimeRange'][0],
                     'reservation_till' => $reservation['reservationTimeRange'][1],
                     'price' => $reservation['price'],
                     'paid' => $paid,
                     'invoice_id' => $invoiceId,
                     'user_id' => $request->userId,
-                    'item_id' => $freeItemsIds[$i]->id
+                    'item_id' => $freeItemsIds[$i]->id,
+                    'discount_id' => $discountId
                 ]);
-
-                // TODO what if discount is already applied
-                if ($request->discount != '')
-                    Discount::applyDiscountOnReservation($request->discount, $newRes->id);
             }
         }
 
         return response()->json(['success' => 'success'], 200);
+    }
+
+    public function getUserReservations(Request $request)
+    {
+        return Reservation::getUserReservations($request->user_id);
+    }
+
+    public function cancelReservation(Request $request)
+    {
+        $reservation = Reservation::find($request->reservationId);
+        $discount = Discount::find($reservation->discount_id);
+        $reservation->delete();
+        $discount->delete();
     }
 }

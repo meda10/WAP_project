@@ -17,7 +17,7 @@ class Reservation extends Model
 
     protected $fillable = ['reservation', 'reservation_till', 'invoice_id', 
                             'price', 'returned', 'paid', 'issued', 'created_at', 
-                            'user_id', 'item_id', 'fine'];
+                            'user_id', 'item_id', 'fine', 'discount_id'];
 
     public static function getTitleReservations($titleUrl, $store_id)
     {
@@ -54,6 +54,13 @@ class Reservation extends Model
         return $reservations;
     }
 
+    public static function getUserReservations($user_id)
+    {
+        return Reservation::where('user_id', $user_id)
+                                ->with('titles')->with('languages')
+                                ->with('stores')->with('discounts')->orderBy('reservation')->get();
+    }
+
     public function items()
     {
         return $this->hasOne(Item::class, 'id', 'item_id');
@@ -71,6 +78,11 @@ class Reservation extends Model
 
     public function discounts()
     {
-        return $this->belongsToMany(Dicount::class, 'discount_reservation', 'reservation_id', 'discount_id');
+        return $this->hasOne(Discount::class, 'id');
+    }
+    
+    public function stores()
+    {
+        return $this->hasOneThrough(Store::class, Item::class, 'id', 'id', 'item_id', 'store_id');
     }
 }
