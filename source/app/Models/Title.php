@@ -63,6 +63,7 @@ class Title extends Model
                         ->first();
     }
 
+
     public static function getTitleItemsMaxCounts($type, $name, $store_id)
     {
         $title = Title::getTitle($type, $name, $store_id);
@@ -72,6 +73,14 @@ class Title extends Model
             $counts[$languageMaxCount['language_name']] = $languageMaxCount['total'];
 
         return $counts;
+    }
+    
+    public static function get_title_edit_by_id($id){
+        return Title::where('id', $id)
+                        ->with('genres')
+                        ->with('languages')
+                        ->with('participant')
+                        ->get();
     }
 
     public function genres()

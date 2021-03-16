@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ParticipantResource extends JsonResource
+class ParticipantSelectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,11 @@ class ParticipantResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'jmeno' => $this->name,
-            'prijmeni' => $this->surname,
-            'datum_narozeni' => $this->birth,
+            'value' => strval($this->id),
+            'label' => $this->name." ".$this->surname,
+            'herec' => strval($this->id),
         ];
     }
+
 }
+

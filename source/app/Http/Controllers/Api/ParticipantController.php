@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ParticipantCollection;
+use App\Http\Resources\ParticipantSelectResource;
 use App\Http\Resources\ParticipantResource;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Participant;
@@ -42,13 +42,10 @@ class ParticipantController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  \App\Models\Participant  $participant
-     * @return \Illuminate\Http\Response
      */
-    public function show(Participant $participant)
+    public function show(Request $request)
     {
-        //
+        return ParticipantResource::collection(Participant::get_actor_by_id($request['id']));
     }
 
     /**
@@ -58,9 +55,18 @@ class ParticipantController extends Controller
      * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Participant $participant)
+    public function update(Request $request, $id)
     {
-        //
+        $participant = Participant::findOrFail($id);
+        $this->participant_validator();
+
+        $participant->update([
+            'name' => $request['jmeno'],
+            'surname' => $request['prijmeni'],
+            'birth' => $request['datum_narozeni'],
+        ]);
+
+        $participant->save();
     }
 
     /**
@@ -69,14 +75,16 @@ class ParticipantController extends Controller
      * @param  \App\Models\Participant  $participant
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Participant $participant)
+    public function destroy($id)
     {
-        //
+        $participant = Participant::findOrFail($id);
+        $participant->title()->detach();
+        $participant->delete();
     }
 
     public function get_items_select()
     {
-        return ParticipantResource::collection(Participant::all());
+        return ParticipantSelectResource::collection(Participant::all());
     }
 
     protected function participant_validator(){

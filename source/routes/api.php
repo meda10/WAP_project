@@ -25,6 +25,10 @@ Route::middleware('auth:sanctum')->get('/authenticated', function () {
 Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
 Route::post('/get_titles', 'Api\TitlesController@getTitles');
 Route::post('/get_title', 'Api\TitlesController@getTitle');
+
+
+
+
 Route::post('/update_user_name', 'Api\UsersController@updateName');
 Route::post('/update_user_surname', 'Api\UsersController@updateSurname');
 Route::post('/update_user_password', 'Api\UsersController@updatePassword');
@@ -36,12 +40,28 @@ Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
 Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');
 Route::get('/get_stores', 'Api\StoresController@getStores');
 
+
+//select
+
 Route::get('/get_actors', 'Api\ParticipantController@get_items_select');
 Route::get('/get_states', 'Api\StateController@get_items_select');
+
+//Title
+Route::get('/get_titles', 'Api\TitlesController@index');
+Route::post('/get_title_by_id', 'Api\TitlesController@show');
 Route::post('/set_titles', 'Api\TitlesController@store');
+Route::put('/update_title/{id}', 'Api\TitlesController@update');
+Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
+
+//Participants
+Route::get('/get_actors', 'Api\ParticipantController@index');
+Route::post('/get_actor_by_id', 'Api\ParticipantController@show');
 Route::post('/set_actor', 'Api\ParticipantController@store');
 
 Route::post('/check_discount_code', 'Api\DiscountsController@checkDiscountCode');
 Route::post('/make_reservation', 'Api\ReservationsController@makeReservation');
 Route::post('/get_user_reservations', 'Api\ReservationsController@getUserReservations');
 Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation');
+
+Route::put('/update_actor/{id}', 'Api\ParticipantController@update');
+Route::delete('/delete_actor/{id}', 'Api\ParticipantController@destroy');

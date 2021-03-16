@@ -103,12 +103,18 @@
                                 {{ itemCount * titleInfo.price * reservationNumberOfDays }} Kč
                             </div>
                         </div>
-                        
+
                         <button :disabled="itemCount === 0" type="button" class="btn btn-primary" 
                                 v-on:click="addItemToCart" data-toggle="tooltip" 
                                 data-placement="top" :title="itemCount === 0 ? 'Pro pokračování vyberte datum rezervace' : ''">
                             Přidat do košíku
                         </button>
+
+                        <!-- todo visible only for admin-->
+                        <router-link type="button" class="btn btn-primary" :to="{ name: 'titleEdit', params: { id: this.titleId}}" append>Upravit</router-link>
+                        <button type="button" class="btn btn-primary" v-on:click="removeTitle">Smazat</button>
+                        <!-- todo visible only for admin-->
+
                     </div>
                 </div>
             </div>
@@ -143,6 +149,7 @@
             return {
                 titleName: '',
                 titleType: '',
+                titleId: '',
                 titleDabingName: '',
                 titleDabingId: '',
                 itemCount: 0,
@@ -369,6 +376,7 @@
 
                 axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName, 'store_id': this.chosenStoreId}).then((res) => {
                     this.titleInfo = res.data;
+                    this.titleId = this.titleInfo.id;
                     this.title = this.titleInfo.title_name;
                     this.titleDabingName = this.titleInfo.languages[0].language_name;
                     this.maxItemCount = this.titleInfo.languages[0].total;
@@ -424,6 +432,12 @@
                 this.addedItem = true;
                 this.itemCountAdded = this.itemCount;
                 this.itemCount = 1;
+            },
+            async removeTitle(){
+                await axios.delete("/api/delete_title/" + this.titleId).catch(error => {
+                    console.log(error.response)
+                });
+                await this.$router.push({path: '/'}); //todo redirect
             }
         }
     }
