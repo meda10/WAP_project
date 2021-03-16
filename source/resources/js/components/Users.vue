@@ -41,7 +41,7 @@ export default {
         get_users() {
             axios.get('/api/get_users').then((res) => {
                 this.users = res.data.data;
-                // console.log(this.users);
+                console.log(this.users);
             });
         },
         async remove_user($id){

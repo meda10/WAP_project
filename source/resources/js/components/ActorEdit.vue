@@ -62,6 +62,7 @@ export default {
 
             axios.post('/api/get_actor_by_id', {'id' : this.actor_id }).then((res) => {
                 this.formValues = res.data.data[0];
+                console.log(this.formValues);
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);

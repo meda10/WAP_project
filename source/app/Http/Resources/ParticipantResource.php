@@ -15,9 +15,11 @@ class ParticipantResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'jmeno' => $this->name,
             'prijmeni' => $this->surname,
             'datum_narozeni' => $this->birth,
+            'actions' => '',
         ];
     }
 }

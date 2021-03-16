@@ -18,7 +18,7 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        return Participant::all();
+        return ParticipantResource::collection(Participant::all());
     }
 
     /**
@@ -46,6 +46,7 @@ class ParticipantController extends Controller
     public function show(Request $request)
     {
         return ParticipantResource::collection(Participant::get_actor_by_id($request['id']));
+        //todo change collection
     }
 
     /**
