@@ -4,8 +4,8 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <router-link :to="{ name: 'home' }" class="navbar-brand">Wap-projekt</router-link>
-<!--                <a class="navbar-brand" href="#">Navbar</a>-->
+                <router-link :to="{ name: 'home' }" class="navbar-brand">Blockbuster 2.0</router-link>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -31,7 +31,7 @@
                         </li>
                     </ul>
 
-                    <div class="search-dropdown ml-auto" v-click-outside="lostFocus">
+                    <div class="search-dropdown ml-auto" v-click-outside="lostFocus" style="padding-left:20px; padding-right:20px;">
                         <input v-model.trim="searchForm.inputValue" class="form-control search-dropdown-input" type="text" placeholder="Search" @click="searchForm.searchFocus = true">
                         <div class="search-dropdown-list" v-show="searchForm.searchFocus">
                             <div v-for="title in searchForm.itemList" :key="title.title_name" class="search-dropdown-item"
@@ -39,14 +39,9 @@
                                 {{ title.title_name }} - {{ title.type }}
                             </div>
                         </div>
-<!--                            <button class="btn btn-secondary">Search</button>-->
                     </div>
-<!--                    <div class="input-group col-auto">-->
-<!--                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">-->
-<!--                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>-->
-<!--                    </div>-->
 
-                    <ul id="login-nav" class="navbar-nav col-4">
+                    <ul id="login-nav" class="navbar-nav col-5">
                         <li class="nav-item" v-if="!user">
                             <router-link :to="{ name: 'login' }" class="nav-link">Přihlásit se</router-link>
                         </li>
@@ -58,13 +53,14 @@
                                 {{ user.name }} {{ user.surname }}
                             </a>
                             <div class="dropdown-menu">
+                                <router-link :to="{ name: 'reservations' }" class="dropdown-item">Mé rezervace</router-link>
                                 <router-link :to="{ name: 'settings' }" class="dropdown-item">Nastavení</router-link>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" @click.prevent="logout" href="#">Odhlásit se</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown nav-item-icon" id="navCartIcon">
-                            <router-link :to="{ name: 'cart' }" class="nav-link">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                                 <i class="fas fa-shopping-cart fa-lg"></i>
                                 <span v-if="cartItemsNumber !== 0">
                                     <span class='badge badge-warning' id='lblCartCount'>{{cartItemsNumber}}</span>
@@ -73,7 +69,12 @@
                                 <span v-if="cartItemsNumber === 0">
                                     <span class='badge' id='infoCart'>Košík</span>
                                 </span>
-                            </router-link>
+                            </a>
+                            <div class="dropdown-menu">
+                                <router-link :to="{ name: 'cart' }" class="dropdown-item">Do košíku</router-link>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" @click="changeStore">Změnit prodejnu</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -85,10 +86,22 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
-            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"></router-view>
+            <router-view v-on:emitHandler="emitHandler" :userProps="user" :key="$route.path"
+            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice" 
+            :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
         </div>
 
+        <b-modal ref="modal-choose-store" :retain-focus="false" title="Vyberte si prodejnu"
+                :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage" 
+                :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
+            <div v-if="changeStoreMessage">
+                Při zmeně prodejny dojde ke smazání Vašeho košíku!
+            </div>
+            <select autocomplete="off" class="form-select" v-model="chosenStore" style="width:400px;">
+                <option v-for="store in stores" v-bind:value="store.id"
+                        v-bind:key="store.id">{{store.address}}</option>
+            </select>
+        </b-modal>
     </div>
 </template>
 
@@ -109,18 +122,13 @@ export default {
             cartCookies: [],
             cartItemsNumber: 0,
             cartItemsPrice: 0,
+            stores: [],
+            chosenStore: 1,
+            changeStoreMessage: false,
             searchForm: {
                 inputValue: '',
                 searchFocus: false,
-                itemList: [
-/*                    {title_name: 'Kmotr', url: 'kmotr', type: 'Film', typeUrl: 'film'},
-                    {title_name: 'Sedm', url: 'sedm', type: 'Film', typeUrl: 'film'},
-                    {title_name: 'Vykoupení z věznice Shawshank', url: "vykoupeni-z-veznice-shawshank", type: 'Film', typeUrl: 'film'},
-                    {title_name: "Forrest Gump", url: "forrest-gump", type: 'Film', typeUrl: 'film'},
-                    {title_name: "Zelená míle", url: "zelena-mile", type: 'Film', typeUrl: 'film'},
-                    {title_name: "Přelet nad kukaččím hnízdem", url: "prelet-nad-kukaccim-hnizdem", type: 'Film', typeUrl: 'film'},
-                    {title_name: "Schindlerův seznam", url: "schindleruv-seznam", type: 'Film', typeUrl: 'film'},*/
-                ]
+                itemList: []
             }
         }
     },
@@ -172,32 +180,12 @@ export default {
         }
     },
     mounted() {
+        this.getStores();
         this.loadCookies();
         this.getGenres();
-        this.getUser();
         this.getSeachTitles();
-
-        // TODO DELETE THIS AFTER UCHYLE_Z_VOKUREK
-
-        // USAGE
-        // type : ['type', 'serial']
-        // number_of_titles - number of titles on one page
-        // page_number - actual page number
-        // order : ['asc', 'desc']
-
-        // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 1, order: 'asc'};
-        // axios.post('/api/get_titles', request).then((res) => {
-        //     console.log(res.data);
-        // }).catch((error) => {
-        //     console.log(error);
-        // });
-        //
-        // var request = {type: 'movie', genre_url: 'krimi', number_of_titles: 2, page_number: 2, order: 'asc'};
-        // axios.post('/api/get_titles', request).then((res) => {
-        //     console.log(res.data);
-        // }).catch((error) => {
-        //     console.log(error);
-        // });
+        this.getUser();
+        this.chooseStore();
     },
     methods: {
         getSeachTitles() {
@@ -214,6 +202,39 @@ export default {
                     item.type = 'Seriál';
                 });
             });
+        },
+        handleSaveStore() {
+            this.setStore();
+        },
+        chooseStore() {
+            if (!this.$session.exists('wap-store')) {
+                this.isLoading = false;
+                this.showModalChooseStore();
+                this.setStore();
+            }
+        },
+        setStore() {
+            if (this.$session.exists('wap-store') && this.$session.get('wap-store') !== this.chosenStore) 
+                this.clearCookies();
+
+            this.$session.set('wap-store', this.chosenStore);
+        },
+        changeStore() {
+            this.changeStoreMessage = true;
+            this.showModalChooseStore();
+        },
+        showModalChooseStore() {
+            this.$refs['modal-choose-store'].show();
+        },
+        getStores() {
+            axios.get('/api/get_stores').then((res) => {
+                this.stores = res.data;
+                this.chosenStore = this.stores[0].id;
+            });
+        },
+        clearCookies() {
+            this.cartCookies = [];
+            this.$cookies.set('wap-cart', JSON.stringify(this.cartCookies));
         },
         lostFocus() {
             this.searchForm.searchFocus = false;
@@ -239,6 +260,8 @@ export default {
         getUser() {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
+            }).catch(error => {
+                
             });
         },
         getGenres() {
@@ -248,7 +271,7 @@ export default {
             });
         },
         loadCookies(){
-            this.cartCookies = JSON.parse($cookies.get('wap-cart')) || [];
+            this.cartCookies = JSON.parse(this.$cookies.get('wap-cart')) || [];
             this.cookiesItemsCount();
         },
         cookiesItemsCount() {
@@ -256,7 +279,7 @@ export default {
             this.cartItemsPrice = 0;
             this.cartCookies.forEach(element => {
                 this.cartItemsNumber += Number(element.quantity);
-                this.cartItemsPrice += Number(element.quantity) * Number(element.price);
+                this.cartItemsPrice += Number(element.quantity) * Number(element.price) * Number(element.reservationNumberOfDays);
             });
         },
         emitHandler(values) {

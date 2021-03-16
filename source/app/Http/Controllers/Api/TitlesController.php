@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Participant;
 use App\Models\Genre;
 use App\Models\Title;
+use App\Models\Reservation;
 
 
 class TitlesController extends Controller
@@ -40,7 +41,9 @@ class TitlesController extends Controller
 
     public function getTitle(Request $request)
     {
-        return Title::getTitle($request->type, $request->name);
+        $title = Title::getTitle($request->type, $request->name, $request->store_id);
+        $title['reservations'] = Reservation::getTitleReservations($request->name, $request->store_id);
+        return $title;
     }
 
     public function getGenresMovies()

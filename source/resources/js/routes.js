@@ -12,6 +12,7 @@ import Checkout from './components/Checkout';
 import Cart from './components/Cart';
 import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
+import Reservations from "./components/Reservations";
 import TitleEdit from "./components/EditTitle";
 import ActorEdit from "./components/ActorEdit";
 import UserEdit from "./components/UserEdit";
@@ -41,6 +42,11 @@ export default {
             path: '/heslo',
             name: 'password',
             component: ForgotPassword
+        },
+        {
+            path: '/rezervace',
+            name: 'reservations',
+            component: Reservations
         },
         {
             path: '/admin',
@@ -139,6 +145,7 @@ export default {
         },
         {
             path: "*",
+            name: 'notfound',
             component: NotFound
         },
     ],

@@ -61,6 +61,12 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&
 
 // Tables ======================================================================
 
+#cart .img-responsive {
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+}
+
 .table {
   font-size: $font-size-sm;
 
@@ -231,6 +237,10 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&
   }
 }
 
+.paymentMethodTable tbody tr {
+  cursor: pointer;
+}
+
 // Forms =======================================================================
 
 label,
@@ -238,6 +248,10 @@ label,
 .checkbox label,
 .help-block {
   font-size: $font-size-sm;
+}
+
+.title-reservation-item {
+  width: $input-title-reservation-width !important;
 }
 
 // Navs ========================================================================
@@ -384,4 +398,10 @@ label,
     &:hover {
         color: $cyan-dark;
     }
+}
+
+
+// Cart 
+.cart-item-name {
+  padding-left: $cart-item-name-padding
 }

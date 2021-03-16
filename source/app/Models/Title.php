@@ -11,6 +11,8 @@ use App\Models\Genre;
 use App\Models\State;
 use App\Models\Language;
 use App\Models\Item;
+use App\Models\Reservation;
+use App\Models\Store;
 
 
 class Title extends Model
@@ -51,16 +53,28 @@ class Title extends Model
         return Title::select(['title_name', 'url', 'type AS typeUrl'])->get();
     }
 
-    public static function getTitle($type, $name)
+    public static function getTitle($type, $name, $store_id)
     {
         return Title::where('type', 'like', "{$type}%")
                         ->where('url', $name)
                         ->with('states')
                         ->with('genres')
-                        ->with('languages')
+                        ->with('languages', function($query) use($store_id) { $query->where('items.store_id', $store_id); })
                         ->first();
     }
 
+
+    public static function getTitleItemsMaxCounts($type, $name, $store_id)
+    {
+        $title = Title::getTitle($type, $name, $store_id);
+        $counts = [];
+        
+        foreach ($title->languages as $languageMaxCount)
+            $counts[$languageMaxCount['language_name']] = $languageMaxCount['total'];
+
+        return $counts;
+    }
+    
     public static function get_title_edit_by_id($id){
         return Title::where('id', $id)
                         ->with('genres')
@@ -74,12 +88,18 @@ class Title extends Model
         return $this->belongsToMany(Genre::class, 'title_genre');
     }
 
+    public function stores()
+    {
+        return $this->hasOneThrough(Store::class, Item::class, 'title_id', 'id', 'id', 'store_id');
+    }
+
     public static function getAllCount()
     {
         return Title::get()->count();
     }
 
-    public function participant(){
+    public function participant()
+    {
         return $this->belongsToMany(Participant::class, 'participant_title');
     }
 
@@ -90,7 +110,7 @@ class Title extends Model
 
     public function languages()
     {
-        return $this->belongsToMany(Language::class, 'items', 'title_id', 'language_id')
+        return $this->belongsToMany(Language::class, Item::class, 'title_id', 'language_id')
                     ->select(['languages.language', 'languages.language_name', DB::raw('count(*) as total')])
                     ->groupBy('language_id');
     }

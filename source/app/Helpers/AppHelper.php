@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\Discount;
+
 class AppHelper
 {
     public static function friendlyUrl($name) {
@@ -22,5 +24,29 @@ class AppHelper
         $url = strtolower($url);
         $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
         return $url;
+    }
+
+    public static function generateDiscountCode()
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        do {
+            $code = '';
+            for ($i = 0; $i < 10; $i++) {
+                $type = rand(0, 1);
+                
+                if ($type) {
+                    $nextChar = strval(rand(0, 9));
+                } else {
+                    $nextChar = $chars[rand(0, strlen($chars) - 1)];
+                }
+
+                $code .= $nextChar;
+            }
+
+            $generate = Discount::checkCodeNotExist($code);
+        } while ($generate);
+
+        return $code;
     }
 }
