@@ -58,7 +58,7 @@ export default {
                 console.log(error.response)
             });
             alert('Thank you')
-            // await this.$router.push({path: '/admin/uzivatele'}); //todo redirect to actors
+            await this.$router.push({name: 'actors'}); //todo redirect to actors
         },
     }
 }

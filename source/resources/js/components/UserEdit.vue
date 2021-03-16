@@ -119,7 +119,7 @@ export default {
                 console.log(error.response)
             });
             // alert('Thank you')
-            await this.$router.push({path: '/admin/uzivatele'}); //todo redirect
+            await this.$router.push({name: 'users'}); //todo redirect
         },
         get_stores() {
             axios.get('/api/get_stores_select').then((res) => {

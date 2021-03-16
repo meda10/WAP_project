@@ -1,12 +1,13 @@
 <template>
     <div>
+        <b-button variant="success" size="sm" @click="add_user()" class="mr-2" >Přidat uživatele</b-button>
         <b-table :items="users" :fields="fields" striped responsive="sm">
             <template #cell(confirmed)="row">
                 <b-badge v-if="row.item.confirmed" variant="success">Potvrzen</b-badge>
                 <b-button v-else size="sm" @click="confirm_user(row.item.id)" class="mr-2" >Potvrdit</b-button>
             </template>
             <template #cell(actions)="row">
-                <b-button size="sm" :to="{ name: 'userEdit', params: { id: row.item.id}}" class="mr-2">
+                <b-button size="sm" :to="{ name: 'userEdit', params: {id: row.item.id}}" class="mr-2">
                     Upravit
                 </b-button>
                 <b-button variant="danger" size="sm" @click="remove_user(row.item.id)" class="mr-2">
@@ -40,7 +41,7 @@ export default {
         get_users() {
             axios.get('/api/get_users').then((res) => {
                 this.users = res.data.data;
-                console.log(this.users);
+                // console.log(this.users);
             });
         },
         async remove_user($id){
@@ -54,6 +55,9 @@ export default {
                 console.log(error.response)
             });
             this.get_users();
+        },
+        async add_user(){
+            await this.$router.push({name: 'userAdd'});
         }
     }
 }

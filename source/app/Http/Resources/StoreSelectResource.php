@@ -16,7 +16,7 @@ class StoreSelectResource extends JsonResource
     {
         return [
             'value' => strval($this->id),
-            'label' => $this->address,
+            'label' => $this->address." ".$this->city." ".$this->zip_code,
             'store' => strval($this->id),
         ];
     }

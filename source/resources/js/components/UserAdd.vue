@@ -4,7 +4,7 @@
         v-model="formValues"
         @submit="submitHandler"
     >
-        <h2 class="form-title">Pridat uživatele</h2>
+        <h2 class="form-title">Pridat uživatele - NEFUNGUJE</h2>
         <div class="double-wide">
             <FormulateInput
                 name="jmeno"
@@ -97,7 +97,7 @@
     </FormulateForm>
 </template>
 
-
+//
 <script>
 export default {
     data() {
@@ -115,7 +115,7 @@ export default {
                 console.log(error.response)
             });
             // alert('Thank you')
-            await this.$router.push({path: '/admin/uzivatele'}); //todo redirect
+            await this.$router.push({name: 'users'}); //todo redirect
         },
         get_stores() {
             axios.get('/api/get_stores_select').then((res) => {

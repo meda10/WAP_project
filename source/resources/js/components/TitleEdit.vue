@@ -164,13 +164,13 @@ export default {
             await this.$router.push({path: '/film/'}); //todo redirect to current film
         },
         get_actors() {
-            axios.get('/api/get_actors').then((res) => {
+            axios.get('/api/get_actors_select').then((res) => {
                 this.actors = res.data.data;
                 // console.log(this.actors);
             });
         },
         get_states() {
-            axios.get('/api/get_states').then((res) => {
+            axios.get('/api/get_states_select').then((res) => {
                 this.states = res.data.data;
                 // console.log(this.states);
             });

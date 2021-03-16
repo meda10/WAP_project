@@ -18,6 +18,7 @@ import ActorEdit from "./components/ActorEdit";
 import UserEdit from "./components/UserEdit";
 import UserAdd from "./components/UserAdd";
 import Users from "./components/Users";
+import Actors from "./components/Actors";
 
 
 export default {
@@ -64,8 +65,13 @@ export default {
             component: TitleEdit
         },
         {
+            path: '/admin/herci',
+            name: 'actors',
+            component: Actors
+        },
+        {
             path: '/admin/pridat_herce',
-            name: 'actoradd',
+            name: 'actorAdd',
             component: ActorAdd
         },
         {
