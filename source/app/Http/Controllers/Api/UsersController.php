@@ -63,9 +63,9 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        return new UserUpdateResource(User::findOrFail($request['id']));
+        return new UserUpdateResource(User::findOrFail($id));
     }
 
     /**

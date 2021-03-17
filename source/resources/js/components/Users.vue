@@ -36,7 +36,7 @@ export default {
         }
     },
     mounted() {
-        this.get_stores();
+        this.get_users();
     },
     methods: {
         get_users() {
@@ -49,13 +49,13 @@ export default {
             await axios.delete("/api/delete_user/" + $id).catch(error => {
                 console.log(error.response)
             });
-            this.get_stores();
+            this.get_users();
         },
         async confirm_user($id){
             await axios.post("/api/confirm_user/" + $id).catch(error => {
                 console.log(error.response)
             });
-            this.get_stores();
+            this.get_users();
         },
         async add_user(){
             await this.$router.push({name: 'userAdd'});

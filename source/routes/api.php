@@ -39,21 +39,21 @@ Route::get('/get_stores', 'Api\StoresController@getStores');
 
 //select + buttons
 Route::get('/get_actors_select', 'Api\ParticipantController@get_items_select');
-Route::get('/get_states_select', 'Api\StateController@get_items_select');
+Route::get('/get_states_select', 'Api\StatesController@get_items_select');
 Route::get('/get_stores_select', 'Api\StoresController@get_items_select');
 Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user');
 
 //Title
 Route::get('/get_titles', 'Api\TitlesController@index');
+Route::get('/get_title/{id}', 'Api\TitlesController@show');
 Route::post('/set_titles', 'Api\TitlesController@store');
-Route::post('/get_title_by_id', 'Api\TitlesController@show');
 Route::put('/update_title/{id}', 'Api\TitlesController@update');
 Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
 
 //Participants
 Route::get('/get_actors', 'Api\ParticipantController@index');
+Route::get('/get_actor/{id}', 'Api\ParticipantController@show');
 Route::post('/set_actor', 'Api\ParticipantController@store');
-Route::post('/get_actor_by_id', 'Api\ParticipantController@show');
 Route::put('/update_actor/{id}', 'Api\ParticipantController@update');
 Route::delete('/delete_actor/{id}', 'Api\ParticipantController@destroy');
 
@@ -65,14 +65,14 @@ Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation
 
 //User
 Route::get('/get_users', 'Api\UsersController@index');
-Route::post('/get_user_by_id', 'Api\UsersController@show');
+Route::get('/get_user/{id}', 'Api\UsersController@show');
 Route::put('/update_user/{id}', 'Api\UsersController@update');
 Route::delete('/delete_user/{id}', 'Api\UsersController@destroy');
 
 //Store
 Route::get('/get_stores', 'Api\StoresController@index');
+Route::get('/get_store/{id}', 'Api\StoresController@show');
 Route::post('/set_store', 'Api\StoresController@store');
-Route::post('/get_store_by_id', 'Api\StoresController@show');
 Route::put('/update_store/{id}', 'Api\StoresController@update');
 Route::delete('/delete_store/{id}', 'Api\StoresController@destroy');
 

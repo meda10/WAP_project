@@ -7,7 +7,7 @@ use App\Models\State;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class StateController extends Controller
+class StatesController extends Controller
 {
     /**
      * Display a listing of the resource.

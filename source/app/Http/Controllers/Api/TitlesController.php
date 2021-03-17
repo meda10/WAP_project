@@ -104,11 +104,12 @@ class TitlesController extends Controller
     }
 
 
-    public function show(Request $request)
+    public function show($id)
     {
 //        return Title::get_by_id($request['id']);
 //        return Title::get_title_edit_by_id($request['id']);
-        return TitleUpdateResource::collection(Title::get_title_edit_by_id($request['id']));
+//        return new TitleUpdateResource(Title::get_title_edit_by_id($id));
+        return TitleUpdateResource::collection(Title::get_title_edit_by_id($id));
     }
 
     /**
