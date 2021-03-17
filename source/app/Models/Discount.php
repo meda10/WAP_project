@@ -22,7 +22,7 @@ class Discount extends Model
     public static function checkCodeExistNotUsed($code)
     {
         $discount = Discount::with('reservations')->where(DB::raw('BINARY `code`'), $code)->first();
-        if ($discount->reservations == null)
+        if ($discount != null && $discount->reservations == null)
             return ['percent' => $discount['percent']];
         return [];
     }
