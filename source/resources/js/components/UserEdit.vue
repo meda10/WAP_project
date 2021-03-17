@@ -8,7 +8,8 @@
         <div class="double-wide">
             <FormulateInput name="email" type="email" label="Email" validation="required|email"/>
             <FormulateInput name="role" type="select" label="Role" placeholder="Vyberte moznost"
-                            :options="{admin: 'Administrátor', customer: 'Uživatel'}" validation="required|matches:admin,customer"/>
+                            :options="{director: 'Ředitel', manager: 'Manažer', employee: 'Zaměstnanec', customer: 'Uživatel'}"
+                            validation="required|matches:director,manager,employee,customer"/>
         </div>
 <!--        <div class="double-wide">-->
 <!--            <FormulateInput name="password" type="password" label="Heslo" validation="required|min:7,length"/>-->
@@ -22,7 +23,7 @@
         </div>
         <FormulateInput type="select" name="obchod" label="Obchod" validation="required" :options='this.stores'/>
         <FormulateInput name="potvrzeni" type="checkbox" label="Potvrdit uživatele"/>
-        <FormulateInput type="submit" label="Register"/>
+        <FormulateInput type="submit" label="Upravit"/>
         <!--        todo remove-->
         <pre class="code" v-text="formValues"/>
     </FormulateForm>
