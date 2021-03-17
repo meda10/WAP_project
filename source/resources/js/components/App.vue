@@ -86,13 +86,13 @@
         </div>
 
         <div class="container" style="margin-top: 100px;">
-            <router-view v-on:emitHandler="emitHandler" :userProps="user" :key="$route.path"
-            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice" 
+            <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
+            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
             :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
         </div>
 
         <b-modal ref="modal-choose-store" :retain-focus="false" title="Vyberte si prodejnu"
-                :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage" 
+                :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage"
                 :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
             <div v-if="changeStoreMessage">
                 Při zmeně prodejny dojde ke smazání Vašeho košíku!
@@ -214,7 +214,7 @@ export default {
             }
         },
         setStore() {
-            if (this.$session.exists('wap-store') && this.$session.get('wap-store') !== this.chosenStore) 
+            if (this.$session.exists('wap-store') && this.$session.get('wap-store') !== this.chosenStore)
                 this.clearCookies();
 
             this.$session.set('wap-store', this.chosenStore);
@@ -261,7 +261,7 @@ export default {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
             }).catch(error => {
-                
+
             });
         },
         getGenres() {
