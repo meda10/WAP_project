@@ -17,6 +17,7 @@ import 'vue-select/dist/vue-select.css';
 
 Vue.use(VueI18n)
 Vue.component('FormulateAutocomplete', FormulateAutocomplete)
+
 Vue.use(VueFormulate, {
     library: {
         autocomplete: {
@@ -25,7 +26,10 @@ Vue.use(VueFormulate, {
         }
     },
     plugins: [ cs, FormulateVSelectPlugin ],
-    locate: 'cs'
+    locate: 'cs',
+    classes: {
+        inputHasErrors: 'is-invalid',
+    }
 })
 
 Vue.use(VueRouter);

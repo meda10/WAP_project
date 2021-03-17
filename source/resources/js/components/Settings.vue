@@ -241,7 +241,7 @@ export default {
             // TODO: values validation
             console.log("menim ADDRESS");
             this.$emit('emitHandler',  {isLoading: true});
-            
+
             axios.post('/api/update_user_address',
                 {'address': this.updateForm.address, 'city': this.updateForm.city, 'zip_code': this.updateForm.zipCode}).then((res) => {
                 this.updateForm.address = '';
