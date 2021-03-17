@@ -10,10 +10,10 @@ use App\Helpers\AppHelper;
 class Participant extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
 
-    protected $fillable = [ 'name', 'surname', 'birth'];
+    protected $fillable = ['name', 'surname', 'birth', 'created_at', 'updated_at'];
 
     public function by_name($value){
         $id_array = [];
@@ -31,9 +31,5 @@ class Participant extends Model
 
     public function title(){
         return $this->belongsToMany(Title::class, 'participant_title');
-    }
-
-    public static function get_actor_by_id($id){
-        return Participant::where('id', $id)->get();
     }
 }

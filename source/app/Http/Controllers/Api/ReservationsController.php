@@ -100,6 +100,7 @@ class ReservationsController extends Controller
         $reservation = Reservation::find($request->reservationId);
         $discount = Discount::find($reservation->discount_id);
         $reservation->delete();
-        $discount->delete();
+        if ($discount != null)
+            $discount->delete();
     }
 }

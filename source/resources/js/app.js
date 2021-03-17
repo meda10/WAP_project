@@ -7,15 +7,15 @@ import VueCookies from 'vue-cookies';
 import App from './components/App';
 import router from './routes';
 import titleMixin from './titles';
-import { ModalPlugin, ButtonPlugin } from 'bootstrap-vue';
+import { BootstrapVue, ModalPlugin, ButtonPlugin } from 'bootstrap-vue';
 import VueSessionStorage from 'vue-sessionstorage';
-import VueFormulate from '@braid/vue-formulate'
-import { cs } from '@braid/vue-formulate-i18n'
-import FormulateVSelectPlugin from '@cone2875/vue-formulate-select'
-import FormulateAutocomplete from './components/FormulateAutocomplete'
+import VueFormulate from '@braid/vue-formulate';
+import { cs } from '@braid/vue-formulate-i18n';
+import FormulateVSelectPlugin from '@cone2875/vue-formulate-select';
+import FormulateAutocomplete from './components/FormulateAutocomplete';
 import 'vue-select/dist/vue-select.css';
 
-Vue.use(VueI18n)
+Vue.use(VueI18n);
 Vue.component('FormulateAutocomplete', FormulateAutocomplete)
 
 Vue.use(VueFormulate, {
@@ -26,6 +26,7 @@ Vue.use(VueFormulate, {
         }
     },
     plugins: [ cs, FormulateVSelectPlugin ],
+
     locate: 'cs',
     classes: {
         inputHasErrors: 'is-invalid',
@@ -34,6 +35,7 @@ Vue.use(VueFormulate, {
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
+Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
 Vue.use(ButtonPlugin);
 Vue.use(VueSessionStorage);
@@ -41,7 +43,7 @@ Vue.mixin(titleMixin);
 
 const i18n = new VueI18n({
     locale: 'cs'
-})
+});
 
 const app = new Vue({
     el: '#app',

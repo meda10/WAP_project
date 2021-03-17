@@ -21,7 +21,7 @@ class Title extends Model
 
     const UPDATED_AT = NULL;
 
-    protected $fillable = [ 'title_name', 'year', 'state_id', 'type', 'price', 'description', 'url', 'cover_path',];
+    protected $fillable = [ 'title_name', 'year', 'state_id', 'type', 'price', 'description', 'url', 'created_at'];
 
     public static function create(array $attributes = [])
     {
@@ -68,13 +68,13 @@ class Title extends Model
     {
         $title = Title::getTitle($type, $name, $store_id);
         $counts = [];
-        
+
         foreach ($title->languages as $languageMaxCount)
             $counts[$languageMaxCount['language_name']] = $languageMaxCount['total'];
 
         return $counts;
     }
-    
+
     public static function get_title_edit_by_id($id){
         return Title::where('id', $id)
                         ->with('genres')

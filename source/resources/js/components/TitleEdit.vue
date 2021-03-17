@@ -2,7 +2,7 @@
     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
         <!--        #default="{ hasErrors }"-->
         <!--        #default="{isLoading}"-->
-        <h2 class="form-title">Tituly</h2>
+        <h2 class="form-title">Upravit titul</h2>
         <FormulateInput name="titul" type="text" label="Jmeno filmu" validation="required"/>
         <div class="double-wide">
             <FormulateInput name="rok" type="number" label="Rok vydani" validation="required|number" min="1800" max="9999"/>
@@ -33,9 +33,7 @@
         <pre class="code" v-text="formValues"/>
     </FormulateForm>
 </template>
-<!-- //todo add director -->
-<!-- //todo add items -->
-<!-- //todo add fix genres -->
+
 
 <script>
 export default {
@@ -49,13 +47,17 @@ export default {
     mounted() {
         this.get_actors();
         this.get_states();
+        if (this.$route.params.id != null){
+            this.title_id = this.$route.params.id;
+            this.get_title_by_id();
+        }
     },
     computed: {
 
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_titles', data).catch(error => {
+            await axios.put("/api/update_title/" + this.title_id, data).catch(error => {
                 console.log(error.response)
             });
             await this.$router.push({path: '/film/'}); //todo redirect to current film
@@ -72,8 +74,21 @@ export default {
                 // console.log(this.states);
             });
         },
+        get_title_by_id() {
+            // this.$emit('emitHandler',  {isLoading: true});
+
+            axios.get('/api/get_one_title/' + this.title_id).then((res) => {
+                this.formValues = res.data.data[0];
+                console.log(this.formValues);
+            }).catch((error) => {
+                // TODO handle this error
+                console.log(error);
+                this.$emit('emitHandler',  {isLoading: false});
+            });
+        },
     }
 }
 </script>
 <style scoped>
+
 </style>

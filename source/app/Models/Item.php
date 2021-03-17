@@ -11,6 +11,8 @@ class Item extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['language_id', 'store_id', 'title_id'];
+
     public static function getFreeItemsIds($url, $languageName, $storeId)
     {
         return Item::select(['id'])

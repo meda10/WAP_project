@@ -20,12 +20,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'surname',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['name', 'surname', 'email', 'password', 'role', 'address',
+                            'zip_code', 'city', 'confirmed', 'store_id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -46,7 +42,7 @@ class User extends Authenticatable
     ];*/
 
 
-    public function hasRole($roles) 
+    public function hasRole($roles)
     {
         foreach ($roles as $role)
             if ($this->role == $role) return true;
@@ -59,7 +55,7 @@ class User extends Authenticatable
         return boolval($this->confirmed);
     }
 
-    
+
     public static function getPossibleRoles()
     {
         $type = DB::select(DB::raw('SHOW COLUMNS FROM users WHERE Field = "role"'))[0]->Type;
@@ -69,5 +65,10 @@ class User extends Authenticatable
             $values[] = trim($value, "'");
         }
         return $values;
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'id', 'store_id');
     }
 }

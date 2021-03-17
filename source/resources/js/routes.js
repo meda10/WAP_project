@@ -13,8 +13,15 @@ import Cart from './components/Cart';
 import TitleAdd from "./components/TitleAdd";
 import ActorAdd from "./components/ActorAdd";
 import Reservations from "./components/Reservations";
-import TitleEdit from "./components/EditTitle";
+import TitleEdit from "./components/TitleEdit";
 import ActorEdit from "./components/ActorEdit";
+import UserEdit from "./components/UserEdit";
+import UserAdd from "./components/UserAdd";
+import Users from "./components/Users";
+import Actors from "./components/Actors";
+import Stores from "./components/Stores";
+import StoreAdd from "./components/StoreAdd";
+import StoreEdit from "./components/StoreEdit";
 
 
 export default {
@@ -61,14 +68,49 @@ export default {
             component: TitleEdit
         },
         {
-            path: '/admin/pridat_herce',
-            name: 'actoradd',
+            path: '/admin/obchody',
+            name: 'stores',
+            component: Stores
+        },
+        {
+            path: '/admin/obchody/pridat_obchod',
+            name: 'storeAdd',
+            component: StoreAdd
+        },
+        {
+            path: '/admin/obchody/upravit_obchod/:id',
+            name: 'storeEdit',
+            component: StoreEdit
+        },
+        {
+            path: '/admin/herci',
+            name: 'actors',
+            component: Actors
+        },
+        {
+            path: '/admin/herci/pridat_herce',
+            name: 'actorAdd',
             component: ActorAdd
         },
         {
-            path: '/admin/upravit_herce/:id',
+            path: '/admin/herci/upravit_herce/:id',
             name: 'actorEdit',
             component: ActorEdit
+        },
+        {
+            path: '/admin/uzivatele',
+            name: 'users',
+            component: Users
+        },
+        {
+            path: '/admin/uzivatele/pridat_uzivatele',
+            name: 'userAdd',
+            component: UserAdd
+        },
+        {
+            path: '/admin/uzivatele/upravit_uzivatele/:id',
+            name: 'userEdit',
+            component: UserEdit
         },
         {
             path: '/nastaveni',
