@@ -34,7 +34,7 @@ export default {
         get_actor_by_id() {
             // this.$emit('emitHandler',  {isLoading: true});
 
-            axios.get('/api/get_actor/' + this.actor_id).then((res) => {
+            axios.get('/api/get_one_actor/' + this.actor_id).then((res) => {
                 this.formValues = res.data.data;
                 console.log(this.formValues);
             }).catch((error) => {

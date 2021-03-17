@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         get_stores() {
-            axios.get('/api/get_stores').then((res) => {
+            axios.get('/api/get_all_stores').then((res) => {
                 this.stores = res.data.data;
                 console.log(this.stores);
             });

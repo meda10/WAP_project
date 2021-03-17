@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         get_users() {
-            axios.get('/api/get_users').then((res) => {
+            axios.get('/api/get_all_users').then((res) => {
                 this.users = res.data.data;
                 console.log(this.users);
             });

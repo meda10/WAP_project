@@ -77,7 +77,7 @@ export default {
         get_title_by_id() {
             // this.$emit('emitHandler',  {isLoading: true});
 
-            axios.get('/api/get_title/' + this.title_id).then((res) => {
+            axios.get('/api/get_one_title/' + this.title_id).then((res) => {
                 this.formValues = res.data.data[0];
                 console.log(this.formValues);
             }).catch((error) => {

@@ -44,15 +44,15 @@ Route::get('/get_stores_select', 'Api\StoresController@get_items_select');
 Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user');
 
 //Title
-Route::get('/get_titles', 'Api\TitlesController@index');
-Route::get('/get_title/{id}', 'Api\TitlesController@show');
+Route::get('/get_all_titles', 'Api\TitlesController@index');
+Route::get('/get_one_title/{id}', 'Api\TitlesController@show');
 Route::post('/set_titles', 'Api\TitlesController@store');
 Route::put('/update_title/{id}', 'Api\TitlesController@update');
 Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
 
 //Participants
-Route::get('/get_actors', 'Api\ParticipantController@index');
-Route::get('/get_actor/{id}', 'Api\ParticipantController@show');
+Route::get('/get_all_actors', 'Api\ParticipantController@index');
+Route::get('/get_one_actor/{id}', 'Api\ParticipantController@show');
 Route::post('/set_actor', 'Api\ParticipantController@store');
 Route::put('/update_actor/{id}', 'Api\ParticipantController@update');
 Route::delete('/delete_actor/{id}', 'Api\ParticipantController@destroy');
@@ -64,14 +64,14 @@ Route::post('/get_user_reservations', 'Api\ReservationsController@getUserReserva
 Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation');
 
 //User
-Route::get('/get_users', 'Api\UsersController@index');
-Route::get('/get_user/{id}', 'Api\UsersController@show');
+Route::get('/get_all_users', 'Api\UsersController@index');
+Route::get('/get_one_user/{id}', 'Api\UsersController@show');
 Route::put('/update_user/{id}', 'Api\UsersController@update');
 Route::delete('/delete_user/{id}', 'Api\UsersController@destroy');
 
 //Store
-Route::get('/get_stores', 'Api\StoresController@index');
-Route::get('/get_store/{id}', 'Api\StoresController@show');
+Route::get('/get_all_stores', 'Api\StoresController@index');
+Route::get('/get_one_store/{id}', 'Api\StoresController@show');
 Route::post('/set_store', 'Api\StoresController@store');
 Route::put('/update_store/{id}', 'Api\StoresController@update');
 Route::delete('/delete_store/{id}', 'Api\StoresController@destroy');

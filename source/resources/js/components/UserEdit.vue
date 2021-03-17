@@ -61,7 +61,7 @@ export default {
         get_user_by_id() {
             // this.$emit('emitHandler',  {isLoading: true});
 
-            axios.get('/api/get_user/' + this.user_id).then((res) => {
+            axios.get('/api/get_one_user/' + this.user_id).then((res) => {
                 this.formValues = res.data.data;
                 console.log(this.formValues);
             }).catch((error) => {

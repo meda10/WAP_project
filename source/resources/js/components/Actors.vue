@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         get_actors() {
-            axios.get('/api/get_actors').then((res) => {
+            axios.get('/api/get_all_actors').then((res) => {
                 this.actors = res.data.data;
                 console.log(this.actors)
             });

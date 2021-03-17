@@ -24,7 +24,7 @@ export default {
             await axios.post('/api/set_actor', data).catch(error => {
                 console.log(error.response)
             });
-            alert('Thank you')
+            // alert('Thank you')
             await this.$router.push({name: 'actors'}); //todo redirect to actors
         },
     }

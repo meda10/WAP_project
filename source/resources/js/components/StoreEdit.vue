@@ -34,7 +34,7 @@ export default {
         get_store_by_id() {
             // this.$emit('emitHandler',  {isLoading: true});
 
-            axios.get('/api/get_store/' + this.store_id).then((res) => {
+            axios.get('/api/get_one_store/' + this.store_id).then((res) => {
                 this.formValues = res.data.data;
                 console.log(this.formValues);
             }).catch((error) => {
