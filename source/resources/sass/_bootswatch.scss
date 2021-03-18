@@ -401,7 +401,44 @@ label,
 }
 
 
-// Cart 
+// Cart
 .cart-item-name {
   padding-left: $cart-item-name-padding
+}
+
+// White hr tag
+.white-hr {
+    background-color: $white;
+}
+
+
+// Links in administration
+.admin-link {
+    cursor: pointer;
+    background-color: transparent;
+    color: $cyan-light;
+
+    p {
+        font-weight: bold;
+    }
+
+    i {
+        font-size: 3em;
+        transition: font-size 0.1s;
+    }
+
+    .card-img {
+        height: 75px;
+    }
+
+    &:hover {
+        i {
+            font-size: 4em;
+            color: $cyan;
+        }
+
+        p {
+            color: $cyan;
+        }
+    }
 }

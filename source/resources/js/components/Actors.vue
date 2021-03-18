@@ -31,9 +31,12 @@ export default {
     },
     methods: {
         get_actors() {
+            this.$emit('emitHandler',  {isLoading: true});
+
             axios.get('/api/get_all_actors').then((res) => {
                 this.actors = res.data.data;
                 console.log(this.actors)
+                this.$emit('emitHandler',  {isLoading: false});
             });
         },
         async remove_actor($id){

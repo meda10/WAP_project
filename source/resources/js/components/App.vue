@@ -29,6 +29,10 @@
                                 <router-link :to="{ name: 'series' }" class="dropdown-item">Jiné</router-link>
                             </div>
                         </li>
+
+                        <li class="nav-item" v-if="user && user.role === 'manager'">
+                            <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
+                        </li>
                     </ul>
 
                     <div class="search-dropdown ml-auto" v-click-outside="lostFocus" style="padding-left:20px; padding-right:20px;">
