@@ -11,7 +11,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbar">
-                    <ul class="navbar-nav col-2">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filmy</a>
                             <div class="dropdown-menu">
@@ -35,7 +35,7 @@
                         </li>
                     </ul>
 
-                    <div class="search-dropdown ml-auto" v-click-outside="lostFocus" style="padding-left:20px; padding-right:20px;">
+                    <div class="search-dropdown mx-3" v-click-outside="lostFocus">
                         <input v-model.trim="searchForm.inputValue" class="form-control search-dropdown-input" type="text" placeholder="Search" @click="searchForm.searchFocus = true">
                         <div class="search-dropdown-list" v-show="searchForm.searchFocus">
                             <div v-for="title in searchForm.itemList" :key="title.title_name" class="search-dropdown-item"
@@ -45,9 +45,9 @@
                         </div>
                     </div>
 
-                    <ul id="login-nav" class="navbar-nav col-5">
+                    <ul id="login-nav" class="navbar-nav ml-auto">
                         <li class="nav-item" v-if="!user">
-                            <router-link :to="{ name: 'login' }" class="nav-link">Přihlásit se</router-link>
+                            <router-link :to="{ name: 'login' }" class="nav-link" style="white-space: nowrap">Přihlásit se</router-link>
                         </li>
                         <li class="nav-item" v-if="!user">
                             <router-link :to="{ name: 'register' }" class="nav-link">Registrace</router-link>

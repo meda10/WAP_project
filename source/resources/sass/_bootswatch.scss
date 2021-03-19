@@ -366,10 +366,13 @@ label,
     width: 100%;
     //max-width: 400px;
     margin: 0 auto;
+    //padding-left:20px;
+    //padding-right:20px;
 
     .search-dropdown-list {
         position: absolute;
-        width: 100%;
+        left: 0;
+        right: 0;
         max-height: 200px;
         background-color: $white;
         z-index: 9999;
