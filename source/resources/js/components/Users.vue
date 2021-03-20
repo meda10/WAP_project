@@ -40,21 +40,30 @@ export default {
     },
     methods: {
         get_users() {
+            this.$emit('emitHandler',  {isLoading: true});
+
             axios.get('/api/get_all_users').then((res) => {
                 this.users = res.data.data;
+                this.$emit('emitHandler',  {isLoading: false});
                 console.log(this.users);
             });
         },
         async remove_user($id){
+            this.$emit('emitHandler',  {isLoading: true});
+
             await axios.delete("/api/delete_user/" + $id).catch(error => {
                 console.log(error.response)
             });
+            this.$emit('emitHandler',  {isLoading: false});
             this.get_users();
         },
         async confirm_user($id){
+            this.$emit('emitHandler',  {isLoading: true});
+
             await axios.post("/api/confirm_user/" + $id).catch(error => {
                 console.log(error.response)
             });
+            this.$emit('emitHandler',  {isLoading: false});
             this.get_users();
         },
         async add_user(){

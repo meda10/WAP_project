@@ -30,7 +30,7 @@
                             </div>
                         </li>
 
-                        <li class="nav-item" v-if="user && user.role === 'manager'">
+                        <li class="nav-item" v-if="user && user.role !== 'customer'">
                             <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
                         </li>
                     </ul>

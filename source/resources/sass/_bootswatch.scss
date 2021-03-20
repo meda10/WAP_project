@@ -445,3 +445,17 @@ label,
         }
     }
 }
+
+// Genre tag (adding title into database)
+.genre-tag {
+    background-color: $cyan-dark;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 4px;
+    white-space: nowrap;
+
+    i {
+        color: $more-red;
+        cursor: pointer;
+    }
+}
