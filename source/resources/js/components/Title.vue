@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div v-if="titleInfo.title_name !== ''">
         <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="addedItem">
             <strong>Položka přidána do košíku!</strong> - {{itemCountAdded}}x {{titleInfo.title_name}} ({{titleDabingId}} dabing)
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="closedMessage">
@@ -144,7 +144,7 @@
     export default {
         components: { DatePicker },
         title: '',
-        props: ['cartCookiesProps', 'chosenStoreProps'],
+        props: ['cartCookiesProps', 'chosenStoreProps', 'user'],
         data() {
             return {
                 titleName: '',
@@ -218,8 +218,9 @@
             },
             titleInfo: {
                 handler: function (titleInfo) {
-                    this.$emit('emitHandler',  {isLoading: false});
-                    this.$forceUpdate();
+                    if (titleInfo !== undefined && titleInfo !== null && this.user !== null) {
+                        this.$emit('emitHandler',  {isLoading: false});
+                    }
                 },
                 immediate: true
             },
@@ -227,20 +228,12 @@
                 handler: function (itemCount) {
                     if (itemCount < 0) this.itemCount = 0;
                     if (itemCount > this.maxItemCount) this.itemCount = this.maxItemCount;
-                    this.$forceUpdate();
                 },
                 immediate: true
             },
             titleDabingName: {
                 handler: function (titleDabingName) {
                     this.reservationTimeRange = [null, null];
-                    this.$forceUpdate();
-                },
-                immediate: true
-            },
-            addedItem: {
-                handler: function (addedItem) {
-                    this.$forceUpdate();
                 },
                 immediate: true
             },
@@ -248,7 +241,6 @@
                 handler: function (maxItemCount) {
                     if (maxItemCount > 0) this.itemCount = 1;
                     else this.itemCount = 0;
-                    this.$forceUpdate();
                 },
                 immediate: true
             },
@@ -257,7 +249,6 @@
                     if (reservationTimeRange[0] === null && reservationTimeRange[1] === null) {
                         this.itemCount = 0;
                         this.maxItemCount = 0;
-                        this.$forceUpdate();
                     } else { 
                         this.countMaxItemInCart();
                         var startDate = new Date(reservationTimeRange[0]);

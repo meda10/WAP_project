@@ -260,8 +260,7 @@ export default {
 
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.movieGenre}).then((res) => {
                 this.genre.name = res.data.name;
-                this.genre.url = this.$route.params.movieGenre
-                this.$emit('emitHandler', {isLoading: false});
+                this.genre.url = this.$route.params.movieGenre;
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);
