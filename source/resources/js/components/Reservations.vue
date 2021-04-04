@@ -101,7 +101,7 @@ export default {
         },
         myReservations: {
             handler: function (myReservations) {
-                if (myReservations !== undefined && myReservations !== null && myReservations.length !== 0)
+                if (myReservations !== undefined && myReservations !== null)
                     this.$emit('emitHandler', {isLoading: false});
             },
             immediate: true
