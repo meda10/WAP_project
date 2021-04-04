@@ -19,4 +19,9 @@ class Language extends Model
         $attributes['language_name'] = AppHelper::friendlyUrl($attributes['language']);
         return static::query()->create($attributes);
     }
+
+    public static function getLanguageName($id)
+    {
+        return Language::select(['language_name'])->where('id', $id)->first();
+    }
 }

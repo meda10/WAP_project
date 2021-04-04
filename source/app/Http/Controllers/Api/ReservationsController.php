@@ -10,24 +10,22 @@ use App\Models\Discount;
 use App\Models\Title;
 use App\Models\Item;
 
-use Illuminate\Support\Facades\Log;
-
 
 class ReservationsController extends Controller
 {
     public function makeReservation(Request $request)
     {
+
         if ($request->discount != '') {
             if (Discount::checkCodeExistNotUsed($request->discount) == [])
                 return response()->json(['error' => 'discount_code'], 400);
         }
 
+
         $interval = new \DateInterval('P1D');
         $reservationsCannotFinish = [];
 
         foreach ($request->reservations as $reservation) {
-            Log::info($reservation);
-
             // check if there is enough cassetes in store
             $start = new \DateTime($reservation['reservationTimeRange'][0]);
             $end = new \DateTime($reservation['reservationTimeRange'][1]);
@@ -71,20 +69,22 @@ class ReservationsController extends Controller
 
         
         foreach ($request->reservations as $reservation) {
-            $freeItemsIds = Item::getFreeItemsIds($reservation['url'], $reservation['language_name'], $request['storeId']);
+            $freeItemsIds = Item::getFreeItemsIds($reservation['url'], $reservation['language_name'], 
+                $request['storeId'], $reservation['reservationTimeRange'][0], $reservation['reservationTimeRange'][1]);
             
-            for ($i = 0; $i < $reservation['quantity']; $i++) {
-                Reservation::create([
-                    'reservation' => $reservation['reservationTimeRange'][0],
-                    'reservation_till' => $reservation['reservationTimeRange'][1],
-                    'price' => $reservation['price'],
-                    'paid' => $paid,
-                    'invoice_id' => $invoiceId,
-                    'user_id' => $request->userId,
-                    'item_id' => $freeItemsIds[$i]->id,
-                    'discount_id' => $discountId
-                ]);
-            }
+            $new_reservation = Reservation::create([
+                'reservation' => $reservation['reservationTimeRange'][0],
+                'reservation_till' => $reservation['reservationTimeRange'][1],
+                'price' => $reservation['price'],
+                'paid' => $paid,
+                'invoice_id' => $invoiceId,
+                'user_id' => $request->userId,
+                'title_id' => $reservation['title_id'],
+                'discount_id' => $discountId
+            ]);
+
+            for ($i = 0; $i < $reservation['quantity']; $i++)
+                $new_reservation->items()->attach($freeItemsIds[$i]->id);
         }
 
         return response()->json(['success' => 'success'], 200);
@@ -98,9 +98,10 @@ class ReservationsController extends Controller
     public function cancelReservation(Request $request)
     {
         $reservation = Reservation::find($request->reservationId);
-        $discount = Discount::find($reservation->discount_id);
+        $reservation->items()->detach();
         $reservation->delete();
-        if ($discount != null)
-            $discount->delete();
+        $discountId = $reservation->discount_id;
+        $discount = Discount::getById($discountId);
+        if ($discount != null && count($discount->reservations) == 0) $discount->delete();
     }
 }

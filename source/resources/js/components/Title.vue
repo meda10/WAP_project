@@ -294,14 +294,15 @@
 
                 if (!disabled) {
                     this.cartCookies.forEach(item => {
-                        for (var reservationDate = new Date(item.reservationTimeRange[0]); 
-                        reservationDate <= new Date(item.reservationTimeRange[1]); 
-                        reservationDate.setDate(reservationDate.getDate() + 1)) {
-                            
-                            if (dateFormat(reservationDate, 'yyyy-mm-dd') === dateFormat(date, 'yyyy-mm-dd')) {
-                                if (item.maxItemCount <= titlesCountInDate + item.quantity)
-                                    disabled = true;
-                                break;
+                        if (item.url === this.titleName) {
+                            for (var reservationDate = new Date(item.reservationTimeRange[0]); 
+                            reservationDate <= new Date(item.reservationTimeRange[1]); 
+                            reservationDate.setDate(reservationDate.getDate() + 1)) {
+                                if (dateFormat(reservationDate, 'yyyy-mm-dd') === dateFormat(date, 'yyyy-mm-dd')) {
+                                    if (item.maxItemCount <= titlesCountInDate + item.quantity)
+                                        disabled = true;
+                                    break;
+                                }
                             }
                         }
                     });
@@ -409,6 +410,7 @@
 
                     var item = {
                         name: this.titleInfo.title_name,
+                        title_id: this.titleInfo.id,
                         type: this.titleInfo.type,
                         price: this.titleInfo.price,
                         quantity: this.itemCount,

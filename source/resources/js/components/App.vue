@@ -233,7 +233,8 @@ export default {
         getStores() {
             axios.get('/api/get_stores').then((res) => {
                 this.stores = res.data;
-                this.chosenStore = this.stores[0].id;
+                var chosenStoreIdSession = this.$session.get('wap-store');
+                this.chosenStore = chosenStoreIdSession || this.stores[0].id;
             });
         },
         clearCookies() {

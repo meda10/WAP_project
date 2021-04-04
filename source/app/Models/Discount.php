@@ -22,13 +22,19 @@ class Discount extends Model
     public static function checkCodeExistNotUsed($code)
     {
         $discount = Discount::with('reservations')->where(DB::raw('BINARY `code`'), $code)->first();
-        if ($discount != null && $discount->reservations == null)
+        if ($discount != null && count($discount->reservations) == 0)
             return ['percent' => $discount['percent']];
         return [];
     }
 
+    public static function getById($id)
+    {
+        return Discount::where('id', $id)->with('reservations')->first();
+    }
+
     public function reservations()
     {
-        return $this->hasOne(Reservation::class, 'discount_id');
+        return $this->hasMany(Reservation::class, 'discount_id', 'id');
     }
+
 }

@@ -6,13 +6,20 @@
             Aktuálně nemáte žádné rezervace. <router-link :to="{ name: 'home' }" class="dropdown-item">Běžte si něco objednat :)</router-link>
         </div>
 
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="reservationDeleted">
+            <strong>Rezervace byla zrušena!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <div class="accordion" id="accordionExample">
             <div v-for="(reservation, index) in myReservations" v-bind:key="reservation.id" class="card">
                 <div class="card-header" :id="'heading' + reservation.id">
                     <h5 class="mb-0">
                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
                         :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
-                            <h4>{{reservation.titles.title_name}} ({{reservation.languages.language}} dabing)</h4>
+                            <h4>{{reservation.titles.title_name}} ({{reservation.items[0].languages.language}} dabing)</h4>
                         </button>
                     </h5>
                 </div>
@@ -23,7 +30,7 @@
                             <h6>Čas rezervace: {{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</h6>
                         </div>
                         <div>
-                            <h6>Místo vyzvednutí: {{reservation.stores.address}}, {{reservation.stores.city}}, {{reservation.stores.zip_code}}</h6>
+                            <h6>Místo vyzvednutí: {{reservation.items[0].stores.address}}, {{reservation.items[0].stores.city}}, {{reservation.items[0].stores.zip_code}}</h6>
                         </div>
                         <div v-if="reservation.fine > 0">
                             <h6>Pokuta: {{reservation.fine}} Kč</h6>
@@ -41,14 +48,17 @@
                         <div>
                             <h6>Cena za kus: {{reservation.price}} Kč</h6>
                         </div>
+                        <div>
+                            <h6>Kusů: {{reservation.items.length}}</h6>
+                        </div>
                         <div v-if="reservation.discounts !== undefined">
                             <h6>Sleva: {{reservation.discounts.percent}} %</h6>
                         </div>
                         <div v-if="reservation.discounts">
-                            <h6>Cena celkem: {{(Number(reservation.price) * countNumberOfDaysFromDateRange(reservation.reservation, reservation.reservation_till)) * (1 - (reservation.discounts.percent/100))}} Kč</h6>
+                            <h6>Cena celkem: {{countPrice(reservation.price, reservation.items.length, reservation.reservation, reservation.reservation_till, null)}} Kč</h6>
                         </div>
                         <div v-if="!reservation.discounts">
-                            <h6>Cena celkem: {{(Number(reservation.price) * countNumberOfDaysFromDateRange(reservation.reservation, reservation.reservation_till))}} Kč</h6>
+                            <h6>Cena celkem: {{countPrice(reservation.price, reservation.items.length, reservation.reservation, reservation.reservation_till, reservation.discounts.percent)}} Kč</h6>
                         </div>
                         <div v-if="new Date(reservation.reservation) >= new Date()">
                             <button type="button" class="btn btn-primary" @click="cancelReservationModal(reservation.id, index)">Zrušit rezervaci</button>
@@ -69,27 +79,30 @@ import dateFormat from 'dateformat';
 
 export default {
     title: 'Mé rezervace',
-    props: ['userProps'],
+    props: ['user'],
     data() {
         return {
             myReservations: [],
             reservationIdToBeDeleted: -1,
             reservationIdLocalToBeDeleted: -1,
-            modalCancelReservation: false
-        }
-    },
-    computed: {
-        user: function () {
-            return this.userProps;
+            modalCancelReservation: false,
+            reservationDeleted: false
         }
     },
     watch: {
         user: {
             handler: function (user) {
-                if (user !== null) {
+                if (user !== undefined && user !== null) {
+                    this.$emit('emitHandler', {isLoading: true});
                     this.getMyReservations(user.id);
-                    this.$emit('emitHandler', {isLoading: false});
                 }
+            },
+            immediate: true
+        },
+        myReservations: {
+            handler: function (myReservations) {
+                if (myReservations !== undefined && myReservations !== null && myReservations.length !== 0)
+                    this.$emit('emitHandler', {isLoading: false});
             },
             immediate: true
         }
@@ -102,20 +115,20 @@ export default {
         getMyReservations(userId) {
             axios.post('/api/get_user_reservations', { user_id: userId }).then((res) => {
                 this.myReservations = res.data;
-                console.log(res.data);
             });
         },
         cancelReservationModal(reservationId, reservationIdLocal) {
             this.modalCancelReservation = true;
             this.reservationIdToBeDeleted = reservationId;
             this.reservationIdLocalToBeDeleted = reservationIdLocal;
+            console.log(this.reservationIdLocalToBeDeleted);
         },
         cancelReservation() {
-            this.$emit('emitHandler', {isLoading: true});
+            this.myReservations.splice(this.reservationIdLocalToBeDeleted, 1);
+            this.reservationDeleted = true;
+
             axios.post('/api/cancel_reservation', { reservationId: this.reservationIdToBeDeleted }).then((res) => {
-                this.myReservations.splice(this.reservationIdLocalToBeDeleted, 1);
                 this.dontCancelReservation();
-                this.$emit('emitHandler', {isLoading: false});
             });
         },
         dontCancelReservation() {
@@ -126,6 +139,14 @@ export default {
             var startDate = new Date(start);
             var endDate = new Date(end);
             return Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+        },
+        countPrice(reservationPrice, piecesCount, startDate, endDate, discountPercent) {
+            var finalPrice = Number(reservationPrice) * this.countNumberOfDaysFromDateRange(startDate, endDate) * piecesCount;
+            if (discountPercent !== null) {
+                $discount = (1 - (discountPercent / 100));
+                finalPrice *= $discount;
+            }
+            return finalPrice;
         }
     }
 }
