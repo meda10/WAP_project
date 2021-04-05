@@ -21,44 +21,24 @@ class ReservationsController extends Controller
                 return response()->json(['error' => 'discount_code'], 400);
         }
 
+        $reservationsFreeItemsIds = [];
+        $canCreateReservations = true;
 
-        $interval = new \DateInterval('P1D');
-        $reservationsCannotFinish = [];
-
+        // get all free items id for all titles (reservations)
         foreach ($request->reservations as $reservation) {
-            // check if there is enough cassetes in store
-            $start = new \DateTime($reservation['reservationTimeRange'][0]);
-            $end = new \DateTime($reservation['reservationTimeRange'][1]);
-            $end->setTime(0,0,1);
-
-            $daterange = new \DatePeriod($start, $interval, $end);
-
-            $existingReservations = Reservation::getTitleReservations($reservation['url'], $request['storeId']);
-
-            if (isset($existingReservations[$reservation['language_name']])) {
-                foreach ($daterange as $date) {
-                    if (isset($existingReservations[$reservation['language_name']][$date->format('Y-m-d')])) {
-                        $existingReservationCount = $existingReservations[$reservation['language_name']][$date->format('Y-m-d')];
-                        $titleMaxCounts = Title::getTitleItemsMaxCounts($reservation['type'], $reservation['url'], $request['storeId']);
-
-                        // cannot reserve, no free cassetes
-                        if ($titleMaxCounts[$reservation['language_name']] < $existingReservationCount + $reservation['quantity']) {
-                            $reservationsCannotFinish[] = $reservation;
-                            break;
-                        }
-                    }
-                }
-            }
+            $freeItemsIds = Item::getFreeItemsIds($reservation['url'], $reservation['language_name'], 
+                    $request['storeId'], $reservation['reservationTimeRange'][0], $reservation['reservationTimeRange'][1]);
+            $reservationsFreeItemsIds[] = $freeItemsIds;
+            if (count($freeItemsIds) == 0) $canCreateReservations = false;
         }
 
         // if there is some reservation that  cannot be performed then return bad request with list of titles 
         // that cannot be reserved
-        if (count($reservationsCannotFinish) != 0) {
+        if (!$canCreateReservations) {
             return response()->json(['error' => 'time_violation', 'violation' => $reservationsCannotFinish], 400);
         }
 
-        // TODO create invoice
-        $invoiceId = 111;
+        $invoiceId = $this->createInvoice();
         $paid = $request->paymentMethod == 'online' ? 1 : 0;
         
 
@@ -68,10 +48,9 @@ class ReservationsController extends Controller
             $discountId = Discount::where('code', $request->discount)->first()->id;
 
         
-        foreach ($request->reservations as $reservation) {
-            $freeItemsIds = Item::getFreeItemsIds($reservation['url'], $reservation['language_name'], 
-                $request['storeId'], $reservation['reservationTimeRange'][0], $reservation['reservationTimeRange'][1]);
-            
+        foreach ($request->reservations as $index=>$reservation) {
+            $freeItemsIds = $reservationsFreeItemsIds[$index];
+
             $new_reservation = Reservation::create([
                 'reservation' => $reservation['reservationTimeRange'][0],
                 'reservation_till' => $reservation['reservationTimeRange'][1],
@@ -103,5 +82,12 @@ class ReservationsController extends Controller
         $discountId = $reservation->discount_id;
         $discount = Discount::getById($discountId);
         if ($discount != null && count($discount->reservations) == 0) $discount->delete();
+    }
+
+    private function createInvoice()
+    {
+        $invoiceId = 111;
+
+        return $invoiceId;
     }
 }
