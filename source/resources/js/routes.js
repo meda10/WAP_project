@@ -17,6 +17,7 @@ import TitleEdit from "./components/TitleEdit";
 import ActorEdit from "./components/ActorEdit";
 import UserEdit from "./components/UserEdit";
 import UserAdd from "./components/UserAdd";
+import UserReservations from "./components/UserReservations";
 import Users from "./components/Users";
 import Actors from "./components/Actors";
 import Stores from "./components/Stores";
@@ -106,6 +107,16 @@ export default {
             path: '/admin/uzivatele/pridat_uzivatele',
             name: 'userAdd',
             component: UserAdd
+        },
+        {
+            path: '/admin/uzivatele/rezervace/:id',
+            name: 'userReservationsId',
+            component: UserReservations
+        },
+        {
+            path: '/admin/uzivatele/rezervace',
+            name: 'userReservations',
+            component: UserReservations
         },
         {
             path: '/admin/uzivatele/upravit_uzivatele/:id',

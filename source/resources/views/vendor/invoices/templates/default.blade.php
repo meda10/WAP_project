@@ -250,6 +250,9 @@
                     <th scope="col" class="text-center border-0">Množství</th>
                     <th scope="col" class="text-right border-0">Cena za kus za dobu vypůjčení</th>
                     <th scope="col" class="text-right border-0 pr-0">Mezisoučet</th>
+                    @if($invoice->hasItemDiscount)
+                        <th scope="col" class="text-right border-0">Sleva</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -265,6 +268,11 @@
                     <td class="text-right pr-0">
                         {{ $invoice->formatCurrency($item->sub_total_price) }}
                     </td>
+                    @if($invoice->hasItemDiscount)
+                        <td class="text-right pr-0">
+                            {{ $invoice->formatCurrency($item->discount) }}
+                        </td>
+                    @endif
                 </tr>
                 @endforeach
                 {{-- Summary --}}

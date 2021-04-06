@@ -31,6 +31,12 @@
             </router-link>
         </div>
         <div class="col-2">
+            <router-link class="card border-0 admin-link" tag="div" :to="'/admin/uzivatele/rezervace'">
+                <div class="card-img d-flex align-items-center justify-content-center">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <p class="card-text text-center">Rezervace uživatelů</p>
+            </router-link>
         </div>
         <div class="col-2">
         </div>

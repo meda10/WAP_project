@@ -58,9 +58,11 @@ class Reservation extends Model
         return $reservations;
     }
 
-    public static function getUserReservations($user_id)
+    public static function getUserReservations($userEmail)
     {
-        return Reservation::where('user_id', $user_id)
+        return Reservation::whereHas('users', function($query) use($userEmail) {
+                                    $query->where('email', $userEmail);
+                                })
                                 ->with('items', 'items.stores', 'items.languages')
                                 ->with('discounts')->with('titles')->orderBy('reservation')->get();
     }
@@ -77,6 +79,11 @@ class Reservation extends Model
 
     public function discounts()
     {
-        return $this->hasOne(Discount::class, 'id');
+        return $this->hasOne(Discount::class, 'id', 'discount_id');
+    }
+
+    public function users()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

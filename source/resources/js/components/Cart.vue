@@ -288,8 +288,8 @@ export default {
                         if (error.response.data.error === 'discount_code')
                             return;
 
-                        this.$emit('emitHandler',  {cartCookies: this.cartCookies});
-                        this.$emit('emitHandler',  {isLoading: false});
+                        this.$emit('emitHandler', {cartCookies: this.cartCookies});
+                        this.$emit('emitHandler', {isLoading: false});
                     }
                 });
 

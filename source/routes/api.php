@@ -57,15 +57,19 @@ Route::post('/set_actor', 'Api\ParticipantController@store');
 Route::put('/update_actor/{id}', 'Api\ParticipantController@update');
 Route::delete('/delete_actor/{id}', 'Api\ParticipantController@destroy');
 
-//Discount
+//Reservations
 Route::post('/check_discount_code', 'Api\DiscountsController@checkDiscountCode');
 Route::post('/make_reservation', 'Api\ReservationsController@makeReservation');
 Route::post('/get_user_reservations', 'Api\ReservationsController@getUserReservations');
+Route::post('/get_user_reservations_by_email', 'Api\ReservationsController@getUserReservationsByEmail');
+Route::post('/pay_reservation', 'Api\ReservationsController@payReservation');
+Route::post('/return_reservation', 'Api\ReservationsController@returnReservation');
 Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation');
 
 //User
 Route::get('/get_all_users', 'Api\UsersController@index');
 Route::get('/get_one_user/{id}', 'Api\UsersController@show');
+Route::get('/get_user_by_id', 'Api\UsersController@getUserById');
 Route::put('/update_user/{id}', 'Api\UsersController@update');
 Route::delete('/delete_user/{id}', 'Api\UsersController@destroy');
 

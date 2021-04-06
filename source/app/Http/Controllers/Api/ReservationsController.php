@@ -11,10 +11,12 @@ use App\Models\Reservation;
 use App\Models\Discount;
 use App\Models\Title;
 use App\Models\Item;
+use App\Models\User;
 use App\Mail\SendInvoice;
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+use App\Http\Resources\ReservationResource;
 
 
 class ReservationsController extends Controller
@@ -81,11 +83,93 @@ class ReservationsController extends Controller
     }
 
     /**
-     * Return all user's reservaions
+     * Return all reservaions of logged in user
      */
-    public function getUserReservations(Request $request)
+    public function getUserReservations()
     {
-        return Reservation::getUserReservations($request->user_id);
+        $user = Auth::user();
+        return ReservationResource::collection(Reservation::getUserReservations($user->email));
+    }
+
+    /**
+     * Return all reservaions of user by given email
+     * Or HTTP 400 if given not existing email
+     */
+    public function getUserReservationsByEmail(Request $request)
+    {
+        $userEmail = $request->user_email;
+        $user = User::where('email', $userEmail)->first();
+
+        if ($user == null) 
+            return response()->json(['error' => 'user_not_found'], 400);
+
+        $reservations = ReservationResource::collection(Reservation::getUserReservations($userEmail));
+        return response()->json(['user' => $user, 'reservations' => $reservations], 200);
+    }
+
+    /**
+     * Set every reservation to paid and send invoice for all items
+     */
+    public function payReservation(Request $request)
+    {
+        $user = $request->user;
+        $name = $user['name'] . ' ' . $user['surname'];
+        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
+
+        $customer = new Buyer([
+            'name'          => $name,
+            'custom_fields' => [
+                'Email' => $user['email'],
+                'Adresa' => $address
+            ],
+        ]);
+
+        $items = [];
+
+        foreach ($request->reservations as $reservation) {
+            $reservationDB = Reservation::findOrFail($reservation['id']);
+            $reservationDB['paid'] = $reservationDB['issued'] = 1;
+            
+            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)';
+            $itemQuantity = intval($reservation['quantity']);
+            $itemPrice = intval($reservation['price']) * intval($reservation['reservationNumberOfDays']);
+
+            $startDate = new \DateTime($reservation['reservation']);
+            $endDate = new \DateTime($reservation['reservation_till']);
+
+            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
+
+            $item = (new InvoiceItem())
+                ->title($itemName)
+                ->pricePerUnit($itemPrice)
+                ->units($itemDateRange)
+                ->quantity($itemQuantity);
+
+            if ($reservation['discount'] != 0)
+                $item->discountByPercent($reservation['discount']);
+            
+            $items[] = $item;
+            $reservationDB->save();
+        }
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->addItems($items);
+        
+        $data = $invoice->stream();
+        Mail::to($user['email'])->send(new SendInvoice($data));
+
+        return response()->json(['success' => 'ok'], 200);
+    }
+
+    /**
+     * Return issued reservation
+     */
+    public function returnReservation(Request $request)
+    {
+        $reservation = Reservation::findOrFail($request->reservationId);
+        $reservation['returned'] = 1;
+        $reservation->save();
     }
 
     /**
