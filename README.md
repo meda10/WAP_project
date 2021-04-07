@@ -72,6 +72,9 @@ If you want to change .vue files, you have to run this:
 sudo docker-compose run --rm npm run watch
 ```
 
+If you cannot install anything or run watch/dev than try [this](https://github.com/JeffreyWay/laravel-mix/issues/1072). This happens because of cache.
+
+
 <!--
 Next you must install the frontend scaffolding (Bootstrap and Vue.js). ("Yes" for commands with `--auth`):
 ``` bash
