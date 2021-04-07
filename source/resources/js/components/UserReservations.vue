@@ -435,7 +435,10 @@ export default {
                 return;
             }
             var startDate = new Date(reservation.reservation);
-            if (startDate > new Date()) {
+            var today = new Date();
+            startDate.setHours(0,0,0,0);
+            today.setHours(0,0,0,0);
+            if (startDate < today) {
                 this.showWrongDateModal = true;
                 return;
             }
