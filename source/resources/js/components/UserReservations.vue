@@ -438,7 +438,7 @@ export default {
             var today = new Date();
             startDate.setHours(0,0,0,0);
             today.setHours(0,0,0,0);
-            if (startDate < today) {
+            if (startDate !== today) {
                 this.showWrongDateModal = true;
                 return;
             }
