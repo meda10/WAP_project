@@ -373,6 +373,7 @@
                     this.titleDabingName = this.titleInfo.languages[0].language_name;
                     this.maxItemCount = this.titleInfo.languages[0].total;
                     this.maxPossibleItemCount = this.titleInfo.languages[0].total;
+                    this.$emit('emitHandler',  {isLoading: false});
                 }).catch((error) => {
                     this.$router.push({ name: 'notfound' });
                 });
