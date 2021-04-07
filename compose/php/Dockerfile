@@ -15,6 +15,15 @@ RUN chown laravel:laravel /var/www/html
 # Work in the specific space
 WORKDIR /var/www/html
 
+# crontab schedule COPY
+COPY ./compose/php/crontab /etc/crontabs/root
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/crontabs/root
+
+# Apply cron job
+RUN crontab /etc/crontabs/root
+
 # Install dependencies
 RUN apk add --no-cache \
     freetype \
