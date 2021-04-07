@@ -7,16 +7,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 use App\Models\Reservation;
 use App\Models\Discount;
 use App\Models\Title;
 use App\Models\Item;
 use App\Models\User;
-use App\Mail\SendInvoice;
-use LaravelDaily\Invoices\Invoice;
-use LaravelDaily\Invoices\Classes\Buyer;
-use LaravelDaily\Invoices\Classes\InvoiceItem;
 use App\Http\Resources\ReservationResource;
+use App\Http\Resources\UsersResource;
+use App\Helpers\AppHelper;
 
 
 class ReservationsController extends Controller
@@ -108,61 +107,6 @@ class ReservationsController extends Controller
     }
 
     /**
-     * Set every reservation to paid and send invoice for all items
-     */
-    public function payReservation(Request $request)
-    {
-        $user = $request->user;
-        $name = $user['name'] . ' ' . $user['surname'];
-        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
-
-        $customer = new Buyer([
-            'name'          => $name,
-            'custom_fields' => [
-                'Email' => $user['email'],
-                'Adresa' => $address
-            ],
-        ]);
-
-        $items = [];
-
-        foreach ($request->reservations as $reservation) {
-            $reservationDB = Reservation::findOrFail($reservation['id']);
-            $reservationDB['paid'] = $reservationDB['issued'] = 1;
-            
-            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)';
-            $itemQuantity = intval($reservation['quantity']);
-            $itemPrice = intval($reservation['price']) * intval($reservation['reservationNumberOfDays']);
-
-            $startDate = new \DateTime($reservation['reservation']);
-            $endDate = new \DateTime($reservation['reservation_till']);
-
-            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
-
-            $item = (new InvoiceItem())
-                ->title($itemName)
-                ->pricePerUnit($itemPrice)
-                ->units($itemDateRange)
-                ->quantity($itemQuantity);
-
-            if ($reservation['discount'] != 0)
-                $item->discountByPercent($reservation['discount']);
-            
-            $items[] = $item;
-            $reservationDB->save();
-        }
-
-        $invoice = Invoice::make()
-            ->buyer($customer)
-            ->addItems($items);
-        
-        $data = $invoice->stream();
-        Mail::to($user['email'])->send(new SendInvoice($data));
-
-        return response()->json(['success' => 'ok'], 200);
-    }
-
-    /**
      * Return issued reservation
      */
     public function returnReservation(Request $request)
@@ -170,59 +114,6 @@ class ReservationsController extends Controller
         $reservation = Reservation::findOrFail($request->reservationId);
         $reservation['returned'] = 1;
         $reservation->save();
-    }
-
-    /**
-     * Pay for fines
-     */
-    public function payFines(Request $request)
-    {
-        $user = $request->user;
-        $name = $user['name'] . ' ' . $user['surname'];
-        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
-
-        $customer = new Buyer([
-            'name'          => $name,
-            'custom_fields' => [
-                'Email' => $user['email'],
-                'Adresa' => $address
-            ],
-        ]);
-
-        $items = [];
-
-        foreach ($request->reservations as $reservation) {
-            // return reservation
-            $reservationDB = Reservation::findOrFail($reservation['id']);
-            $reservationDB['returned'] = 1;
-            $reservationDB['fine_paid'] = 1;
-            $reservationDB->save();
-
-            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)' . ' - pokuta';
-            $itemPrice = intval($reservation['fineSum']);
-
-            $startDate = new \DateTime($reservation['reservation']);
-            $endDate = new \DateTime($reservation['reservation_till']);
-
-            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
-
-            $item = (new InvoiceItem())
-                ->title($itemName)
-                ->pricePerUnit($itemPrice)
-                ->quantity(1)
-                ->units($itemDateRange);
-            
-            $items[] = $item;
-        }
-
-        $invoice = Invoice::make()
-            ->buyer($customer)
-            ->addItems($items);
-        
-        $data = $invoice->stream();
-        Mail::to($user['email'])->send(new SendInvoice($data));
-
-        return response()->json(['success' => 'ok'], 200);
     }
 
     /**
@@ -239,24 +130,86 @@ class ReservationsController extends Controller
     }
 
     /**
+     * Set every reservation to paid and send invoice for all items
+     */
+    public function payReservation(Request $request)
+    {
+
+        $items = [];
+
+        foreach ($request->reservations as $reservation) {
+            $reservationDB = Reservation::findOrFail($reservation['id']);
+            $reservationDB['paid'] = $reservationDB['issued'] = 1;
+            $reservationDB->save();
+            
+            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)';
+            $itemQuantity = intval($reservation['quantity']);
+            $itemPrice = intval($reservation['price']) * intval($reservation['reservationNumberOfDays']);
+
+            $startDate = new \DateTime($reservation['reservation']);
+            $endDate = new \DateTime($reservation['reservation_till']);
+            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
+
+            $item = (new InvoiceItem())
+                ->title($itemName)
+                ->pricePerUnit($itemPrice)
+                ->units($itemDateRange)
+                ->quantity($itemQuantity);
+
+            if ($reservation['discount'] != 0)
+                $item->discountByPercent($reservation['discount']);
+            
+            $items[] = $item;
+        }
+
+        $user = $request->user;
+        AppHelper::createInvoiceAndSend($user, $items, 0);
+
+        return response()->json(['success' => 'ok'], 200);
+    }
+
+
+    /**
+     * Pay for fines
+     */
+    public function payFines(Request $request)
+    {
+        $items = [];
+
+        foreach ($request->reservations as $reservation) {
+            // return reservation
+            $reservationDB = Reservation::findOrFail($reservation['id']);
+            $reservationDB['returned'] = 1;
+            $reservationDB['fine_paid'] = 1;
+            $reservationDB->save();
+
+            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)' . ' - pokuta';
+            $itemPrice = intval($reservation['fineSum']);
+
+            $startDate = new \DateTime($reservation['reservation']);
+            $endDate = new \DateTime($reservation['reservation_till']);
+            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
+
+            $item = (new InvoiceItem())
+                ->title($itemName)
+                ->pricePerUnit($itemPrice)
+                ->quantity(1)
+                ->units($itemDateRange);
+            
+            $items[] = $item;
+        }
+
+        $user = $request->user;
+        AppHelper::createInvoiceAndSend($user, $items, 0);
+
+        return response()->json(['success' => 'ok'], 200);
+    }
+
+    /**
      * Creates invoice and sends it to users email
      */
     private function createInvoice($reservations, $discount)
     {
-        $invoiceId = 111;
-
-        $user = Auth::user();
-        $name = $user->name . ' ' . $user->surname;
-        $address = $user->address . ', ' . $user->city . ', ' . $user->zip_code;
-
-        $customer = new Buyer([
-            'name'          => $name,
-            'custom_fields' => [
-                'Email' => $user->email,
-                'Adresa' => $address
-            ],
-        ]);
-
         $items = [];
 
         foreach ($reservations as $reservation) {
@@ -266,7 +219,6 @@ class ReservationsController extends Controller
 
             $startDate = new \DateTime($reservation['reservationTimeRange'][0]);
             $endDate = new \DateTime($reservation['reservationTimeRange'][1]);
-
             $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
 
             $items[] = (new InvoiceItem())
@@ -276,14 +228,7 @@ class ReservationsController extends Controller
                 ->quantity($itemQuantity);
         }
 
-        $invoice = Invoice::make()
-            ->buyer($customer)
-            ->addItems($items);
-
-        if ($discount != 0)
-            $invoice->discountByPercent(intval($discount)); 
-
-        $data = $invoice->stream();
-        Mail::to($user->email)->send(new SendInvoice($data));
+        $user = (new UsersResource(Auth::user()))->toArray(null);
+        AppHelper::createInvoiceAndSend($user, $items, $discount);
     }
 }

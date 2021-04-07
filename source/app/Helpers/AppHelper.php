@@ -8,8 +8,10 @@ use App\Models\Reservation;
 use App\Http\Resources\ReservationWithUserResource;
 use App\Mail\SendReservationCanceled;
 use App\Mail\SendReservationFined;
-
-use Illuminate\Support\Facades\Log;
+use App\Mail\SendInvoice;
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 
 
 class AppHelper
@@ -56,6 +58,31 @@ class AppHelper
         } while ($generate);
 
         return $code;
+    }
+
+    public static function createInvoiceAndSend($user, $items, $discount)
+    {
+        $name = $user['name'] . ' ' . $user['surname'];
+        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
+
+        $customer = new Buyer([
+            'name'          => $name,
+            'custom_fields' => [
+                'Email' => $user['email'],
+                'Adresa' => $address
+            ],
+        ]);
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->addItems($items);
+
+        if ($discount != 0)
+            $invoice->discountByPercent(intval($discount)); 
+
+
+        $data = $invoice->stream();
+        Mail::to($user['email'])->send(new SendInvoice($data));
     }
 
     public static function checkUsersReservations()
