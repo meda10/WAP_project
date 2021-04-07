@@ -198,6 +198,7 @@ export default {
             this.discountPercent = Number(cookiesDiscount.percent);
             this.discountApplied = true;
         }
+        this.$emit('emitHandler',  {isLoading: false});
     },
     methods: {
         dateFormat: dateFormat,
