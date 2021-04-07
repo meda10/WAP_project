@@ -21,7 +21,8 @@ class CreateReservationsTable extends Migration
             $table->integer('invoice_id');
             $table->integer('price');
             $table->boolean('returned')->default(false);
-            $table->boolean('paid');
+            $table->boolean('paid')->default(false);
+            $table->boolean('fine_paid')->default(false);
             $table->boolean('issued')->default(false);
             $table->dateTime('created_at');
             $table->bigInteger('user_id')->unsigned();

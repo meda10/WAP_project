@@ -19,6 +19,7 @@ class ReservationResource extends JsonResource
             'id' => $this->id,
             'issued' => $this->issued,
             'paid' => $this->paid,
+            'fine_paid' => $this->fine_paid,
             'price' => $this->price,
             'quantity' => count($this->items),
             'language' => $this->items[0]->languages->language,

@@ -65,6 +65,7 @@ Route::post('/get_user_reservations_by_email', 'Api\ReservationsController@getUs
 Route::post('/pay_reservation', 'Api\ReservationsController@payReservation');
 Route::post('/return_reservation', 'Api\ReservationsController@returnReservation');
 Route::post('/cancel_reservation', 'Api\ReservationsController@cancelReservation');
+Route::post('/pay_fines', 'Api\ReservationsController@payFines');
 
 //User
 Route::get('/get_all_users', 'Api\UsersController@index');

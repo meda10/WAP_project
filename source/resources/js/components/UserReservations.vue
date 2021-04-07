@@ -72,7 +72,6 @@
                 </b-button>
             </div>
 
-
             <div v-if="reservationsToBeIssued.length !== 0">
                 <div class="row mb-1 mt-5">
                     <div class="col">
@@ -119,6 +118,52 @@
                 </button>
             </div>
 
+            <div v-if="finedReservations.length !== 0">
+                <div class="row mb-1 mt-5">
+                    <div class="col">
+                        <h3>Zaplacení pokut</h3>
+                    </div>
+                </div>
+
+                <table class="table" id="titlesTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Název titulu</th>
+                            <th scope="col">Datum rezervace</th>
+                            <th scope="col">Celkový mezisoučet</th>
+                            <th scope="col">Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(reservation, index) in finedReservations"
+                            v-bind:class="!(index%2) ? 'table-dark' : ''" :key="index">
+                                <td>{{ reservation.title_name }} ({{ reservation.language }} dabing)</td>
+                                <td>{{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</td>
+                                <td>
+                                    {{ reservation.fineSum }} Kč
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" @click="removeFromToBeFined(index)">
+                                        Odebrat
+                                    </button>
+                                </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <th>Cena celkem:</th>
+                            <th>{{fineSumToBeIssued}} Kč</th>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-primary" @click="payFines()">
+                    Zaplaceno a poslat fakturu
+                </button>
+            </div>
+
             <div class="row mb-1 mt-5">
                 <div class="col">
                     <h3>Nevyřízené</h3>
@@ -144,8 +189,12 @@
                             <div>
                                 <h6>Místo vyzvednutí: {{reservation.store_address}}</h6>
                             </div>
-                            <div v-if="reservation.fine === 0">
+                            <div>
                                 <h6>Zaplaceno: <span v-if="reservation.paid">Ano</span><span v-if="!reservation.paid">Ne</span></h6>
+                            </div>
+                            <div v-if="reservation.fine > 0">
+                                <h6>Pokuta: {{reservation.fine}} Kč</h6>
+                                <h6>Pokuta zaplacena: <span v-if="reservation.fine_paid">Ano</span><span v-if="!reservation.fine_paid">Ne</span></h6>
                             </div>
                             <div>
                                 <h6>Cena za kus: {{reservation.price}} Kč</h6>
@@ -194,8 +243,12 @@
                             <div>
                                 <h6>Místo vyzvednutí: {{reservation.store_address}}</h6>
                             </div>
-                            <div v-if="reservation.fine === 0">
+                            <div>
                                 <h6>Zaplaceno: <span v-if="reservation.paid">Ano</span><span v-if="!reservation.paid">Ne</span></h6>
+                            </div>
+                            <div v-if="reservation.fine > 0">
+                                <h6>Pokuta: {{reservation.fine}} Kč</h6>
+                                <h6>Pokuta zaplacena: <span v-if="reservation.fine_paid">Ano</span><span v-if="!reservation.fine_paid">Ne</span></h6>
                             </div>
                             <div>
                                 <h6>Cena za kus: {{reservation.price}} Kč</h6>
@@ -210,8 +263,11 @@
                                 <h6>Cena celkem: {{reservation.intSum}} Kč</h6>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-primary" @click="returnReservation(index)">
+                                <button type="button" class="btn btn-primary" @click="returnReservation(index)" v-if="reservation.fine === 0">
                                     Potvrdit vrácení
+                                </button>
+                                <button type="button" class="btn btn-primary" @click="reservationToBeFined(index)" v-if="reservation.fine > 0">
+                                    Zaplatit pokutu
                                 </button>
                             </div>
                         </div>
@@ -243,6 +299,9 @@
                             </div>
                             <div>
                                 <h6>Místo vyzvednutí: {{reservation.store_address}}</h6>
+                            </div>
+                            <div v-if="reservation.fine > 0">
+                                <h6>Pokuta: {{reservation.fine}} Kč</h6>
                             </div>
                             <div>
                                 <h6>Cena za kus: {{reservation.price}} Kč</h6>
@@ -278,10 +337,12 @@ export default {
             reservations: [],
             issuedReservations: [],
             notIssuedReservations: [],
+            finedReservations: [],
             returnedReservations: [],
             reservationsToBeIssued: [],
             dontShowTemplate: false,
             priceSumToBeIssued: 0,
+            fineSumToBeIssued: 0,
             showNotConfirmedModal: false,
             showWrongStoreModal: false,
             showWrongDateModal: false,
@@ -339,8 +400,8 @@ export default {
         splitReservations() {
             this.reservations.forEach(reservation => {
                 reservation.reservationNumberOfDays = this.countNumberOfDaysFromDateRange(reservation.reservation, reservation.reservation_till);
-                reservation.intSum = this.countPrice(reservation.price, reservation.quantity, reservation.reservationNumberOfDays, reservation.discount);
-                
+                this.countPrice(reservation);
+
                 if (reservation.issued) {
                     if (reservation.returned) this.returnedReservations.push(reservation);
                     else this.issuedReservations.push(reservation);
@@ -352,13 +413,15 @@ export default {
             var endDate = new Date(end);
             return Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
         },
-        countPrice(reservationPrice, piecesCount, reservationNumberOfDays, discountPercent) {
-            var finalPrice = Number(reservationPrice) * reservationNumberOfDays * piecesCount;
-            if (discountPercent !== 0) {
-                var discount = (1 - (discountPercent / 100));
+        countPrice(reservation) {
+            var finalPrice = Number(reservation.price) * reservation.reservationNumberOfDays * reservation.quantity;
+            if (reservation.discount !== 0) {
+                var discount = (1 - (reservation.discount / 100));
                 finalPrice *= discount;
             }
-            return Math.round(finalPrice);
+            reservation.intSum = Math.round(finalPrice + reservation.fine);
+            if (!reservation.paid) reservation.fineSum = reservation.intSum
+            else reservation.fineSum = reservation.fine;
         },
         issueReservation(resId) {
             if (!this.userReservation.confirmed) {
@@ -401,6 +464,34 @@ export default {
             axios.post('/api/return_reservation', {reservationId: this.issuedReservations[resId].id}).then((res) => {
                 this.returnedReservations.push(this.issuedReservations[resId]);
                 this.issuedReservations.splice(resId, 1);
+                this.reservationReturned = true;
+                this.$emit('emitHandler', {isLoading: false});
+            });
+        },
+        reservationToBeFined(resId) {
+            var reservation = this.issuedReservations[resId];
+
+            if (this.user.store_id !== reservation.store_id) {
+                this.showWrongStoreModal = true;
+                return;
+            }
+
+            reservation.returnId = resId;
+            this.fineSumToBeIssued += Number(reservation.fineSum);
+            this.finedReservations.push(reservation);
+            this.issuedReservations.splice(resId, 1);
+        },
+        removeFromToBeFined(resId) {
+            var retId = this.finedReservations[resId].returnId;
+            this.fineSumToBeIssued -= Number(this.finedReservations[resId].fineSum);
+            this.issuedReservations.splice(retId, 0, this.finedReservations[resId]);
+            this.finedReservations.splice(resId, 1);
+        },
+        payFines() {
+            this.$emit('emitHandler', {isLoading: true});
+            axios.post('/api/pay_fines', {reservations: this.finedReservations, user: this.userReservation}).then((res) => {
+                this.returnedReservations = this.returnedReservations.concat(this.finedReservations);
+                this.finedReservations = [];
                 this.reservationReturned = true;
                 this.$emit('emitHandler', {isLoading: false});
             });

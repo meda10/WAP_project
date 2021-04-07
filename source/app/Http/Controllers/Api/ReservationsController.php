@@ -173,6 +173,59 @@ class ReservationsController extends Controller
     }
 
     /**
+     * Pay for fines
+     */
+    public function payFines(Request $request)
+    {
+        $user = $request->user;
+        $name = $user['name'] . ' ' . $user['surname'];
+        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
+
+        $customer = new Buyer([
+            'name'          => $name,
+            'custom_fields' => [
+                'Email' => $user['email'],
+                'Adresa' => $address
+            ],
+        ]);
+
+        $items = [];
+
+        foreach ($request->reservations as $reservation) {
+            // return reservation
+            $reservationDB = Reservation::findOrFail($reservation['id']);
+            $reservationDB['returned'] = 1;
+            $reservationDB['fine_paid'] = 1;
+            $reservationDB->save();
+
+            $itemName = $reservation['title_name'] . ' (' . $reservation['language'] . ' dabing)' . ' - pokuta';
+            $itemPrice = intval($reservation['fineSum']);
+
+            $startDate = new \DateTime($reservation['reservation']);
+            $endDate = new \DateTime($reservation['reservation_till']);
+
+            $itemDateRange = $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y');
+
+            $item = (new InvoiceItem())
+                ->title($itemName)
+                ->pricePerUnit($itemPrice)
+                ->quantity(1)
+                ->units($itemDateRange);
+            
+            $items[] = $item;
+        }
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->addItems($items);
+        
+        $data = $invoice->stream();
+        Mail::to($user['email'])->send(new SendInvoice($data));
+
+        return response()->json(['success' => 'ok'], 200);
+    }
+
+    /**
      * Cancel reservation
      */
     public function cancelReservation(Request $request)

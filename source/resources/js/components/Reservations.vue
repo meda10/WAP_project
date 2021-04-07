@@ -37,7 +37,7 @@
                             <h6>Zaplaceno: <span v-if="reservation.paid">Ano</span><span v-if="!reservation.paid">Ne</span></h6>
                         </div>
                         <div v-if="reservation.fine === 0">
-                            <h6>Zaplaceno: <span v-if="reservation.paid">Ano</span><span v-if="!reservation.paid">Ne</span></h6>
+                            <h6>Zaplaceno: <span v-if="reservation.fine_paid">Ano</span><span v-if="!reservation.fine_paid">Ne</span></h6>
                         </div>
                         <div>
                             <h6>Vyzvednuto: <span v-if="reservation.issued">Ano</span><span v-if="!reservation.issued">Ne</span></h6>
@@ -55,7 +55,7 @@
                             <h6>Sleva: {{reservation.discount}} %</h6>
                         </div>
                         <div>
-                            <h6>Cena celkem: {{countPrice(reservation.price, reservation.quantity, reservation.reservation, reservation.reservation_till, reservation.discount)}} Kč</h6>
+                            <h6>Cena celkem: {{countPrice(reservation.price, reservation.quantity, reservation.reservation, reservation.reservation_till, reservation.discount, reservation.fine)}} Kč</h6>
                         </div>
                         <div v-if="new Date(reservation.reservation) >= new Date() && !reservation.issued && !reservation.returned">
                             <button type="button" class="btn btn-primary" @click="cancelReservationModal(reservation.id, index)">Zrušit rezervaci</button>
@@ -136,13 +136,13 @@ export default {
             var endDate = new Date(end);
             return Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
         },
-        countPrice(reservationPrice, piecesCount, start, end, discountPercent) {
+        countPrice(reservationPrice, piecesCount, start, end, discountPercent, fine) {
             var finalPrice = Number(reservationPrice) * this.countNumberOfDaysFromDateRange(start, end) * piecesCount;
             if (discountPercent !== 0) {
                 var discount = (1 - (discountPercent / 100));
                 finalPrice *= discount;
             }
-            return Math.round(finalPrice);
+            return Math.round(finalPrice + fine);
         }
     }
 }
