@@ -32,19 +32,27 @@ export default {
     },
     methods: {
         get_stores() {
+            this.$emit('emitHandler',  {isLoading: true});
             axios.get('/api/get_all_stores').then((res) => {
                 this.stores = res.data.data;
-                console.log(this.stores);
+                // console.log(this.stores);
+                this.$emit('emitHandler',  {isLoading: false});
+            }).catch((error) => {
+                // TODO handle this error
+                console.log(error);
+                this.$emit('emitHandler',  {isLoading: false});
             });
         },
         async remove_store($id){
-            await axios.delete("/api/delete_store/" + $id).catch(error => {
+            const response = await axios.delete("/api/delete_store/" + $id).catch(error => {
                 console.log(error.response)
             });
-            this.get_stores();
+            if (JSON.parse(response.status) == '200') {
+                this.get_stores();
+            }
         },
-        async add_store(){
-            await this.$router.push({name: 'storeAdd'});
+        add_store(){
+            this.$router.push({name: 'storeAdd'});
         }
     }
 }

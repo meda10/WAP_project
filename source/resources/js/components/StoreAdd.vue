@@ -23,10 +23,12 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_store', data).catch(error => {
-                console.log(error.response)
-            });
-            await this.$router.push({name: 'stores'});
+            const response = await axios.post('/api/set_store', data).catch(error => {
+                    console.log(error.response)
+                });
+            if (JSON.parse(response.status) == '200') {
+                await this.$router.push({name: 'stores'});
+            }
         },
     }
 }

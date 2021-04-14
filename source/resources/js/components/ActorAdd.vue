@@ -37,11 +37,12 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_actor', data).catch(error => {
-                console.log(error.response)
-            });
-            // alert('Thank you')
-            await this.$router.push({name: 'actors'}); //todo redirect to actors
+            const response = await axios.post('/api/set_actor', data).catch(error => {
+                    console.log(error.response)
+                });
+            if (JSON.parse(response.status) == '200') {
+                await this.$router.push({name: 'actors'});
+            }
         },
     }
 }

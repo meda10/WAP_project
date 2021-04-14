@@ -46,20 +46,19 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_user', data).catch(error => { //todo
-                console.log(error.response)
-            });
-            // alert('Thank you')
-            await this.$router.push({name: 'users'}); //todo redirect
+            const response = await axios.post('/api/set_user', data).catch(error => { //todo
+                    console.log(error.response)
+                });
+            if (JSON.parse(response.status) == '200') {
+                await this.$router.push({name: 'users'});
+            }
         },
         get_stores() {
             axios.get('/api/get_stores_select').then((res) => {
                 this.stores = res.data.data;
-                console.log(this.stores)
+                // console.log(this.stores)
             });
         },
-
-
     }
 }
 </script>
