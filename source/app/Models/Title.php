@@ -83,6 +83,19 @@ class Title extends Model
                         ->get();
     }
 
+    public static function get_title_edit_by_url($url){
+        return Title::where('url', $url)
+            ->with('genres')
+            ->with('languages')
+            ->with('participant')
+            ->get();
+    }
+
+    public static function get_title_by_url($url){
+        return Title::where('url', $url);
+    }
+
+
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'title_genre');

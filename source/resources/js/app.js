@@ -14,6 +14,11 @@ import { cs } from '@braid/vue-formulate-i18n';
 import FormulateVSelectPlugin from '@cone2875/vue-formulate-select';
 import FormulateAutocomplete from './components/FormulateAutocomplete';
 import 'vue-select/dist/vue-select.css';
+import axios from 'axios'
+
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:8080/api'
+})
 
 Vue.use(VueI18n);
 Vue.component('FormulateAutocomplete', FormulateAutocomplete)
@@ -30,7 +35,9 @@ Vue.use(VueFormulate, {
     locate: 'cs',
     classes: {
         inputHasErrors: 'is-invalid',
-    }
+    },
+    uploader: axiosInstance,
+    uploadUrl: '/upload_image' ///public/img/movies
 })
 
 Vue.use(VueRouter);

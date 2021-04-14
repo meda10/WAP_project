@@ -45,10 +45,11 @@ Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user');
 
 //Title
 Route::get('/get_all_titles', 'Api\TitlesController@index');
-Route::get('/get_one_title/{id}', 'Api\TitlesController@show');
+Route::get('/get_one_title/{url}', 'Api\TitlesController@show');
 Route::post('/set_titles', 'Api\TitlesController@store');
-Route::put('/update_title/{id}', 'Api\TitlesController@update');
+Route::put('/update_title/{url}', 'Api\TitlesController@update');
 Route::delete('/delete_title/{id}', 'Api\TitlesController@destroy');
+Route::post('/upload_image', 'Api\TitlesController@upload_image');
 
 //Participants
 Route::get('/get_all_actors', 'Api\ParticipantController@index');

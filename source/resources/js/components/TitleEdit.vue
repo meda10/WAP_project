@@ -14,7 +14,11 @@
         </div>
         <FormulateInput name="zanr" type="checkbox" label="Žánr" :options="{'1': 'Akční', '13': 'Dobrodružný', '9': 'Dokumentární', '4': 'Drama', '8': 'Fantasy', '2': 'Komedie', '5': 'Krimi', '11': 'Mysteriózní', '3': 'Romantický', '7': 'Sci-fy', '6': 'Thriller', '12': 'Western', '10': 'Životopisný',}"/>
         <FormulateInput type="textarea" name="popis" label="Popis" validation="required|max:1000,length"/>
-        <FormulateInput name="obrazek" type="image" label="Select an image to upload" help="Vyberte soubor png nebo jpg." validation="mime:image/jpeg,image/png"/>
+
+        <FormulateForm name="form_img" @submit="form_img_submit">
+            <FormulateInput @input="new_image()" name="obrazek" upload-behavior="live" type="image" label="Select an image to upload" :value="obrazek" help="Vyberte soubor jpg." validation="mime:image/jpeg"/>
+        </FormulateForm>
+
         <FormulateInput name="herci" type="group" :repeatable="true" label="Herci" add-label="+ Pridat herce" validation="required|min:1">
             <FormulateInput type="select" name="herec" label="Jmeno a prijmeni herce" validation="required" :options='this.actors'/>
         </FormulateInput>
@@ -40,27 +44,41 @@ export default {
     data() {
         return {
             formValues: {},
+            obrazek: [{"url":"http:\/\/localhost:8080\/storage\/img\/"+this.$route.params.titleName+".jpg","name": this.$route.params.titleName+".jpg"}],
             actors: [],
             states: [],
+            image: {},
         }
     },
     mounted() {
         this.get_actors();
         this.get_states();
-        if (this.$route.params.id != null){
-            this.title_id = this.$route.params.id;
-            this.get_title_by_id();
+        if (this.$route.params.titleName != null){
+            this.url = this.$route.params.titleName;
+            this.get_title_by_url();
         }
     },
     computed: {
 
     },
     methods: {
+        new_image(){
+            this.$formulate.submit('form_img');
+        },
+        form_img_submit(data){
+            this.image = data;
+        },
         async submitHandler (data) {
-            await axios.put("/api/update_title/" + this.title_id, data).catch(error => {
-                console.log(error.response)
-            });
-            await this.$router.push({path: '/film/'}); //todo redirect to current film
+            data.obrazek = this.image['obrazek'];
+            console.log(data)
+            const response = await axios.put("/api/update_title/" + this.url, data)
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+            if (JSON.parse(response.status) == '200') {
+                await this.$router.push({path: '/film/' + response.data['url']});
+            }
         },
         get_actors() {
             axios.get('/api/get_actors_select').then((res) => {
@@ -74,12 +92,11 @@ export default {
                 // console.log(this.states);
             });
         },
-        get_title_by_id() {
-            // this.$emit('emitHandler',  {isLoading: true});
-
-            axios.get('/api/get_one_title/' + this.title_id).then((res) => {
+        get_title_by_url() {
+            this.$emit('emitHandler',  {isLoading: true});
+            axios.get('/api/get_one_title/' + this.url).then((res) => {
                 this.formValues = res.data.data[0];
-                console.log(this.formValues);
+                this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);

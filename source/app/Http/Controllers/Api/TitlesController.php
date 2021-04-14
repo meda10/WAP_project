@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Api\ParticipantController;
 use App\Http\Resources\TitleUpdateResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -13,6 +12,7 @@ use App\Models\Participant;
 use App\Models\Genre;
 use App\Models\Title;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Storage;
 
 
 class TitlesController extends Controller
@@ -75,6 +75,7 @@ class TitlesController extends Controller
     public function store(Request $request)
     {
         $this->Title_validator();
+        $url = AppHelper::friendlyUrl($request['titul']);
         $title = Title::create([
             'title_name' => $request['titul'],
             'year' => $request['rok'],
@@ -82,7 +83,7 @@ class TitlesController extends Controller
             'type' => $request['typ'],
             'price' => $request['cena'],
             'description' => $request['popis'],
-            'url' => AppHelper::friendlyUrl($request['titul'])
+            'url' => $url
         ]);
         $title->genres()->attach($request['zanr']);
 
@@ -100,16 +101,20 @@ class TitlesController extends Controller
             ]);
             $title->participant()->attach($participant['id']);
         }
-        return response()->json($title, 200);
+        foreach ($request['obrazek'] as $obrazek){
+            Storage::move("/public/".$obrazek['url'], "/public/img/".$url.".jpg");
+        }
+        return response()->json(['url'=> $url], 200);
     }
 
 
-    public function show($id)
+    public function show($url)
     {
 //        return Title::get_by_id($request['id']);
 //        return Title::get_title_edit_by_id($request['id']);
 //        return new TitleUpdateResource(Title::get_title_edit_by_id($id));
-        return TitleUpdateResource::collection(Title::get_title_edit_by_id($id));
+//        return TitleUpdateResource::collection(Title::get_title_edit_by_id($id));
+        return TitleUpdateResource::collection(Title::get_title_edit_by_url($url));
     }
 
     /**
@@ -119,23 +124,25 @@ class TitlesController extends Controller
      * @param  \App\Models\Title  $title
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $url)
     {
-        $title = Title::findOrFail($id);
+//        $title = Title::where('url', $url)->first();
+        $title = Title::get_title_by_url($url);
         $this->Title_validator();
+        $new_url = AppHelper::friendlyUrl($request['titul']);
         $title->update([
             'title_name' => $request['titul'],
             'year' => $request['rok'],
+
             'state_id' => $request['zeme_puvodu'],
             'type' => $request['typ'],
             'price' => $request['cena'],
             'description' => $request['popis'],
-            'url' => AppHelper::friendlyUrl($request['titul'])
+            'url' => $new_url
         ]);
         $title->genres()->sync($request['zanr']);
 
         $actor_id_arr = [];
-        print_r($request['herci']);
         foreach ($request['herci'] as $value) {
             array_push($actor_id_arr, $value['herec']);
         }
@@ -150,7 +157,17 @@ class TitlesController extends Controller
             $title->participant()->attach($participant['id']);
         }
         $title->save();
-        return response()->json($title, 200);
+
+        $pattern = '#^img\/.*\.jpg$#';;
+        foreach ($request['obrazek'] as $obrazek){
+            if(preg_match($pattern, $obrazek['url'])){
+                Storage::delete("/public/img/".$new_url.".jpg");
+                Storage::move("/public/".$obrazek['url'], "/public/img/".$new_url.".jpg");
+            }else if ($url != $new_url){
+                Storage::move("/public/img/".$url.".jpg", "/public/img/".$new_url.".jpg");
+            }
+        }
+        return response()->json(['url'=> $new_url], 200);
     }
 
     /**
@@ -170,8 +187,8 @@ class TitlesController extends Controller
 
     protected function Title_validator(){
         return request()->validate([
-            'titul' => 'required|string|max:255|unique:titles,title_name',
-            'rok' => 'required|numeric|min:1800',
+            'titul' => 'required|string|max:255', //|unique:titles,title_name
+            'rok' => 'required|numeric|min:1899',
             'typ' => 'required|in:movie,serial',
             'cena' => 'required|numeric|min:1',
             'popis' => 'required|string|max:255',
@@ -180,6 +197,13 @@ class TitlesController extends Controller
             'novy_herec.*.jmeno' => 'required|string|max:255',
             'novy_herec.*.prijmeni' => 'required|string|max:255',
             'novy_herec.*.datum_narozeni' => 'required|date|before:today',
+            'obrazek.*.url' => 'required',
         ]);
+    }
+
+    public function upload_image(Request $request){
+        $path = $request->file('obrazek')->storePublicly('img', 'public');
+        $name = $request->file('obrazek')->getClientOriginalName();
+        return response()->json(['url' => $path, 'name' => $name], 200);
     }
 }

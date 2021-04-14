@@ -1,13 +1,14 @@
 <template>
-    <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
+    <FormulateForm class="form" @submit="submitHandler">
         <div class="row justify-content-center">
             <div class="col-sm-6">
+                <!--        v-model="formValues"-->
                 <!--        #default="{ hasErrors }"-->
                 <!--        #default="{isLoading}"-->
                 <h2 class="form-title">Tituly</h2>
                 <FormulateInput class="mb-2" name="titul" type="text" label="Jmeno filmu" validation="required"/>
                 <div class="double-wide">
-                    <FormulateInput class="mb-2" name="rok" type="number" label="Rok vydani" validation="required|number" min="1800" max="9999"/>
+                    <FormulateInput class="mb-2" name="rok" type="number" label="Rok vydani" validation="required|number" min="1901" max="9999"/>
                     <FormulateInput class="mb-2" name="zeme_puvodu" type="select" label="Země původu" placeholder="Vyberte zemi" :options="this.states" validation="required"/>
                 </div>
                 <div class="double-wide">
@@ -24,7 +25,7 @@
                                 :error="Object.keys(genresSelected).length === 0 ? 'Vyberte alespoň jeden žánr.' : null"/>
 
                 <FormulateInput class="mb-2" type="textarea" name="popis" label="Popis" validation="required|max:1000,length"/>
-                <FormulateInput class="mb-2" name="obrazek" type="image" label="Select an image to upload" help="Vyberte soubor png nebo jpg." validation="mime:image/jpeg,image/png"/>
+                <FormulateInput class="mb-2" name="obrazek" type="image" upload-behavior="live" label="Vyberte obrazek" help="Vyberte soubor png nebo jpg." validation="required|mime:image/jpeg,image/png"/>
 
                 <hr class="white-hr pt-1">
 
@@ -40,7 +41,7 @@
                     <div class="double-wide border-bottom py-2">
                         <FormulateInput class="mb-2" name="jmeno" type="text" label="Jmeno" validation="required"/>
                         <FormulateInput class="mb-2" name="prijmeni" type="text" label="Prijmeni" validation="required"/>
-                        <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
+                        <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1900-1-01"/>
                     </div>
                 </FormulateInput>
                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit"/>
@@ -101,14 +102,19 @@ export default {
             for (const prop in this.genresSelected) {
                 genData.push(prop);
             }
-            if (genData.length < 1) {
-                console.log(chyba);
-            }
+            // if (genData.length < 1) {
+            //     console.log("chyba"); //todo chyba
+            // }
             data["zanr"] = this.genData;
-            await axios.post('/api/set_titles', data).catch(error => {
-                console.log(error.response)
-            });
-            await this.$router.push({path: '/film/'}); //todo redirect to current film
+            data["zanr"] = ["1","4"]; //todo Genre does not work
+            const response = await axios.post('/api/set_titles', data)
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+            if (JSON.parse(response.status) == '200') {
+                await this.$router.push({path: '/film/' + response.data['url']});
+            }
         },
         get_actors() {
             axios.get('/api/get_actors_select').then((res) => {
