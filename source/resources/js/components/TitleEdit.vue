@@ -83,7 +83,7 @@ export default {
             data.obrazek = this.image['obrazek'];
             await axios.put("/api/update_title/" + this.url, data)
                 .then(res => {
-                    // this.$router.push({path: '/film/' + res.data['url']});
+                    this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
                     console.log(err.response)
