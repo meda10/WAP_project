@@ -2,7 +2,7 @@
     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
         <div class="row justify-content-center">
             <div class="col-sm-6">
-                <h2 class="form-title">Pridat uživatele - NEFUNGUJE</h2>
+                <h2 class="form-title">Pridat uživatele</h2>
                 <div class="double-wide">
                     <FormulateInput class="mb-2" name="jmeno" type="text" label="Jmeno" validation="required"/>
                     <FormulateInput class="mb-2" name="prijmeni" type="text" label="Prijmeni" validation="required"/>
@@ -10,10 +10,10 @@
                 <div class="double-wide">
                     <FormulateInput class="mb-2" name="email" type="email" label="Email" validation="required|email"/>
                     <FormulateInput class="mb-2" name="role" type="select" label="Role" placeholder="Vyberte moznost"
-                        :options="{admin: 'Administrátor', customer: 'Uživatel'}" validation="required|matches:admin,customer"/>
+                        :options="{director: 'Ředitel', customer: 'Uživatel', employee: 'Zaměstnanec', manager: 'Manager'}" validation="required|matches:director,customer,manager,employee"/>
                 </div>
                 <div class="double-wide">
-                    <FormulateInput class="mb-2" name="password" type="password" label="Heslo" validation="required|min:7,length" autocomplete="new-password"/>
+                    <FormulateInput class="mb-2" name="password" type="password" label="Heslo" validation="required|min:8,length" autocomplete="new-password"/>
                     <FormulateInput class="mb-2" name="password_confirm" type="password" label="Potvrďte heslo" validation="required|confirm" validation-name="Potvrzení"/>
                 </div>
                 <FormulateInput class="mb-2" name="adresa" type="text" label="Adresa" validation="required"/>

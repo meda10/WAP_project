@@ -11,6 +11,9 @@
                 <b-button size="sm" :to="{ name: 'userEdit', params: {id: row.item.id}}" class="mr-2">
                     Upravit
                 </b-button>
+                <b-button size="sm" @click="reset_password(row.item.id)" class="mr-2">
+                    Reset hesla
+                </b-button>
                 <b-button variant="danger" size="sm" @click="remove_user(row.item.id)" class="mr-2">
                     Odstranit
                 </b-button>
@@ -44,9 +47,17 @@ export default {
 
             axios.get('/api/get_all_users').then((res) => {
                 this.users = res.data.data;
+                // console.log(this.users);
                 this.$emit('emitHandler',  {isLoading: false});
-                console.log(this.users);
             });
+        },
+        async reset_password($id){
+            this.$emit('emitHandler',  {isLoading: true});
+            await axios.delete("/api/reset_password/" + $id).catch(error => {
+                console.log(error.response)
+            });
+            this.$emit('emitHandler',  {isLoading: false});
+            this.get_users();
         },
         async remove_user($id){
             this.$emit('emitHandler',  {isLoading: true});

@@ -71,6 +71,7 @@ Route::post('/pay_fines', 'Api\ReservationsController@payFines');
 //User
 Route::get('/get_all_users', 'Api\UsersController@index');
 Route::get('/get_one_user/{id}', 'Api\UsersController@show');
+Route::post('/set_user', 'Api\UsersController@store');
 Route::get('/get_user_by_id', 'Api\UsersController@getUserById');
 Route::put('/update_user/{id}', 'Api\UsersController@update');
 Route::delete('/delete_user/{id}', 'Api\UsersController@destroy');

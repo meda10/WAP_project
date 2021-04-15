@@ -7,6 +7,7 @@ use App\Http\Resources\UsersResource;
 use App\Http\Resources\UserUpdateResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -39,6 +40,24 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
         $user['confirmed'] = 1;
         $user->save();
+    }
+
+    public function store(Request $request){
+        $this->user_validator();
+
+        $user = User::create([
+            'name' => $request['jmeno'],
+            'surname' => $request['prijmeni'],
+            'email' => $request['email'],
+            'role' => $request['role'],
+            'password' => Hash::make($request['password']),
+            'address' => $request['adresa'],
+            'city' => $request['mesto'],
+            'zip_code' => $request['psc'],
+            'store_id' => $request['obchod'],
+            'confirmed' => $request['potvrzeni'],
+        ]);
+        return response()->json(['ok'=> 'ok'], 200);
     }
 
     /**
@@ -87,8 +106,7 @@ class UsersController extends Controller
             'store_id' => $request['obchod'],
         ]);
         $user->save();
-        //todo response
-        return response()->json($user, 200);
+        return response()->json(['ok'=> 'ok'], 200);
     }
 
     protected function user_validator(){
