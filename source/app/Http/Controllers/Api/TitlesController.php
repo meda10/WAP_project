@@ -104,14 +104,14 @@ class TitlesController extends Controller
             $title->participant()->attach($participant['id']);
         }
         foreach ($request['polozka'] as $item){
-            Item::create([
-                'language_id' => $item['jazyk'],
-                'store_id' => $item['prodejna'],
-                'title_id' => $title->id,
-            ]);
+            for ($i = 0; $i < $item['pocet']; $i++){
+                Item::create([
+                    'language_id' => $item['jazyk'],
+                    'store_id' => $item['prodejna'],
+                    'title_id' => $title->id,
+                ]);
+            }
         }
-
-        $pattern = '#^'.$url.'.jpg$#';;
         foreach ($request['obrazek'] as $obrazek){
             try {
                 Storage::delete("/public/img/".$url.".jpg");
@@ -124,11 +124,7 @@ class TitlesController extends Controller
 
     public function show($url)
     {
-//        return Title::get_by_id($request['id']);
-//        return Title::get_title_edit_by_id($request['id']);
-//        return new TitleUpdateResource(Title::get_title_edit_by_id($id));
-//        return TitleUpdateResource::collection(Title::get_title_edit_by_id($id));
-        return TitleUpdateResource::collection(Title::get_title_edit_by_url($url));
+        return new TitleUpdateResource(Title::get_title_edit_by_url($url));
     }
 
     /**
@@ -140,14 +136,12 @@ class TitlesController extends Controller
      */
     public function update(Request $request, $url)
     {
-//        $title = Title::where('url', $url)->first();
         $title = Title::get_title_by_url($url);
         $this->Title_validator();
         $new_url = AppHelper::friendlyUrl($request['titul']);
         $title->update([
             'title_name' => $request['titul'],
             'year' => $request['rok'],
-
             'state_id' => $request['zeme_puvodu'],
             'type' => $request['typ'],
             'price' => $request['cena'],
@@ -171,6 +165,17 @@ class TitlesController extends Controller
             $title->participant()->attach($participant['id']);
         }
         $title->save();
+
+        $title->items()->delete();
+        foreach ($request['polozka'] as $item){
+            for ($i = 0; $i < $item['pocet']; $i++){
+                Item::create([
+                    'language_id' => $item['jazyk'],
+                    'store_id' => $item['prodejna'],
+                    'title_id' => $title->id,
+                ]);
+            }
+        }
 
         $pattern = '#^img\/.*\.jpg$#';;
         foreach ($request['obrazek'] as $obrazek){

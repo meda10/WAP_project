@@ -88,11 +88,16 @@ class Title extends Model
             ->with('genres')
             ->with('languages')
             ->with('participant')
-            ->get();
+            ->with('items', function($query) { $query->select("*", DB::raw("count(*) as sum"))->groupBy('store_id', 'language_id')->get(); })
+            ->first();
+    }
+
+    public static function get_title_items($id){
+        return DB::select("SELECT COUNT(id) as suma, store_id, language_id FROM items WHERE title_id=".$id." GROUP BY store_id, language_id");
     }
 
     public static function get_title_by_url($url){
-        return Title::where('url', $url);
+        return Title::where('url', $url)->first();
     }
 
     public function items()

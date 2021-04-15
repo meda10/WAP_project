@@ -29,6 +29,7 @@ class TitleUpdateResource extends JsonResource
             'popis' => $this->description,
             'herci' => ParticipantSelectResource::collection($this->participant),
             'zanr' => $genre_arr,
+            'polozka' => ItemsResource::collection($this->items),
         ];
     }
 }

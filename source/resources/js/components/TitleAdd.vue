@@ -49,6 +49,7 @@
                     <div class="double-wide border-bottom py-2">
                         <FormulateInput class="mb-2" name="prodejna" type="select" label="Prodejna" :options="stores" validation="required"/>
                         <FormulateInput class="mb-2" name="jazyk" type="select" label="Jazyk" :options="languages" validation="required"/>
+                        <FormulateInput class="mb-2" name="pocet" type="number" label="Počet" validation="required|number" min="1"/>
                     </div>
                 </FormulateInput>
 

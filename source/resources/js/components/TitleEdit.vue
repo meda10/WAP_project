@@ -29,6 +29,13 @@
                 <FormulateInput name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
             </div>
         </FormulateInput>
+        <FormulateInput class="mb-2" name="polozka" type="group" :minimum="1" :repeatable="true" label="Přidat kus" add-label="Přidat kus">
+            <div class="double-wide border-bottom py-2">
+                <FormulateInput class="mb-2" name="prodejna" type="select" label="Prodejna" :options="stores" validation="required"/>
+                <FormulateInput class="mb-2" name="jazyk" type="select" label="Jazyk" :options="languages" validation="required"/>
+                <FormulateInput class="mb-2" name="pocet" type="number" label="Počet" validation="required|number" min="1"/>
+            </div>
+        </FormulateInput>
         <FormulateInput type="submit" label="Uložit"/>
         <!--            :disabled="hasErrors"-->
         <!--            :disabled="isLoading"-->
@@ -48,11 +55,15 @@ export default {
             actors: [],
             states: [],
             image: {},
+            stores: [],
+            languages: [],
         }
     },
     mounted() {
         this.get_actors();
         this.get_states();
+        this.get_stores();
+        this.get_languages();
         if (this.$route.params.titleName != null){
             this.url = this.$route.params.titleName;
             this.get_title_by_url();
@@ -72,7 +83,7 @@ export default {
             data.obrazek = this.image['obrazek'];
             await axios.put("/api/update_title/" + this.url, data)
                 .then(res => {
-                    this.$router.push({path: '/film/' + res.data['url']});
+                    // this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
                     console.log(err.response)
@@ -98,10 +109,31 @@ export default {
                     console.log(err.response)
                 });
         },
+        get_stores() {
+            axios.get('/api/get_stores_select')
+                .then((res) => {
+                    this.stores = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
+        },
+        get_languages() {
+            axios.get('/api/get_languages_select')
+                .then((res) => {
+                    this.languages = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
+        },
         async get_title_by_url() {
             this.$emit('emitHandler',  {isLoading: true});
             await axios.get('/api/get_one_title/' + this.url).then((res) => {
-                this.formValues = res.data.data[0];
+                this.formValues = res.data.data;
+                // console.log(res.data.data);
                 this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error
