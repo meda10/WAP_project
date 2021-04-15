@@ -120,7 +120,6 @@ EXIT;
 exit
 ```
 
-
 ## Delete docker containers and images
 
 In case there was any problem and you wish to delete docker containers and images.
@@ -142,4 +141,9 @@ To initialize tables and data in PhpMyAdmin run command:
 
 ``` bash
 docker-compose exec php php artisan migrate:fresh --seed
+```
+
+## Storage link
+``` bash
+docker-compose exec php php artisan storage:link
 ```
