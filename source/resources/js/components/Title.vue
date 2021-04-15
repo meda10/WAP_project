@@ -14,7 +14,7 @@
         </div>
         <div class="row mb-3">
             <div class="col-4">
-                <img :src="'/img/movies/' + titleInfo.url+'.jpg'" style="width: 100%;">
+                <img :src="'/storage/img/' + titleInfo.url+'.jpg'" style="width: 100%;">
             </div>
             <div class="col-8">
                 <div class="row mb-1">

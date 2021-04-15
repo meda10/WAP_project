@@ -28,7 +28,7 @@ class TitlesController extends Controller
     {
         $genre = Genre::getGenreByUrl($request->url);
         if ($genre != null) return $genre;
-        abort(404);
+        return response()->json(['ok'=> 'error', 'message' => ''], 404); //todo what is it for?
     }
 
     public function getAllTitlesSearch()
