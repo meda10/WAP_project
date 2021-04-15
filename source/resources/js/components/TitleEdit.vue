@@ -70,31 +70,37 @@ export default {
         },
         async submitHandler (data) {
             data.obrazek = this.image['obrazek'];
-            console.log(data)
-            const response = await axios.put("/api/update_title/" + this.url, data)
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+            await axios.put("/api/update_title/" + this.url, data)
+                .then(res => {
+                    this.$router.push({path: '/film/' + res.data['url']});
+                })
+                .catch(err => {
+                    console.log(err.response)
                 });
-            if (JSON.parse(response.status) == '200') {
-                await this.$router.push({path: '/film/' + response.data['url']});
-            }
         },
         get_actors() {
-            axios.get('/api/get_actors_select').then((res) => {
-                this.actors = res.data.data;
-                // console.log(this.actors);
-            });
+            axios.get('/api/get_actors_select')
+                .then((res) => {
+                    this.actors = res.data.data;
+                    // console.log(this.actors);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
         },
         get_states() {
-            axios.get('/api/get_states_select').then((res) => {
-                this.states = res.data.data;
-                // console.log(this.states);
-            });
+            axios.get('/api/get_states_select')
+                .then((res) => {
+                    this.states = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
         },
-        get_title_by_url() {
+        async get_title_by_url() {
             this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_one_title/' + this.url).then((res) => {
+            await axios.get('/api/get_one_title/' + this.url).then((res) => {
                 this.formValues = res.data.data[0];
                 this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {

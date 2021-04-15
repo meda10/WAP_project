@@ -15,24 +15,24 @@ class Reservation extends Model
 
     const UPDATED_AT = NULL;
 
-    protected $fillable = ['reservation', 'reservation_till', 'invoice_id', 
-                            'price', 'returned', 'paid', 'issued', 'created_at', 
+    protected $fillable = ['reservation', 'reservation_till', 'invoice_id',
+                            'price', 'returned', 'paid', 'issued', 'created_at',
                             'user_id', 'fine', 'discount_id', 'title_id'];
 
     public static function getTitleReservations($titleUrl, $store_id)
     {
         $reservations = [];
-        
+
         $reservationsDB = Reservation::whereHas('titles', function($query) use($titleUrl) {
                                 $query->where('url', $titleUrl);
                             })->with('items')
                             ->get();
-    
+
         $interval = new \DateInterval('P1D');
 
         foreach ($reservationsDB as $reservation) {
             $itemsCount = count($reservation->items);
-            
+
             $reservation->reservation;
             $reservation->reservation_till;
             $language_name = Language::getLanguageName($reservation->items[0]->language_id)->language_name;
@@ -65,6 +65,10 @@ class Reservation extends Model
                                 })
                                 ->with('items', 'items.stores', 'items.languages')
                                 ->with('discounts')->with('titles')->orderBy('reservation')->get();
+    }
+
+    public static function hasReservations($id){
+        return Reservation::where('title_id', $id);
     }
 
     public function items()

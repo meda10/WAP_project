@@ -26,16 +26,17 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            const response = await axios.put("/api/update_store/" + this.store_id, data).catch(error => {
+            await axios.put("/api/update_store/" + this.store_id, data)
+                .then(res => {
+                    this.$router.push({name: 'stores'});
+                })
+                .catch(error => {
                     console.log(error.response)
                 });
-            if (JSON.parse(response.status) == '200') {
-                await this.$router.push({name: 'stores'});
-            }
         },
-        get_store_by_id() {
+        async get_store_by_id() {
             this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_one_store/' + this.store_id).then((res) => {
+            await axios.get('/api/get_one_store/' + this.store_id).then((res) => {
                 this.formValues = res.data.data;
                 // console.log(this.formValues);
                 this.$emit('emitHandler',  {isLoading: false});

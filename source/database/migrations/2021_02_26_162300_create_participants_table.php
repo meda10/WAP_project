@@ -18,8 +18,8 @@ class CreateParticipantsTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->date('birth');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+//            $table->dateTime('created_at');
+//            $table->dateTime('updated_at');
         });
     }
 

@@ -8,6 +8,9 @@
                 <b-button v-else size="sm" @click="confirm_user(row.item.id)" class="mr-2" >Potvrdit</b-button>
             </template>
             <template #cell(actions)="row">
+                <b-button size="sm" @click="user_reservations(row.item.id)" class="mr-2">
+                    Rezervace
+                </b-button>
                 <b-button size="sm" :to="{ name: 'userEdit', params: {id: row.item.id}}" class="mr-2">
                     Upravit
                 </b-button>
@@ -44,41 +47,49 @@ export default {
     methods: {
         get_users() {
             this.$emit('emitHandler',  {isLoading: true});
-
             axios.get('/api/get_all_users').then((res) => {
                 this.users = res.data.data;
                 // console.log(this.users);
-                this.$emit('emitHandler',  {isLoading: false});
+            }).catch(error => {
+                console.log(error.response)
             });
+            this.$emit('emitHandler',  {isLoading: false});
         },
-        async reset_password($id){
+        user_reservations($id){
+            this.$router.push({name: 'userReservationsId', params: {id: $id}});
+        },
+        reset_password($id){
             this.$emit('emitHandler',  {isLoading: true});
-            await axios.delete("/api/reset_password/" + $id).catch(error => {
+            axios.delete("/api/reset_password/" + $id).catch(error => {
                 console.log(error.response)
             });
             this.$emit('emitHandler',  {isLoading: false});
             this.get_users();
         },
-        async remove_user($id){
+        remove_user($id){
             this.$emit('emitHandler',  {isLoading: true});
-
-            await axios.delete("/api/delete_user/" + $id).catch(error => {
-                console.log(error.response)
-            });
-            this.$emit('emitHandler',  {isLoading: false});
-            this.get_users();
+            axios.delete("/api/delete_user/" + $id)
+                .then(res => {
+                    this.get_users();
+                    this.$emit('emitHandler',  {isLoading: false});
+                })
+                .catch(error => {
+                    console.log(error.response)
+                });
         },
         async confirm_user($id){
             this.$emit('emitHandler',  {isLoading: true});
-
-            await axios.post("/api/confirm_user/" + $id).catch(error => {
-                console.log(error.response)
-            });
-            this.$emit('emitHandler',  {isLoading: false});
-            this.get_users();
+            await axios.post("/api/confirm_user/" + $id)
+                .then(res => {
+                    this.get_users();
+                    this.$emit('emitHandler',  {isLoading: false});
+                })
+                .catch(error => {
+                    console.log(error.response)
+                });
         },
-        async add_user(){
-            await this.$router.push({name: 'userAdd'});
+        add_user(){
+            this.$router.push({name: 'userAdd'});
         }
     }
 }

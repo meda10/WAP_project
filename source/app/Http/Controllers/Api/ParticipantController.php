@@ -38,6 +38,7 @@ class ParticipantController extends Controller
                 'birth' => $herec['datum_narozeni'],
             ]);
         }
+        return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
     }
 
     /**
@@ -67,6 +68,7 @@ class ParticipantController extends Controller
         ]);
 
         $participant->save();
+        return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
     }
 
     /**
@@ -80,6 +82,7 @@ class ParticipantController extends Controller
         $participant = Participant::findOrFail($id);
         $participant->title()->detach();
         $participant->delete();
+        return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
     }
 
     public function get_items_select()

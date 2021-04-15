@@ -31,25 +31,29 @@ export default {
         this.get_stores();
     },
     methods: {
-        get_stores() {
-            this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_all_stores').then((res) => {
+        async get_stores() {
+            this.$emit('emitHandler',{isLoading: true});
+            await axios.get('/api/get_all_stores').then((res) => {
                 this.stores = res.data.data;
                 // console.log(this.stores);
-                this.$emit('emitHandler',  {isLoading: false});
+                this.$emit('emitHandler',{isLoading: false});
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);
-                this.$emit('emitHandler',  {isLoading: false});
+                this.$emit('emitHandler',{isLoading: false});
             });
         },
         async remove_store($id){
-            const response = await axios.delete("/api/delete_store/" + $id).catch(error => {
-                console.log(error.response)
-            });
-            if (JSON.parse(response.status) == '200') {
-                this.get_stores();
-            }
+            this.$emit('emitHandler',{isLoading: true});
+            await axios.delete("/api/delete_store/" + $id)
+                .then(res => {
+                    this.get_stores();
+                    this.$emit('emitHandler',{isLoading: false});
+                })
+                .catch(error => {
+                    console.log(error.response)
+                    this.$emit('emitHandler',{isLoading: false});
+                });
         },
         add_store(){
             this.$router.push({name: 'storeAdd'});

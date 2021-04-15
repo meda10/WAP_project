@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TitleUpdateResource;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ use App\Models\Genre;
 use App\Models\Title;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Storage;
+use mysql_xdevapi\Exception;
 
 
 class TitlesController extends Controller
@@ -101,7 +103,19 @@ class TitlesController extends Controller
             ]);
             $title->participant()->attach($participant['id']);
         }
+        foreach ($request['polozka'] as $item){
+            Item::create([
+                'language_id' => $item['jazyk'],
+                'store_id' => $item['prodejna'],
+                'title_id' => $title->id,
+            ]);
+        }
+
+        $pattern = '#^'.$url.'.jpg$#';;
         foreach ($request['obrazek'] as $obrazek){
+            try {
+                Storage::delete("/public/img/".$url.".jpg");
+            }catch (Exception $e){}
             Storage::move("/public/".$obrazek['url'], "/public/img/".$url.".jpg");
         }
         return response()->json(['url'=> $url], 200);
@@ -172,17 +186,26 @@ class TitlesController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Title  $title
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $title = Title::findOrFail($id);
+
+        $reservations = Reservation::hasReservations($title->id);
+
+        if($reservations != null){
+            return response()->json(['ok'=> 'error', 'message' => 'Titul nelze smazat protože existují rezervace'], 403);
+        }
+
         $title->genres()->detach();
         $title->participant()->detach();
+        $title->items()->delete();
+        try {
+            Storage::delete("/public/img/".$title->url.".jpg");
+        }catch (Exception $e){}
         $title->delete();
 
+        return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
     }
 
     protected function Title_validator(){

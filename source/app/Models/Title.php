@@ -95,6 +95,10 @@ class Title extends Model
         return Title::where('url', $url);
     }
 
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'title_id');
+    }
 
     public function genres()
     {
@@ -104,6 +108,12 @@ class Title extends Model
     public function stores()
     {
         return $this->hasOneThrough(Store::class, Item::class, 'title_id', 'id', 'id', 'store_id');
+    }
+
+    public function reservations()
+    {
+//        return $this->hasManyThrough(Reservation::class, Item::class, 'title_id', 'item_id', 'id', '');
+
     }
 
     public static function getAllCount()

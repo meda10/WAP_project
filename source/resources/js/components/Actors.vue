@@ -30,9 +30,9 @@ export default {
         this.get_actors();
     },
     methods: {
-        get_actors() {
+        async get_actors() {
             this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_all_actors').then((res) => {
+            await axios.get('/api/get_all_actors').then((res) => {
                 this.actors = res.data.data;
                 // console.log(this.actors)
                 this.$emit('emitHandler',  {isLoading: false});
@@ -42,13 +42,14 @@ export default {
                 this.$emit('emitHandler',  {isLoading: false});
             });
         },
-        async remove_actor($id){
-            const response = await axios.delete("/api/delete_actor/" + $id).catch(error => {
+        remove_actor($id){
+            axios.delete("/api/delete_actor/" + $id)
+                .then(res => {
+                    this.get_actors();
+                })
+                .catch(error => {
                     console.log(error.response)
                 });
-            if (JSON.parse(response.status) == '200') {
-                this.get_actors();
-            }
         },
         add_actor(){
             this.$router.push({name: 'actorAdd'});

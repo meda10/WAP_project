@@ -41,6 +41,7 @@ Route::get('/get_stores', 'Api\StoresController@getStores');
 Route::get('/get_actors_select', 'Api\ParticipantController@get_items_select');
 Route::get('/get_states_select', 'Api\StatesController@get_items_select');
 Route::get('/get_stores_select', 'Api\StoresController@get_items_select');
+Route::get('/get_languages_select', 'Api\LanguageController@get_items_select');
 Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user');
 
 //Title

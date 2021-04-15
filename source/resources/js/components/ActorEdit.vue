@@ -25,16 +25,24 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            const response = await axios.put('/api/update_actor/' + this.actor_id, data).catch(error => {
-                    console.log(error.response)
+            await axios.post('/api/set_actor', data)
+                .then(res => {
+                    this.$router.push({name: 'actors'});
+                })
+                .catch(err => {
+                    console.log(err.response)
+                    if (err.response) {
+                        // client received an error response (5xx, 4xx)
+                    } else if (err.request) {
+                        // client never received a response, or request never left
+                    } else {
+                        // anything else
+                    }
                 });
-            if (JSON.parse(response.status) == '200') {
-                await this.$router.push({name: 'actors'});
-            }
         },
-        get_actor_by_id() {
+        async get_actor_by_id() {
             this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_one_actor/' + this.actor_id).then((res) => {
+            await axios.get('/api/get_one_actor/' + this.actor_id).then((res) => {
                 this.formValues = res.data.data;
                 // console.log(this.formValues);
                 this.$emit('emitHandler',  {isLoading: false});

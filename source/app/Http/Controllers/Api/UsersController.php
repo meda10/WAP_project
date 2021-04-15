@@ -45,7 +45,7 @@ class UsersController extends Controller
     public function store(Request $request){
         $this->user_validator();
 
-        $user = User::create([
+        User::create([
             'name' => $request['jmeno'],
             'surname' => $request['prijmeni'],
             'email' => $request['email'],

@@ -44,6 +44,14 @@
                         <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1900-1-01"/>
                     </div>
                 </FormulateInput>
+
+                <FormulateInput class="mb-2" name="polozka" type="group" :minimum="1" :repeatable="true" label="Přidat kus" add-label="Přidat kus">
+                    <div class="double-wide border-bottom py-2">
+                        <FormulateInput class="mb-2" name="prodejna" type="select" label="Prodejna" :options="stores" validation="required"/>
+                        <FormulateInput class="mb-2" name="jazyk" type="select" label="Jazyk" :options="languages" validation="required"/>
+                    </div>
+                </FormulateInput>
+
                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit"/>
                 <!--            :disabled="hasErrors"-->
                 <!--            :disabled="isLoading"-->
@@ -71,11 +79,15 @@ export default {
             },
             actors: [],
             states: [],
+            stores: [],
+            languages: [],
         }
     },
     mounted() {
         this.get_actors();
         this.get_states();
+        this.get_stores();
+        this.get_languages();
         this.formValues.novy_herec = [];
         this.$forceUpdate();
     },
@@ -107,26 +119,53 @@ export default {
             // }
             data["zanr"] = this.genData;
             data["zanr"] = ["1","4"]; //todo Genre does not work
-            const response = await axios.post('/api/set_titles', data)
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+            await axios.post('/api/set_titles', data)
+                .then(res => {
+                   this.$router.push({path: '/film/' + res.data['url']});
+                })
+                .catch(err => {
+                    console.log(err.response)
                 });
-            if (JSON.parse(response.status) == '200') {
-                await this.$router.push({path: '/film/' + response.data['url']});
-            }
         },
         get_actors() {
-            axios.get('/api/get_actors_select').then((res) => {
-                this.actors = res.data.data;
-                // console.log(this.actors);
-            });
+            axios.get('/api/get_actors_select')
+                .then((res) => {
+                    this.actors = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
         },
         get_states() {
-            axios.get('/api/get_states_select').then((res) => {
-                this.states = res.data.data;
-                // console.log(this.states);
-            });
+            axios.get('/api/get_states_select')
+                .then((res) => {
+                    this.states = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
+        },
+        get_stores() {
+            axios.get('/api/get_stores_select')
+                .then((res) => {
+                    this.stores = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
+        },
+        get_languages() {
+            axios.get('/api/get_languages_select')
+                .then((res) => {
+                    this.languages = res.data.data;
+                    // console.log(this.states);
+                })
+                .catch(err => {
+                    console.log(err.response)
+                });
         },
     }
 }

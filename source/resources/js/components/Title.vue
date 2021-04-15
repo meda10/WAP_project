@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-auto justify-content-left my-auto">
                         <h5><span v-for="(genre, idx) in titleInfo.genres" :key="genre.url">
-                            {{genre.genre_name}} 
+                            {{genre.genre_name}}
                             <span v-if="idx + 1 !== titleInfo.genres.length">/ </span>
                         </span></h5>
                     </div>
@@ -75,7 +75,7 @@
                                 <h5>Datum:</h5>
                             </div>
                             <div class="col-7">
-                                <date-picker v-model="reservationTimeRange" 
+                                <date-picker v-model="reservationTimeRange"
                                 range :disabled-date="disabledDays" class="title-reservation-item"
                                 :lang="datePickerLang" />
                             </div>
@@ -86,7 +86,7 @@
                                 <h5>Kusů:</h5>
                             </div>
                             <div class="col-7">
-                                <input type="number" class="form-control title-reservation-item" name="optionsRadios" value="1" min="1" 
+                                <input type="number" class="form-control title-reservation-item" name="optionsRadios" value="1" min="1"
                                 :max="maxItemCount" v-model="itemCount"
                                 data-toggle="tooltip" :disabled="itemCount === 0"
                                 data-placement="top" :title="itemCount === 0 ? 'Pro pokračování vyberte datum rezervace' : ''">
@@ -104,8 +104,8 @@
                             </div>
                         </div>
 
-                        <button :disabled="itemCount === 0" type="button" class="btn btn-primary" 
-                                v-on:click="addItemToCart" data-toggle="tooltip" 
+                        <button :disabled="itemCount === 0" type="button" class="btn btn-primary"
+                                v-on:click="addItemToCart" data-toggle="tooltip"
                                 data-placement="top" :title="itemCount === 0 ? 'Pro pokračování vyberte datum rezervace' : ''">
                             Přidat do košíku
                         </button>
@@ -249,7 +249,7 @@
                     if (reservationTimeRange[0] === null && reservationTimeRange[1] === null) {
                         this.itemCount = 0;
                         this.maxItemCount = 0;
-                    } else { 
+                    } else {
                         this.countMaxItemInCart();
                         var startDate = new Date(reservationTimeRange[0]);
                         var endDate = new Date(reservationTimeRange[1]);
@@ -286,8 +286,8 @@
                 if (!disabled) {
                     this.cartCookies.forEach(item => {
                         if (item.url === this.titleName) {
-                            for (var reservationDate = new Date(item.reservationTimeRange[0]); 
-                            reservationDate <= new Date(item.reservationTimeRange[1]); 
+                            for (var reservationDate = new Date(item.reservationTimeRange[0]);
+                            reservationDate <= new Date(item.reservationTimeRange[1]);
                             reservationDate.setDate(reservationDate.getDate() + 1)) {
                                 if (dateFormat(reservationDate, 'yyyy-mm-dd') === dateFormat(date, 'yyyy-mm-dd')) {
                                     if (item.maxItemCount <= titlesCountInDate + item.quantity)
@@ -299,7 +299,7 @@
                     });
                 }
 
-                return date < new Date() || disabled;               
+                return date < new Date() || disabled;
             },
             countMaxPossibleItemCartCount() {
                 if (this.reservationTimeRange[0] === null && this.reservationTimeRange[1] === null) return;
@@ -309,7 +309,7 @@
                 if (reservations !== undefined) {
                     for (var date = new Date(this.reservationTimeRange[0]); date <= new Date(this.reservationTimeRange[1]); date.setDate(date.getDate() + 1)) {
                         var tmp = reservations[dateFormat(date, 'yyyy-mm-dd')];
-                        
+
                         if (tmp != undefined && tmp > numberOfReservations) numberOfReservations = tmp;
                     }
                 }
@@ -329,7 +329,7 @@
                             skip = true;
                             return;
                         }
-                        
+
                         index++;
                     }
                 });
@@ -428,10 +428,23 @@
                 this.itemCount = 1;
             },
             async removeTitle(){
-                await axios.delete("/api/delete_title/" + this.titleId).catch(error => {
-                    console.log(error.response)
-                });
-                await this.$router.push({path: '/'}); //todo redirect
+                this.$emit('emitHandler',  {isLoading: true});
+                await axios.delete("/api/delete_title/" + this.titleId)
+                    .then(res => {
+                        this.$emit('emitHandler',  {isLoading: false});
+                        this.$router.push({path: '/'}); //todo redirect
+                    })
+                    .catch(err => {
+                        this.$emit('emitHandler',  {isLoading: false});
+                        if (err.response) {
+                            // client received an error response (5xx, 4xx)
+                            alert(err.response.data['message'])
+                        } else if (err.request) {
+                            // client never received a response, or request never left
+                        } else {
+                            // anything else
+                        }
+                    });
             }
         }
     }
