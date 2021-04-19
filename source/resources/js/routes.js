@@ -23,6 +23,8 @@ import Actors from "./components/Actors";
 import Stores from "./components/Stores";
 import StoreAdd from "./components/StoreAdd";
 import StoreEdit from "./components/StoreEdit";
+import Discounts from "./components/Discounts";
+import DiscountAdd from "./components/DiscountAdd";
 
 
 export default {
@@ -67,6 +69,16 @@ export default {
             path: '/film/:titleName/upravit',
             name: 'titleEdit',
             component: TitleEdit
+        },
+        {
+            path: '/admin/slevy',
+            name: 'discounts',
+            component: Discounts
+        },
+        {
+            path: '/admin/slevy/pridat_slevu',
+            name: 'discountAdd',
+            component: DiscountAdd
         },
         {
             path: '/admin/obchody',

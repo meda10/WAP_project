@@ -84,3 +84,7 @@ Route::post('/set_store', 'Api\StoresController@store');
 Route::put('/update_store/{id}', 'Api\StoresController@update');
 Route::delete('/delete_store/{id}', 'Api\StoresController@destroy');
 
+//Discount
+Route::get('/get_all_discounts', 'Api\DiscountsController@index');
+Route::post('/set_discount', 'Api\DiscountsController@store');
+Route::delete('/delete_discount/{id}', 'Api\DiscountsController@destroy');
