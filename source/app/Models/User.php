@@ -6,14 +6,18 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, LaravelPermissionToVueJS, HasRoles, Notifiable, HasApiTokens;
 
     public $timestamps = false;
+    protected $guard_name = 'api';
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +53,15 @@ class User extends Authenticatable
         return false;
     }
 
+    public static function get_user_role()
+    {
+        $user = Auth::user();
+        if($user != null){
+            return $user->role;
+        }else{
+            return null;
+        }
+    }
 
     public function isConfirmed()
     {

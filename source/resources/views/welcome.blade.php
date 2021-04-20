@@ -9,17 +9,21 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-        <!-- Icon --> 
+        <!-- Icon -->
         <link rel="icon" href="{{ URL::asset('favicon.ico') }}" type="image/x-icon"/>
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
         <style>
-            body {
-                font-family: 'Nunito';
-            }
+            body {font-family: 'Nunito', serif;}
         </style>
+        <script type="text/javascript">
+            window.Laravel = {
+                csrfToken: "{{ csrf_token() }}",
+                jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():'' !!}
+            }
+        </script>
     </head>
     <body>
         <div id="app">

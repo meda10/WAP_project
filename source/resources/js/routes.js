@@ -1,3 +1,4 @@
+import VueRouter from 'vue-router';
 import Home from './components/Home';
 import Title from './components/Title';
 import NotFound from './components/NotFound';
@@ -27,7 +28,7 @@ import Discounts from "./components/Discounts";
 import DiscountAdd from "./components/DiscountAdd";
 
 
-export default {
+const router = new VueRouter({
     mode: 'history',
     routes: [
         {
@@ -58,82 +59,146 @@ export default {
         {
             path: '/admin',
             name: 'administration',
-            component: Administration
+            component: Administration,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/pridat_titul',
             name: 'titleadd',
-            component: TitleAdd
+            component: TitleAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/film/:titleName/upravit',
             name: 'titleEdit',
-            component: TitleEdit
+            component: TitleEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/slevy',
             name: 'discounts',
-            component: Discounts
+            component: Discounts,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/slevy/pridat_slevu',
             name: 'discountAdd',
-            component: DiscountAdd
+            component: DiscountAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/obchody',
             name: 'stores',
-            component: Stores
+            component: Stores,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/obchody/pridat_obchod',
             name: 'storeAdd',
-            component: StoreAdd
+            component: StoreAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/obchody/upravit_obchod/:id',
             name: 'storeEdit',
-            component: StoreEdit
+            component: StoreEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/herci',
             name: 'actors',
-            component: Actors
+            component: Actors,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/herci/pridat_herce',
             name: 'actorAdd',
-            component: ActorAdd
+            component: ActorAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/herci/upravit_herce/:id',
             name: 'actorEdit',
-            component: ActorEdit
+            component: ActorEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele',
             name: 'users',
-            component: Users
+            component: Users,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/pridat_uzivatele',
             name: 'userAdd',
-            component: UserAdd
+            component: UserAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/rezervace/:id',
             name: 'userReservationsId',
-            component: UserReservations
+            component: UserReservations,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/rezervace',
             name: 'userReservations',
-            component: UserReservations
+            component: UserReservations,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/upravit_uzivatele/:id',
             name: 'userEdit',
-            component: UserEdit
+            component: UserEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/nastaveni',
@@ -196,4 +261,31 @@ export default {
             component: NotFound
         },
     ],
-}
+});
+
+export default router;
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.authRequired)) {
+        if(window.Laravel.jsPermissions === ''){
+            next({ name: 'login'});
+        }else {
+            next();
+        }
+    } else {
+        next();
+    }
+    if (to.matched.some(record => record.meta.role)) {
+        if(window.Laravel.jsPermissions !== ''){
+            console.log(window.Laravel);
+            let roles = to.meta.role;
+            if (!roles.includes(window.Laravel.jsPermissions['roles'][0])) {
+                next({ name: 'home'});
+            } else {
+                next();
+            }
+        }
+    } else {
+        next();
+    }
+});

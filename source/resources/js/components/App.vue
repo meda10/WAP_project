@@ -31,7 +31,9 @@
                         </li>
 
                         <li class="nav-item" v-if="user && user.role !== 'customer'">
-                            <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
+                            <div v-if="can('Administration')">
+                                <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
+                            </div>
                         </li>
                     </ul>
 
@@ -184,11 +186,11 @@ export default {
         }
     },
     mounted() {
+        this.getUser();
         this.getStores();
         this.loadCookies();
         this.getGenres();
         this.getSeachTitles();
-        this.getUser();
         this.chooseStore();
     },
     methods: {
@@ -254,12 +256,19 @@ export default {
             let currentInput = this.searchForm.inputValue.toLowerCase();
             return currentName.includes(currentInput);
         },
-        logout() {
-            this.isLoading = true;
-
+        async logout() {
+            this.$emit('emitHandler',  {isLoading: true});
             axios.post('/logout').then(() => {
                 this.user = null;
+                window.Laravel = {
+                    csrfToken: '',
+                    jsPermissions: ''
+                };
                 this.$router.push({ name: 'login' });
+                this.$emit('emitHandler',  {isLoading: false});
+            }).catch( error => {
+                console.log(error);
+                this.$emit('emitHandler',  {isLoading: false});
             });
         },
         getUser() {

@@ -8,6 +8,7 @@ use App\Http\Resources\TitleUpdateResource;
 use App\Models\Item;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Participant;
 use App\Models\Genre;
@@ -15,6 +16,7 @@ use App\Models\Title;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Storage;
 use mysql_xdevapi\Exception;
+use const http\Client\Curl\AUTH_ANY;
 
 
 class TitlesController extends Controller

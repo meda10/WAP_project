@@ -123,12 +123,20 @@ export default {
         validateEmail() {
             return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.form.email);
         },
-        loginUser() {
+        async loginUser() {
             // if (this.formValid.email && this.formValid.password) {
                 this.$emit('emitHandler', {isLoading: true});
 
-                axios.get('/sanctum/csrf-cookie').then(response => {
+                await axios.get('/sanctum/csrf-cookie').then(response => {
                     axios.post('/login', this.form).then((res) => {
+                        axios.get('/api/login_info', this.form).then((res) => {
+                            window.Laravel = {
+                                csrfToken: res.data['csrfToken'],
+                                jsPermissions: res.data['jsPermissions']
+                            };
+                            // console.log(window.Laravel);
+                        });
+                        this.$emit('emitHandler', {isLoading: false});
                         this.$router.push({name: 'home'});
                     }).catch((error) => {
                         this.errors = error.response.data.errors;
@@ -139,6 +147,7 @@ export default {
                                 this.form.password = '';
                             }
                         }
+                        this.$emit('emitHandler', {isLoading: false});
                     });
                 });
             // }

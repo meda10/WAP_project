@@ -111,8 +111,10 @@
                         </button>
 
                         <!-- todo visible only for admin-->
-                        <router-link type="button" class="btn btn-primary" :to="{ name: 'titleEdit', params: { id: this.titleId}}" append>Upravit</router-link>
-                        <button type="button" class="btn btn-primary" v-on:click="removeTitle">Smazat</button>
+                        <div v-if="can('Edit all titles')">
+                            <router-link type="button" class="btn btn-primary" :to="{ name: 'titleEdit', params: { id: this.titleId}}" append>Upravit</router-link>
+                            <button type="button" class="btn btn-primary" v-on:click="removeTitle">Smazat</button>
+                        </div>
                         <!-- todo visible only for admin-->
 
                     </div>

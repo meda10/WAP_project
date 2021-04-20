@@ -7,7 +7,9 @@ use App\Http\Resources\UsersResource;
 use App\Http\Resources\UserUpdateResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
@@ -35,6 +37,12 @@ class UsersController extends Controller
         return response()->json(['ok' => 'ok'], 200);
     }
 
+    public function get_user_info(Request $request)
+    {
+        $csrfToken = csrf_token();
+        $jsPermissions = auth()->check()?auth()->user()->jsPermissions():'';
+        return response()->json(['csrfToken' => $csrfToken, 'jsPermissions' => $jsPermissions], 200);
+    }
 
     public function confirm_user($id){
         $user = User::findOrFail($id);
@@ -76,6 +84,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $user->removeRole($user->role);
         $user->delete();
     }
 
@@ -94,6 +103,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $this->user_validator();
+        $user->removeRole($user->role);
         $user->update([
             'name' => $request['jmeno'],
             'surname' => $request['prijmeni'],
@@ -105,6 +115,7 @@ class UsersController extends Controller
             'confirmed' => $request['potvrzeni'],
             'store_id' => $request['obchod'],
         ]);
+        $user->assignRole(Role::where('name', $request['role'])->get());
         $user->save();
         return response()->json(['ok'=> 'ok'], 200);
     }
