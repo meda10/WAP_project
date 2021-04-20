@@ -1,12 +1,16 @@
 <template>
     <div>
         <h2>Slevové kódy</h2>
-        <b-button variant="success" size="sm" @click="add_discount()" class="mr-2" >Vytvořit slevové kódy</b-button>
+        <div v-if="can('Edit all discounts')">
+            <b-button variant="success" size="sm" @click="add_discount()" class="mr-2" >Vytvořit slevové kódy</b-button>
+        </div>
         <b-table :items="discounts" :fields="fields" striped responsive="sm">
             <template #cell(actions)="row">
-                <b-button variant="danger" size="sm" @click="remove_discount(row.item.id)" class="mr-2">
-                    Odstranit
-                </b-button>
+                <div v-if="can('Edit all discounts')">
+                    <b-button variant="danger" size="sm" @click="remove_discount(row.item.id)" class="mr-2">
+                        Odstranit
+                    </b-button>
+                </div>
             </template>
         </b-table>
     </div>

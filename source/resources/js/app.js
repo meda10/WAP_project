@@ -42,11 +42,6 @@ Vue.use(VueFormulate, {
 })
 window.Vue = require('vue').default;
 
-// window.Laravel = {
-//     csrfToken: '',
-//     jsPermissions: ''
-// }
-
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 Vue.use(BootstrapVue);

@@ -89,8 +89,8 @@ export default {
                     console.log(err.response)
                 });
         },
-        get_actors() {
-            axios.get('/api/get_actors_select')
+        async get_actors() {
+            await axios.get('/api/get_actors_select')
                 .then((res) => {
                     this.actors = res.data.data;
                     // console.log(this.actors);
@@ -99,8 +99,8 @@ export default {
                     console.log(err.response)
                 });
         },
-        get_states() {
-            axios.get('/api/get_states_select')
+        async get_states() {
+            await axios.get('/api/get_states_select')
                 .then((res) => {
                     this.states = res.data.data;
                     // console.log(this.states);
@@ -109,8 +109,8 @@ export default {
                     console.log(err.response)
                 });
         },
-        get_stores() {
-            axios.get('/api/get_stores_select')
+        async get_stores() {
+            await axios.get('/api/get_stores_select')
                 .then((res) => {
                     this.stores = res.data.data;
                     // console.log(this.states);
@@ -119,8 +119,8 @@ export default {
                     console.log(err.response)
                 });
         },
-        get_languages() {
-            axios.get('/api/get_languages_select')
+        async get_languages() {
+            await axios.get('/api/get_languages_select')
                 .then((res) => {
                     this.languages = res.data.data;
                     // console.log(this.states);

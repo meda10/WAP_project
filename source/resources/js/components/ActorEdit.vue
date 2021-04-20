@@ -6,7 +6,7 @@
         <FormulateInput name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
         <FormulateInput type="submit" label="Uložit"/>
         <!--TODO Remove-->
-        <pre class="code" v-text="formValues"/>
+<!--        <pre class="code" v-text="formValues"/>-->
     </FormulateForm>
 </template>
 

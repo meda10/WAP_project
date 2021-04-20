@@ -1,15 +1,19 @@
 <template>
     <div>
         <h2>Obchody</h2>
-        <b-button variant="success" size="sm" @click="add_store()" class="mr-2" >Přidat obchod</b-button>
+        <div v-if="can('Edit all stores')">
+            <b-button variant="success" size="sm" @click="add_store()" class="mr-2" >Přidat obchod</b-button>
+        </div>
         <b-table :items="stores" :fields="fields" striped responsive="sm">
             <template #cell(actions)="row">
-                <b-button size="sm" :to="{ name: 'storeEdit', params: {id: row.item.id}}" class="mr-2">
-                    Upravit
-                </b-button>
-                <b-button variant="danger" size="sm" @click="remove_store(row.item.id)" class="mr-2">
-                    Odstranit
-                </b-button>
+                <div v-if="can('Edit all stores')">
+                    <b-button size="sm" :to="{ name: 'storeEdit', params: {id: row.item.id}}" class="mr-2">
+                        Upravit
+                    </b-button>
+                    <b-button variant="danger" size="sm" @click="remove_store(row.item.id)" class="mr-2">
+                        Odstranit
+                    </b-button>
+                </div>
             </template>
         </b-table>
     </div>

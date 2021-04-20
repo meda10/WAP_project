@@ -55,8 +55,8 @@ export default {
                     console.log(error.response)
                 });
         },
-        get_stores() {
-            axios.get('/api/get_stores_select')
+        async get_stores() {
+            await axios.get('/api/get_stores_select')
                 .then(res => {
                     this.stores = res.data.data;
                 })

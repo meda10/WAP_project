@@ -23,7 +23,7 @@
                 <FormulateInput class="mb-2" name="potvrzeni" type="checkbox" label="Potvrdit uživatele"/>
                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit změny"/>
                 <!--        todo remove-->
-                <pre class="code" v-text="formValues"/>
+<!--                <pre class="code" v-text="formValues"/>-->
             </div>
         </div>
     </FormulateForm>
@@ -56,8 +56,8 @@ export default {
                     console.log(error.response)
                 });
         },
-        get_stores() {
-            axios.get('/api/get_stores_select')
+        async get_stores() {
+            await axios.get('/api/get_stores_select')
                 .then(res => {
                     this.stores = res.data.data;
                 })

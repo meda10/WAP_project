@@ -13,7 +13,6 @@
                                         label="Datum narození" :validation="'required|before:' + today" min="1800-1-01"/>
                     </div>
                 </FormulateInput>
-
                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit"/>
             </div>
         </div>

@@ -1,16 +1,21 @@
 <template>
     <div>
         <h2>Herci</h2>
-        <b-button variant="success" size="sm" @click="add_actor()" class="mr-2" >Přidat herce</b-button>
+        <div v-if="can('Edit all participants')">
+            <b-button variant="success" size="sm" @click="add_actor()" class="mr-2" >Přidat herce</b-button>
+        </div>
         <b-table :items="actors" :fields="fields" striped responsive="sm">
             <template #cell(actions)="row">
-                <b-button size="sm" :to="{ name: 'actorEdit', params: {id: row.item.id}}" class="mr-2">
-                    Upravit
-                </b-button>
-                <b-button variant="danger" size="sm" @click="remove_actor(row.item.id)" class="mr-2">
-                    Odstranit
-                </b-button>
+                <div v-if="can('Edit all participants')">
+                    <b-button size="sm" :to="{ name: 'actorEdit', params: {id: row.item.id}}" class="mr-2">
+                        Upravit
+                    </b-button>
+                    <b-button variant="danger" size="sm" @click="remove_actor(row.item.id)" class="mr-2">
+                        Odstranit
+                    </b-button>
+                </div>
             </template>
+
         </b-table>
     </div>
 </template>
@@ -42,8 +47,8 @@ export default {
                 this.$emit('emitHandler',  {isLoading: false});
             });
         },
-        remove_actor($id){
-            axios.delete("/api/delete_actor/" + $id)
+        async remove_actor($id){
+            await axios.delete("/api/delete_actor/" + $id)
                 .then(res => {
                     this.get_actors();
                 })

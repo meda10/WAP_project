@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get_states_select', 'Api\StatesController@get_items_select');
     Route::get('/get_stores_select', 'Api\StoresController@get_items_select');
     Route::get('/get_languages_select', 'Api\LanguageController@get_items_select');
-    Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user')->middleware('permission:Edit all users');
+    Route::post('/confirm_user/{id}', 'Api\UsersController@confirm_user')->middleware('permission:Confirm users');
 
     //Title
     Route::get('/get_all_titles', 'Api\TitlesController@index')->middleware('permission:View all titles');
@@ -75,8 +75,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     //User
     Route::get('/get_all_users', 'Api\UsersController@index')->middleware('permission:View_all_users');
-    Route::get('/get_one_user/{id}', 'Api\UsersController@show')->middleware('permission:Edit all users');
-    Route::post('/set_user', 'Api\UsersController@store')->middleware('permission:Edit all users');
+    Route::get('/get_one_user/{id}', 'Api\UsersController@show')->middleware('permission:Basic permissions');
+    Route::post('/set_user', 'Api\UsersController@store')->middleware('permission:Add all users');
     Route::get('/get_user_by_id', 'Api\UsersController@getUserById')->middleware('permission:Edit all users');
     Route::put('/update_user/{id}', 'Api\UsersController@update')->middleware('permission:Edit all users');
     Route::delete('/delete_user/{id}', 'Api\UsersController@destroy')->middleware('permission:Edit all users');
@@ -92,8 +92,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get_all_discounts', 'Api\DiscountsController@index')->middleware('permission:View all discounts');
     Route::post('/set_discount', 'Api\DiscountsController@store')->middleware('permission:Edit all discounts');
     Route::delete('/delete_discount/{id}', 'Api\DiscountsController@destroy')->middleware('permission:Edit all discounts');
-
-//    Route::get('logout', 'Auth\AuthController@logout')->name('logout');
 
     //roles
     Route::get('/permissions', 'Api\RoleManager@permissionsIndex')->middleware('permission:View all permissions');

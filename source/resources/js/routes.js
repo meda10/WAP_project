@@ -71,7 +71,7 @@ const router = new VueRouter({
             component: TitleAdd,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director', 'manager'],
             },
         },
         {
@@ -80,7 +80,7 @@ const router = new VueRouter({
             component: TitleEdit,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director', 'manager'],
             },
         },
         {
@@ -89,7 +89,7 @@ const router = new VueRouter({
             component: Discounts,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -98,7 +98,7 @@ const router = new VueRouter({
             component: DiscountAdd,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -116,7 +116,7 @@ const router = new VueRouter({
             component: StoreAdd,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -125,7 +125,7 @@ const router = new VueRouter({
             component: StoreEdit,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -143,7 +143,7 @@ const router = new VueRouter({
             component: ActorAdd,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -152,7 +152,7 @@ const router = new VueRouter({
             component: ActorEdit,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director'],
             },
         },
         {
@@ -197,7 +197,7 @@ const router = new VueRouter({
             component: UserEdit,
             meta: {
                 authRequired: 'true',
-                role: ['employee', 'director', 'manager'],
+                role: ['director', 'manager'],
             },
         },
         {
@@ -265,10 +265,17 @@ const router = new VueRouter({
 
 export default router;
 
+router.afterEach((to, from) => {
+    if (to.name === 'home' && from.name === 'login') {
+        router.go();
+    }
+});
+
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.authRequired)) {
+        console.log(window.Laravel);
         if(window.Laravel.jsPermissions === ''){
-            next({ name: 'login'});
+            router.push({name: 'login'});
         }else {
             next();
         }
@@ -280,12 +287,15 @@ router.beforeEach((to, from, next) => {
             console.log(window.Laravel);
             let roles = to.meta.role;
             if (!roles.includes(window.Laravel.jsPermissions['roles'][0])) {
-                next({ name: 'home'});
+                router.push({name: 'home'});
             } else {
                 next();
             }
+        }else {
+            next();
         }
     } else {
         next();
     }
+    next();
 });

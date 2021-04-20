@@ -1,17 +1,17 @@
 <template>
     <div v-if="!dontShowTemplate">
         <b-modal id="modal-not-confirmed" title="Uživatel není ověřen!"
-                v-model="showNotConfirmedModal" ok-only>
+                 v-model="showNotConfirmedModal" ok-only>
             <p class="my-4">Pro pokračování je nutné ověřit uživatele!</p>
         </b-modal>
 
         <b-modal id="modal-not-confirmed" title="Rezervace na špatné prodejně!"
-                v-model="showWrongStoreModal" ok-only>
+                 v-model="showWrongStoreModal" ok-only>
             <p class="my-4">Rezervace byla vytvořena na jiné prodejně!</p>
         </b-modal>
 
         <b-modal id="modal-not-confirmed" title="Nelze vydat!"
-                v-model="showWrongDateModal" ok-only>
+                 v-model="showWrongDateModal" ok-only>
             <p class="my-4">Rezervace byla vytvořena na jiné datum!</p>
         </b-modal>
 
@@ -32,11 +32,11 @@
 
             <div class="input-group mb-3">
                 <input id="email" type="email" class="form-control"
-                    name="email" autocomplete="email" :class="{'is-invalid' : emailWrong}"
-                    placeholder="Zadejte email uživatele" required v-model="userEmail">
+                       name="email" autocomplete="email" :class="{'is-invalid' : emailWrong}"
+                       placeholder="Zadejte email uživatele" required v-model="userEmail">
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary"
-                        @click.prevent="enterUserEmail" style="margin-left: 20px; width: 200px;">Potvrdit</button>
+                            @click.prevent="enterUserEmail" style="margin-left: 20px; width: 200px;">Potvrdit</button>
                 </div>
             </div>
         </div>
@@ -81,35 +81,35 @@
 
                 <table class="table" id="titlesTable">
                     <thead>
-                        <tr>
-                            <th scope="col">Název titulu</th>
-                            <th scope="col">Datum rezervace</th>
-                            <th scope="col">Celkový mezisoučet</th>
-                            <th scope="col">Akce</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Název titulu</th>
+                        <th scope="col">Datum rezervace</th>
+                        <th scope="col">Celkový mezisoučet</th>
+                        <th scope="col">Akce</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(reservation, index) in reservationsToBeIssued"
-                            v-bind:class="!(index%2) ? 'table-dark' : ''" :key="index">
-                                <td>{{ reservation.title_name }} ({{ reservation.language }} dabing)</td>
-                                <td>{{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</td>
-                                <td>
-                                    {{reservation.intSum}} Kč
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" @click="removeFromToBeIssued(index)">
-                                        Odebrat
-                                    </button>
-                                </td>
-                        </tr>
+                    <tr v-for="(reservation, index) in reservationsToBeIssued"
+                        v-bind:class="!(index%2) ? 'table-dark' : ''" :key="index">
+                        <td>{{ reservation.title_name }} ({{ reservation.language }} dabing)</td>
+                        <td>{{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</td>
+                        <td>
+                            {{reservation.intSum}} Kč
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" @click="removeFromToBeIssued(index)">
+                                Odebrat
+                            </button>
+                        </td>
+                    </tr>
                     </tbody>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <th>Cena celkem:</th>
-                            <th>{{priceSumToBeIssued}} Kč</th>
-                        </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <th>Cena celkem:</th>
+                        <th>{{priceSumToBeIssued}} Kč</th>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -127,35 +127,35 @@
 
                 <table class="table" id="titlesTable">
                     <thead>
-                        <tr>
-                            <th scope="col">Název titulu</th>
-                            <th scope="col">Datum rezervace</th>
-                            <th scope="col">Celkový mezisoučet</th>
-                            <th scope="col">Akce</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Název titulu</th>
+                        <th scope="col">Datum rezervace</th>
+                        <th scope="col">Celkový mezisoučet</th>
+                        <th scope="col">Akce</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(reservation, index) in finedReservations"
-                            v-bind:class="!(index%2) ? 'table-dark' : ''" :key="index">
-                                <td>{{ reservation.title_name }} ({{ reservation.language }} dabing)</td>
-                                <td>{{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</td>
-                                <td>
-                                    {{ reservation.fineSum }} Kč
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" @click="removeFromToBeFined(index)">
-                                        Odebrat
-                                    </button>
-                                </td>
-                        </tr>
+                    <tr v-for="(reservation, index) in finedReservations"
+                        v-bind:class="!(index%2) ? 'table-dark' : ''" :key="index">
+                        <td>{{ reservation.title_name }} ({{ reservation.language }} dabing)</td>
+                        <td>{{dateFormat(reservation.reservation, 'dd. mm. yyyy')}} - {{dateFormat(reservation.reservation_till, 'dd. mm. yyyy')}}</td>
+                        <td>
+                            {{ reservation.fineSum }} Kč
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" @click="removeFromToBeFined(index)">
+                                Odebrat
+                            </button>
+                        </td>
+                    </tr>
                     </tbody>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <th>Cena celkem:</th>
-                            <th>{{fineSumToBeIssued}} Kč</th>
-                        </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <th>Cena celkem:</th>
+                        <th>{{fineSumToBeIssued}} Kč</th>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -174,8 +174,8 @@
                 <div v-for="(reservation, index) in notIssuedReservations" v-bind:key="reservation.id" class="card">
                     <div class="card-header" :id="'heading' + reservation.id">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
-                            :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
                                 <h4>{{reservation.title_name}} ({{reservation.language}} dabing)</h4>
                             </button>
                         </h5>
@@ -226,10 +226,10 @@
 
             <div class="accordion" id="accordionExample">
                 <div v-for="(reservation, index) in issuedReservations" v-bind:key="reservation.id" class="card">
-                                        <div class="card-header" :id="'heading' + reservation.id">
+                    <div class="card-header" :id="'heading' + reservation.id">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
-                            :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
                                 <h4>{{reservation.title_name}} ({{reservation.language}} dabing)</h4>
                             </button>
                         </h5>
@@ -283,10 +283,10 @@
 
             <div class="accordion" id="accordionExample">
                 <div v-for="reservation in returnedReservations" v-bind:key="reservation.id" class="card">
-                                        <div class="card-header" :id="'heading' + reservation.id">
+                    <div class="card-header" :id="'heading' + reservation.id">
                         <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" 
-                            :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    :data-target="'#collapse' + reservation.id" aria-expanded="true" :aria-controls="'collapse' + reservation.id">
                                 <h4>{{reservation.title_name}} ({{reservation.language}} dabing)</h4>
                             </button>
                         </h5>

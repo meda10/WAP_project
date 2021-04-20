@@ -9,7 +9,7 @@
                 </div>
                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Register"/>
                 <!--        todo remove-->
-                <pre class="code" v-text="formValues"/>
+<!--                <pre class="code" v-text="formValues"/>-->
             </div>
         </div>
     </FormulateForm>

@@ -129,15 +129,7 @@ export default {
 
                 await axios.get('/sanctum/csrf-cookie').then(response => {
                     axios.post('/login', this.form).then((res) => {
-                        axios.get('/api/login_info', this.form).then((res) => {
-                            window.Laravel = {
-                                csrfToken: res.data['csrfToken'],
-                                jsPermissions: res.data['jsPermissions']
-                            };
-                            // console.log(window.Laravel);
-                        });
-                        this.$emit('emitHandler', {isLoading: false});
-                        this.$router.push({name: 'home'});
+                        this.ligin_info();
                     }).catch((error) => {
                         this.errors = error.response.data.errors;
                         for (const [key, value] of Object.entries(this.errors)) {
@@ -151,6 +143,20 @@ export default {
                     });
                 });
             // }
+        },
+        async ligin_info (){
+            await axios.get('/api/login_info').then((res) => {
+                window.Laravel = {
+                    csrfToken: res.data['csrfToken'],
+                    jsPermissions: res.data['jsPermissions']
+                };
+                console.log(window.Laravel);
+                this.$emit('emitHandler', {isLoading: false});
+                this.$router.push({name: 'home'});
+                // this.$router.go();
+            }).catch(error =>{
+                console.log(error);
+            });
         }
     }
 }

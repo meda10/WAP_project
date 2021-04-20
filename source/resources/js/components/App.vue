@@ -93,13 +93,13 @@
 
         <div class="container" style="margin-top: 100px;">
             <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
-            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
-            :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
+                         :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
+                         :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
         </div>
 
         <b-modal ref="modal-choose-store" :retain-focus="false" title="Vyberte si prodejnu"
-                :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage"
-                :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
+                 :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage"
+                 :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
             <div v-if="changeStoreMessage">
                 Při zmeně prodejny dojde ke smazání Vašeho košíku!
             </div>
@@ -186,12 +186,12 @@ export default {
         }
     },
     mounted() {
-        this.getUser();
         this.getStores();
         this.loadCookies();
         this.getGenres();
         this.getSeachTitles();
         this.chooseStore();
+        this.getUser();
     },
     methods: {
         getSeachTitles() {
@@ -258,14 +258,15 @@ export default {
         },
         async logout() {
             this.$emit('emitHandler',  {isLoading: true});
-            axios.post('/logout').then(() => {
+            await axios.post('/logout').then(() => {
                 this.user = null;
                 window.Laravel = {
                     csrfToken: '',
                     jsPermissions: ''
                 };
-                this.$router.push({ name: 'login' });
+                console.log(window.Laravel);
                 this.$emit('emitHandler',  {isLoading: false});
+                this.$router.push({ name: 'login' });
             }).catch( error => {
                 console.log(error);
                 this.$emit('emitHandler',  {isLoading: false});
@@ -275,7 +276,7 @@ export default {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
             }).catch(error => {
-
+                // console.log(error);
             });
         },
         getGenres() {
