@@ -147,3 +147,5 @@ docker-compose exec php php artisan migrate:fresh --seed
 ``` bash
 docker-compose exec php php artisan storage:link
 ```
+
+php artisan laravel_api:bootstrap
