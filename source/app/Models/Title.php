@@ -58,6 +58,7 @@ class Title extends Model
         return Title::where('type', 'like', "{$type}%")
                         ->where('url', $name)
                         ->with('states')
+                        ->with('participant')
                         ->with('genres')
                         ->with('languages', function($query) use($store_id) { $query->where('items.store_id', $store_id); })
                         ->first();
