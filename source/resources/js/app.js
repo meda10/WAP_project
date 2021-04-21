@@ -12,10 +12,10 @@ import VueFormulate from '@braid/vue-formulate';
 import { cs } from '@braid/vue-formulate-i18n';
 import FormulateVSelectPlugin from '@cone2875/vue-formulate-select';
 import FormulateAutocomplete from './components/FormulateAutocomplete';
-import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
 import 'vue-select/dist/vue-select.css';
 import axios from 'axios'
 import router from './routes';
+import checkPermissions from './permissions'
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080/api'
@@ -49,7 +49,7 @@ Vue.use(ModalPlugin);
 Vue.use(ButtonPlugin);
 Vue.use(VueSessionStorage);
 Vue.mixin(titleMixin);
-Vue.use(LaravelPermissionToVueJS);
+Vue.use(checkPermissions);
 
 const i18n = new VueI18n({
     locale: 'cs'

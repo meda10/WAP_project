@@ -35,7 +35,7 @@
             <div class="col-4" v-for="(title, tiKey) in rowList" :key="tiKey">
                 <h4>{{ title.title_name }}</h4>
                 <router-link class="card border-primary mb-4" style="max-width: 20rem;" tag="div" :to="'/film/' + title.url">
-                    <img class="card-img" :src="'/img/movies/'+title.url+'.jpg'">
+                    <img class="card-img" :src="'/storage/img/'+title.url+'.jpg'">
                     <div class="card-img-overlay">
                         <div class="card-body">
                             <h5>{{ title.year }}</h5>

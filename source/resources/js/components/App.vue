@@ -91,7 +91,7 @@
             <strong>Váš účet není ověřený.</strong> Ověřte své údaje na některé z našich prodejen.
         </div>
 
-        <div class="container" style="margin-top: 100px;">
+        <div class="container" style="padding-top: 100px; padding-bottom: 100px;">
             <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
                          :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
                          :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
@@ -186,12 +186,12 @@ export default {
         }
     },
     mounted() {
+        this.getUser();
         this.getStores();
         this.loadCookies();
         this.getGenres();
         this.getSeachTitles();
         this.chooseStore();
-        this.getUser();
     },
     methods: {
         getSeachTitles() {
