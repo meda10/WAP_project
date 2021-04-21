@@ -24,11 +24,6 @@
                                 Upravit
                             </b-button>
                         </div>
-                        <!--                <div v-if="can('Edit all users')">-->
-                        <!--                    <b-button size="sm" @click="reset_password(row.item.id)" class="mr-2">-->
-                        <!--                        Reset hesla-->
-                        <!--                    </b-button>-->
-                        <!--                </div>-->
                         <div v-if="can('Edit all users')">
                             <b-button variant="danger" size="sm" @click="remove_user(row.item.id)" class="mr-2">
                                 Odstranit

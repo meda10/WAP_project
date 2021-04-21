@@ -109,6 +109,7 @@ class UsersController extends Controller
             'surname' => $request['prijmeni'],
             'email' => $request['email'],
             'role' => $request['role'],
+            'password' => Hash::make($request['password']),
             'address' => $request['adresa'],
             'city' => $request['mesto'],
             'zip_code' => $request['psc'],
@@ -127,6 +128,7 @@ class UsersController extends Controller
             'email' => 'required|string|email|max:255', //todo |unique:users
             'role' => 'required|string|in:director,manager,employee,customer',
             'adresa' => 'required|string|max:255',
+            'password' => 'sometimes|required_with:password_confirm|string',
             'mesto' => 'required|string|max:255',
             'psc' => 'required|numeric', //todo number of digits
             'potvrzeni' => 'required|boolean',

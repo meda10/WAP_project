@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
                         <div class="row justify-content-center">
-                            <div class="col-sm-6">
+                            <div class="col-sm-10">
                                 <FormulateInput class="mb-2" name="adresa" type="text" label="Adresa" validation="required|max:255,length"/>
                                 <FormulateInput class="mb-2" name="mesto" type="text" label="Město" validation="required|max:255,length"/>
                                 <FormulateInput class="mb-2" name="psc" type="number" label="PSČ" validation="required|number"/>

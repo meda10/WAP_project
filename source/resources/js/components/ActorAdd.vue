@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
                         <div class="row justify-content-center">
-                            <div class="col-sm-6">
+                            <div class="col-sm-10">
                                 <FormulateInput name="novy_herec" type="group" :repeatable="true" add-label="Další herec">
                                     <div class="border-bottom py-2">
                                         <FormulateInput class="mb-2" input-is-valid-class="is-valid" name="jmeno"

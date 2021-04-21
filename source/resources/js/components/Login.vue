@@ -135,7 +135,7 @@ export default {
                     csrfToken: res.data['csrfToken'],
                     jsPermissions: res.data['jsPermissions']
                 };
-                console.log(window.Laravel);
+                // console.log(window.Laravel);
                 this.$emit('emitHandler', {isLoading: false});
                 this.$router.push({name: 'home'});
                 // this.$router.go();

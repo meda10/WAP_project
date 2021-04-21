@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
                         <div class="row justify-content-center">
-                            <div class="col-sm-6">
+                            <div class="col-sm-10">
                                 <FormulateInput class="mb-2" name="pocet" type="number" label="Počet kódů" validation="required|number|min:1"/>
                                 <FormulateInput class="mb-2" name="procenta" type="number" label="Procenta" validation="required|number|min:1|max:100"/>
                                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Register"/>

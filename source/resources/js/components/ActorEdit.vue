@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
                         <div class="row justify-content-center">
-                            <div class="col-sm-6">
+                            <div class="col-sm-10">
                                 <FormulateInput class="mb-2" name="jmeno" type="text" label="Jmeno" validation="required"/>
                                 <FormulateInput class="mb-2" name="prijmeni" type="text" label="Prijmeni" validation="required"/>
                                 <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>

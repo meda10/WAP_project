@@ -273,7 +273,7 @@ router.afterEach((to, from) => {
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.authRequired)) {
-        console.log(window.Laravel);
+        // console.log(window.Laravel);
         if(window.Laravel.jsPermissions === ''){
             router.push({name: 'login'});
         }else {
@@ -284,7 +284,7 @@ router.beforeEach((to, from, next) => {
     }
     if (to.matched.some(record => record.meta.role)) {
         if(window.Laravel.jsPermissions !== ''){
-            console.log(window.Laravel);
+            // console.log(window.Laravel);
             let roles = to.meta.role;
             if (!roles.includes(window.Laravel.jsPermissions['roles'][0])) {
                 router.push({name: 'home'});
