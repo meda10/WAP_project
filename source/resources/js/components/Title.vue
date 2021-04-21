@@ -365,7 +365,7 @@
                 this.$emit('emitHandler', {cartCookies: this.cartCookies});
                 this.countMaxItemInCart();
             },
-            getTitleInfo() {
+            getTitleInfo() { //todo store id
                 this.$emit('emitHandler',  {isLoading: true});
 
                 axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName, 'store_id': this.chosenStoreId}).then((res) => {
@@ -377,6 +377,8 @@
                     this.maxPossibleItemCount = this.titleInfo.languages[0].total;
                     this.$emit('emitHandler',  {isLoading: false});
                 }).catch((error) => {
+                    console.log(error);
+                    console.log(res.data);
                     this.$router.push({ name: 'notfound' });
                 });
             },

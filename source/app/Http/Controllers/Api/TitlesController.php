@@ -72,9 +72,6 @@ class TitlesController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -93,9 +90,19 @@ class TitlesController extends Controller
 
         $actor_id_arr = [];
         foreach ($request['herci'] as $value) {
+            try {
+                if($value['reziser'][0] == 'director'){
+                    if(!in_array($value['herec'], $actor_id_arr, true)){
+                        $title->participant()->attach($value['herec'], ['director' => 1]);
+                    }
+                }
+            } catch (\Exception $e){
+                if(!in_array($value['herec'], $actor_id_arr, true)){
+                    $title->participant()->attach($value['herec']);
+                }
+            }
             array_push($actor_id_arr, $value['herec']);
         }
-        $title->participant()->attach($actor_id_arr);
 
         foreach ($request['novy_herec'] as $herec){
             $participant = Participant::create([
@@ -103,7 +110,13 @@ class TitlesController extends Controller
                 'surname' => $herec['prijmeni'],
                 'birth' => $herec['datum_narozeni'],
             ]);
-            $title->participant()->attach($participant['id']);
+            try {
+                if($herec['reziser'][0] == 'director'){
+                    $title->participant()->attach($participant['id'], ['director' => 1]);
+                }
+            } catch (\Exception $e){
+                $title->participant()->attach($participant['id']);
+            }
         }
         foreach ($request['polozka'] as $item){
             for ($i = 0; $i < $item['pocet']; $i++){
@@ -117,7 +130,7 @@ class TitlesController extends Controller
         foreach ($request['obrazek'] as $obrazek){
             try {
                 Storage::delete("/public/img/".$url.".jpg");
-            }catch (Exception $e){}
+            }catch (\Exception $e){}
             Storage::move("/public/".$obrazek['url'], "/public/img/".$url.".jpg");
         }
         return response()->json(['url'=> $url], 200);
@@ -131,15 +144,11 @@ class TitlesController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Title  $title
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $url)
     {
         $title = Title::get_title_by_url($url);
-        $this->Title_validator();
+        $this->title_update_validator();
         $new_url = AppHelper::friendlyUrl($request['titul']);
         $title->update([
             'title_name' => $request['titul'],
@@ -152,11 +161,30 @@ class TitlesController extends Controller
         ]);
         $title->genres()->sync($request['zanr']);
 
+        $title->participant()->detach();
         $actor_id_arr = [];
         foreach ($request['herci'] as $value) {
+            try {
+                if($value['reziser'][1] == '1' && $value['reziser'][0] == '0'){
+                    if(!in_array($value['herec'], $actor_id_arr, true)){
+                        $title->participant()->attach($value['herec'], ['director' => 1]);
+                    }
+                }
+            } catch (\Exception $e){
+                try {
+                    if($value['reziser'][0] == '1'){
+                        if(!in_array($value['herec'], $actor_id_arr, true)){
+                            $title->participant()->attach($value['herec'], ['director' => 1]);
+                        }
+                    }
+                }catch (\Exception $e){
+                    if(!in_array($value['herec'], $actor_id_arr, true)){
+                        $title->participant()->attach($value['herec']);
+                    }
+                }
+            }
             array_push($actor_id_arr, $value['herec']);
         }
-        $title->participant()->sync(array_values($actor_id_arr));
 
         foreach ($request['novy_herec'] as $herec){
             $participant = Participant::create([
@@ -164,7 +192,13 @@ class TitlesController extends Controller
                 'surname' => $herec['prijmeni'],
                 'birth' => $herec['datum_narozeni'],
             ]);
-            $title->participant()->attach($participant['id']);
+            try {
+                if($herec['reziser'][0] == '1'){
+                    $title->participant()->attach($participant['id'], ['director' => 1]);
+                }
+            } catch (\Exception $e){
+                $title->participant()->attach($participant['id']);
+            }
         }
         $title->save();
 
@@ -217,7 +251,23 @@ class TitlesController extends Controller
 
     protected function Title_validator(){
         return request()->validate([
-            'titul' => 'required|string|max:255', //|unique:titles,title_name
+            'titul' => 'required|string|max:255|unique:titles,title_name', //
+            'rok' => 'required|numeric|min:1899',
+            'typ' => 'required|in:movie,serial',
+            'cena' => 'required|numeric|min:1',
+            'popis' => 'required|string|max:255',
+            'zeme_puvodu' => 'required|exists:states,id',
+            'zanr' => 'required|exists:genres,id',
+            'novy_herec.*.jmeno' => 'required|string|max:255',
+            'novy_herec.*.prijmeni' => 'required|string|max:255',
+            'novy_herec.*.datum_narozeni' => 'required|date|before:today',
+            'obrazek.*.url' => 'required',
+        ]);
+    }
+
+    protected function title_update_validator(){
+        return request()->validate([
+            'titul' => 'required|string|max:255',
             'rok' => 'required|numeric|min:1899',
             'typ' => 'required|in:movie,serial',
             'cena' => 'required|numeric|min:1',

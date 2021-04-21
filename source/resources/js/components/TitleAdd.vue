@@ -30,6 +30,7 @@
                                 <FormulateInput class="mb-2" name="herci" type="group" :repeatable="true" label="Herci" add-label="+ Přidat herce" validation="required|min:1">
                                     <div class="border-bottom py-2">
                                         <FormulateInput class="mb-2" type="select" name="herec" label="Jméno a přijmení herce" validation="required" :options='this.actors'/>
+                                        <FormulateInput class="mb-2" name="reziser" type="checkbox" label="Režisér" :options="{ director: 'Režisér'}"/>
                                     </div>
                                 </FormulateInput>
 
@@ -40,6 +41,7 @@
                                         <FormulateInput class="mb-2" name="jmeno" type="text" label="Jméno" validation="required"/>
                                         <FormulateInput class="mb-2" name="prijmeni" type="text" label="Přijmeni" validation="required"/>
                                         <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narození" validation="required" min="1900-1-01"/>
+                                        <FormulateInput class="mb-2" name="reziser" type="checkbox" label="Režisér" :options="{ director: 'Režisér'}"/>
                                     </div>
                                 </FormulateInput>
 
@@ -124,6 +126,7 @@ export default {
                     this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
+                    alert(err.message);
                     console.log(err.response)
                 });
         },

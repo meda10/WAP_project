@@ -14,11 +14,20 @@ class ParticipantSelectResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'value' => strval($this->id),
-            'label' => $this->name." ".$this->surname,
-            'herec' => strval($this->id),
-        ];
+        if (isset($this->pivot['director'])) {
+            return [
+                'value' => strval($this->id),
+                'label' => $this->name." ".$this->surname,
+                'herec' => strval($this->id),
+                'reziser' => [strval($this->pivot['director'])]
+            ];
+        } else{
+            return [
+                'value' => strval($this->id),
+                'label' => $this->name." ".$this->surname,
+                'herec' => strval($this->id),
+            ];
+        }
     }
 
 }

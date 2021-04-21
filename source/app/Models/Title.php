@@ -128,7 +128,7 @@ class Title extends Model
 
     public function participant()
     {
-        return $this->belongsToMany(Participant::class, 'participant_title');
+        return $this->belongsToMany(Participant::class, 'participant_title')->withPivot('director');
     }
 
     public function states()

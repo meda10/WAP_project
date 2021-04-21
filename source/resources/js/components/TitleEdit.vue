@@ -19,11 +19,13 @@
                                 </FormulateForm>
                                 <FormulateInput name="herci" type="group" :repeatable="true" label="Herci" add-label="+ Přidat herce" validation="required|min:1">
                                     <FormulateInput type="select" name="herec" label="Jmeno a prijmeni herce" validation="required" :options='this.actors'/>
+                                    <FormulateInput class="mb-2" name="reziser" type="checkbox" :options="{ '1': 'Režisér'}"/>
                                 </FormulateInput>
                                 <FormulateInput name="novy_herec" type="group" :repeatable="true" label="Vytvořit herce" add-label="Vytvořit herce">
                                     <FormulateInput name="jmeno" type="text" label="Jmeno" validation="required"/>
                                     <FormulateInput name="prijmeni" type="text" label="Prijmeni" validation="required"/>
                                     <FormulateInput name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
+                                    <FormulateInput class="mb-2" name="reziser" type="checkbox" label="Režisér" :options="{ '1': 'Režisér'}"/>
                                 </FormulateInput>
                                 <FormulateInput class="mb-2" name="polozka" type="group" :minimum="1" :repeatable="true" label="Přidat kus" add-label="Přidat kus">
                                     <div class="double-wide border-bottom py-2">
@@ -37,7 +39,7 @@
                                 <!--            :disabled="isLoading"-->
                                 <!--            :label="isLoading ? 'Ukládání...' : 'Uložit'"-->
                                 <!--TODO Remove-->
-<!--                                <pre class="code" v-text="formValues"/>-->
+                                <pre class="code" v-text="formValues"/>
                             </div>
                         </div>
                     </FormulateForm>
@@ -85,7 +87,7 @@ export default {
             data.obrazek = this.image['obrazek'];
             await axios.put("/api/update_title/" + this.url, data)
                 .then(res => {
-                    this.$router.push({path: '/film/' + res.data['url']});
+                    // this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
                     console.log(err.response)
@@ -135,7 +137,7 @@ export default {
             this.$emit('emitHandler',  {isLoading: true});
             await axios.get('/api/get_one_title/' + this.url).then((res) => {
                 this.formValues = res.data.data;
-                // console.log(res.data.data);
+                console.log(res.data.data);
                 this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error
