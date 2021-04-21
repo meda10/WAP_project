@@ -212,7 +212,7 @@ const router = new VueRouter({
         },
         {
             path: '/filmy/:movieGenre',
-            name: 'movies',
+            name: 'moviesGenre',
             component: Movies
         },
         {
@@ -222,7 +222,7 @@ const router = new VueRouter({
         },
         {
             path: '/film/:titleName',
-            name: 'movie',
+            name: 'movieTitle',
             component: Title
         },
         {
@@ -232,7 +232,7 @@ const router = new VueRouter({
         },
         {
             path: '/serialy/:serialGenre',
-            name: 'series',
+            name: 'seriesGenre',
             component: Series
         },
         {
@@ -242,7 +242,7 @@ const router = new VueRouter({
         },
         {
             path: '/serial/:titleName',
-            name: 'serial',
+            name: 'serialTitle',
             component: Title
         },
         {

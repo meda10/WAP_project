@@ -256,8 +256,10 @@ export default {
             }
         },
         getGenreByUrl() {
+            if (typeof this.$route.params.movieGenre === 'undefined') {
+                return; // todo this.$route.params.movieGenre is undefined -> route fail with 404
+            }
             this.$emit('emitHandler', {isLoading: true});
-
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.movieGenre}).then((res) => {
                 this.genre.name = res.data.name;
                 this.genre.url = this.$route.params.movieGenre;

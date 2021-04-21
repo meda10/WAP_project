@@ -27,8 +27,10 @@ export default {
     },
     methods: {
         getGenreByUrl() {
+            if (typeof this.$route.params.serialGenre === 'undefined') {
+                return; // todo this.$route.params.serialGenre is undefined -> route fail with 404
+            }
             this.$emit('emitHandler', {isLoading: true});
-
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.serialGenre}).then((res) => {
                 this.genre.name = res.data.name;
                 this.$emit('emitHandler', {isLoading: false});

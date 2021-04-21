@@ -390,7 +390,6 @@ export default {
             this.$emit('emitHandler',  {isLoading: true});
 
             axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName, 'store_id': this.chosenStoreId}).then((res) => {
-                console.log(res.data);
                 this.titleInfo = res.data;
                 this.actors = this.titleInfo.participant;
                 this.titleId = this.titleInfo.id;
@@ -459,7 +458,7 @@ export default {
             await axios.delete("/api/delete_title/" + this.titleId)
                 .then(res => {
                     this.$emit('emitHandler',  {isLoading: false});
-                    this.$router.push({path: '/'}); //todo redirect
+                    this.$router.push({name: 'home'});
                 })
                 .catch(err => {
                     this.$emit('emitHandler',  {isLoading: false});
