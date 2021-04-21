@@ -192,28 +192,25 @@ export default {
                 return 'Neznámé';
             }
         },
-        updateName() {
+        async updateName() {
             // TODO: values validation
-            console.log("menim NAME");
+            // console.log("menim NAME");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_name', {'userId': this.user.id, 'name': this.updateForm.name}).then((res) => {
-                // console.log(res);
-                this.updateForm.name = '';
+            await axios.post('/api/update_user_name', {'userId': this.user.id, 'name': this.updateForm.name}).then((res) => {
+                // console.log(res.data);
+                this.updateForm.name = res.data.name;
                 this.whatChange.name = false;
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
                 console.log(error);
             });
         },
-        updateSurname() {
+        async updateSurname() {
             // TODO: values validation
-            console.log("menim SURNAME");
+            // console.log("menim SURNAME");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_surname', {'userId': this.user.id, 'surname': this.updateForm.surname}).then((res) => {
-                // console.log(res);
-                this.updateForm.surname = '';
+            await axios.post('/api/update_user_surname', {'userId': this.user.id, 'surname': this.updateForm.surname}).then((res) => {
+                this.updateForm.surname = res.data.surname;
                 this.whatChange.surname = false;
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
@@ -222,11 +219,12 @@ export default {
         },
         updatePassword() {
             // TODO: values validation
-            console.log("menim PASSWORD");
+            // console.log("menim PASSWORD");
             this.$emit('emitHandler',  {isLoading: true});
 
             axios.post('/api/update_user_password',
-                {'current_password': this.updateForm.passwordCurrent, 'newPassword': this.updateForm.password}).then((res) => {
+                {'current_password': this.updateForm.passwordCurrent,
+                    'password': this.updateForm.password, 'password_confirmation': this.updateForm.passwordAgain   }).then((res) => {
                 // console.log(res);
                 this.updateForm.password = '';
                 this.updateForm.passwordCurrent = '';
@@ -237,16 +235,15 @@ export default {
                 console.log(error);
             });
         },
-        updateAddress() {
+        async updateAddress() {
             // TODO: values validation
-            console.log("menim ADDRESS");
+            // console.log("menim ADDRESS");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_address',
+            await axios.post('/api/update_user_address',
                 {'address': this.updateForm.address, 'city': this.updateForm.city, 'zip_code': this.updateForm.zipCode}).then((res) => {
-                this.updateForm.address = '';
-                this.updateForm.city = '';
-                this.updateForm.zipCode = '';
+                this.updateForm.address = res.data.address;
+                this.updateForm.city = res.data.city;
+                this.updateForm.zipCode = res.data.zip_code;
                 this.whatChange.address = false;
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {

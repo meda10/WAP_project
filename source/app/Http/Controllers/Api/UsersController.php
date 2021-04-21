@@ -15,26 +15,60 @@ class UsersController extends Controller
 {
     public function updateName(Request $request)
     {
-        // TODO change confirmation of user to false
-        return response()->json(['ok' => 'ok'], 200);
+        $user = Auth::user();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $user->update([
+            'name' => $validated['name'],
+        ]);
+        $user->save();
+        return response()->json(['ok' => 'ok', 'name' => $validated['name']], 200);
     }
 
     public function updateSurname(Request $request)
     {
-        // TODO change confirmation of user to false
-        return response()->json(['ok' => 'ok'], 200);
+        $user = Auth::user();
+        $validated = $request->validate([
+            'surname' => 'required|string|max:255',
+        ]);
+        $user->update([
+            'surname' => $validated['surname'],
+        ]);
+        $user->save();
+        return response()->json(['ok' => 'ok', 'surname' => $validated['surname']], 200);
     }
 
     public function updatePassword(Request $request)
     {
-        // TODO change confirmation of user to false
+        $user = Auth::user();
+        $validated = $request->validate([
+            'current_password' => 'password',
+            'password' => 'sometimes|required_with:password_confirmation|string|confirmed',
+        ]);
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+        $user->save();
         return response()->json(['ok' => 'ok'], 200);
     }
 
     public function updateAddress(Request $request)
     {
-        // TODO change confirmation of user to false
-        return response()->json(['ok' => 'ok'], 200);
+        $user = Auth::user();
+        $validated = $request->validate([
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zip_code' => 'required|numeric|digits:5',
+        ]);
+        $user->update([
+            'address' => $validated['address'],
+            'city' => $validated['city'],
+            'zip_code' => $validated['zip_code'],
+        ]);
+        $user->save();
+        return response()->json(['ok' => 'ok', 'address' => $validated['address'],
+            'city' => $validated['city'], 'zip_code' => $validated['zip_code']], 200);
     }
 
     public function get_user_info(Request $request)
@@ -130,7 +164,7 @@ class UsersController extends Controller
             'adresa' => 'required|string|max:255',
             'password' => 'sometimes|required_with:password_confirm|string',
             'mesto' => 'required|string|max:255',
-            'psc' => 'required|numeric', //todo number of digits
+            'psc' => 'required|numeric|digits:5',
             'potvrzeni' => 'required|boolean',
             'obchod' => 'required|numeric',
         ]);

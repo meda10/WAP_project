@@ -17,7 +17,7 @@
                                 <FormulateInput class="mb-2" name="password_confirm" type="password" label="Potvrďte heslo" validation="optional|confirm" validation-name="Potvrzení"/>
                                 <FormulateInput class="mb-2" name="adresa" type="text" label="Adresa" validation="required"/>
                                 <FormulateInput class="mb-2" name="mesto" type="text" label="Město" validation="required"/>
-                                <FormulateInput class="mb-2" name="psc" type="number" label="PSČ" validation="required|number"/>
+                                <FormulateInput class="mb-2" name="psc" type="number" label="PSČ" validation="required|number|min:5,length|max:5,length"/>
                                 <FormulateInput class="mb-2" type="select" name="obchod" label="Obchod" validation="required" :options='this.stores'/>
                                 <FormulateInput class="mb-2" name="potvrzeni" type="checkbox" label="Potvrdit uživatele"/>
                                 <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit změny"/>

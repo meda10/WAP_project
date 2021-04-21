@@ -26,11 +26,6 @@ Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
 Route::post('/get_titles', 'Api\TitlesController@getTitles');
 Route::post('/get_title', 'Api\TitlesController@getTitle');
 
-Route::post('/update_user_name', 'Api\UsersController@updateName');
-Route::post('/update_user_surname', 'Api\UsersController@updateSurname');
-Route::post('/update_user_password', 'Api\UsersController@updatePassword');
-Route::post('/update_user_address', 'Api\UsersController@updateAddress');
-
 Route::get('/get_all_titles_search', 'Api\TitlesController@getAllTitlesSearch');
 Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
 Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
@@ -40,6 +35,12 @@ Route::get('/get_stores', 'Api\StoresController@getStores');
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/login_info', 'Api\UsersController@get_user_info');
+
+    //Settings
+    Route::post('/update_user_name', 'Api\UsersController@updateName')->middleware('permission:Basic permissions');;
+    Route::post('/update_user_surname', 'Api\UsersController@updateSurname')->middleware('permission:Basic permissions');;
+    Route::post('/update_user_password', 'Api\UsersController@updatePassword')->middleware('permission:Basic permissions');;
+    Route::post('/update_user_address', 'Api\UsersController@updateAddress')->middleware('permission:Basic permissions');;
 
     //select + buttons
     Route::get('/get_actors_select', 'Api\ParticipantController@get_items_select');

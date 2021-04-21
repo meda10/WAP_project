@@ -203,7 +203,11 @@ const router = new VueRouter({
         {
             path: '/nastaveni',
             name: 'settings',
-            component: Settings
+            component: Settings,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager', 'customer'],
+            },
         },
         {
             path: '/filmy',
