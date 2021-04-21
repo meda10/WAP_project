@@ -209,3 +209,22 @@
         // form errors (not specific to a field)
     }
 }
+
+
+#image .formulate-files{
+    padding: 0px;
+}
+
+#image .formulate-files li{
+    display: block;
+    margin-top: 20px;
+}
+
+.form_textarea {
+    height: 400px;
+}
+
+//.form_textarea .formulate-input-wrapper .formulate-input-element .formulate-input[data-classification="textarea"]{
+.form_textarea .formulate-input-wrapper .formulate-input-element textarea{
+    height: 350px;
+}

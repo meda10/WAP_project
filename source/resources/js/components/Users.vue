@@ -2,34 +2,42 @@
     <div>
         <h2>Uživatelé</h2>
         <div v-if="can('Add all users')">
-            <b-button variant="success" size="sm" @click="add_user()" class="mr-2" >Přidat uživatele</b-button>
+            <b-button style="margin-top: 20px; margin-bottom: 20px;" variant="success" size="sm" @click="add_user()" class="mr-2" >Přidat uživatele</b-button>
         </div>
-        <b-table :items="users" :fields="fields" striped responsive="sm">
-            <template #cell(confirmed)="row">
-                <div v-if="can('Confirm users')">
-                    <b-badge v-if="row.item.confirmed" variant="success">Potvrzen</b-badge>
-                    <b-button v-else size="sm" @click="confirm_user(row.item.id)" class="mr-2" >Potvrdit</b-button>
-                </div>
-            </template>
-            <template #cell(actions)="row">
-                <div v-if="can('View all reservations')">
-                    <b-button size="sm" @click="user_reservations(row.item.id)" class="mr-2">
-                        Rezervace
-                    </b-button>
-                </div>
-                <div v-if="can('Edit all users')">
-                    <b-button size="sm" :to="{ name: 'userEdit', params: {id: row.item.id}}" class="mr-2">
-                        Upravit
-                    </b-button>
-                    <b-button size="sm" @click="reset_password(row.item.id)" class="mr-2">
-                        Reset hesla
-                    </b-button>
-                    <b-button variant="danger" size="sm" @click="remove_user(row.item.id)" class="mr-2">
-                        Odstranit
-                    </b-button>
-                </div>
-            </template>
-        </b-table>
+        <div class="table-responsive">
+            <b-table :items="users" :fields="fields" striped responsive="sm">
+                <template #cell(confirmed)="row">
+                    <div v-if="can('Confirm users')">
+                        <b-badge v-if="row.item.confirmed" variant="success">Potvrzen</b-badge>
+                        <b-button v-else size="sm" @click="confirm_user(row.item.id)" class="mr-2" >Potvrdit</b-button>
+                    </div>
+                </template>
+                <template #cell(actions)="row">
+                    <div style="display: flex;">
+                        <div v-if="can('View all reservations')">
+                            <b-button size="sm" @click="user_reservations(row.item.id)" class="mr-2">
+                                Rezervace
+                            </b-button>
+                        </div>
+                        <div v-if="can('Edit all users')">
+                            <b-button size="sm" :to="{ name: 'userEdit', params: {id: row.item.id}}" class="mr-2">
+                                Upravit
+                            </b-button>
+                        </div>
+                        <!--                <div v-if="can('Edit all users')">-->
+                        <!--                    <b-button size="sm" @click="reset_password(row.item.id)" class="mr-2">-->
+                        <!--                        Reset hesla-->
+                        <!--                    </b-button>-->
+                        <!--                </div>-->
+                        <div v-if="can('Edit all users')">
+                            <b-button variant="danger" size="sm" @click="remove_user(row.item.id)" class="mr-2">
+                                Odstranit
+                            </b-button>
+                        </div>
+                    </div>
+                </template>
+            </b-table>
+        </div>
     </div>
 </template>
 

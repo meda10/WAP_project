@@ -1,13 +1,25 @@
 <template>
-    <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
-        <h2 class="form-title">Upravit herce</h2>
-        <FormulateInput name="jmeno" type="text" label="Jmeno" validation="required"/>
-        <FormulateInput name="prijmeni" type="text" label="Prijmeni" validation="required"/>
-        <FormulateInput name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
-        <FormulateInput type="submit" label="Uložit"/>
-        <!--TODO Remove-->
-<!--        <pre class="code" v-text="formValues"/>-->
-    </FormulateForm>
+    <div class=" row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Upravit herce</div>
+                <div class="card-body">
+                    <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-6">
+                                <FormulateInput class="mb-2" name="jmeno" type="text" label="Jmeno" validation="required"/>
+                                <FormulateInput class="mb-2" name="prijmeni" type="text" label="Prijmeni" validation="required"/>
+                                <FormulateInput class="mb-2" name="datum_narozeni" type="date" label="Datum narozeni" validation="required" min="1800-1-01"/>
+                                <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit"/>
+                                <!--TODO Remove-->
+                                <!--        <pre class="code" v-text="formValues"/>-->
+                            </div>
+                        </div>
+                    </FormulateForm>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>

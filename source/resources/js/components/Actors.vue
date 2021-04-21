@@ -2,21 +2,24 @@
     <div>
         <h2>Herci</h2>
         <div v-if="can('Edit all participants')">
-            <b-button variant="success" size="sm" @click="add_actor()" class="mr-2" >Přidat herce</b-button>
+            <b-button style="margin-top: 20px; margin-bottom: 20px;" variant="success" size="sm" @click="add_actor()" class="mr-2" >Přidat herce</b-button>
         </div>
-        <b-table :items="actors" :fields="fields" striped responsive="sm">
-            <template #cell(actions)="row">
-                <div v-if="can('Edit all participants')">
-                    <b-button size="sm" :to="{ name: 'actorEdit', params: {id: row.item.id}}" class="mr-2">
-                        Upravit
-                    </b-button>
-                    <b-button variant="danger" size="sm" @click="remove_actor(row.item.id)" class="mr-2">
-                        Odstranit
-                    </b-button>
-                </div>
-            </template>
-
-        </b-table>
+        <div class="table-responsive">
+            <b-table :items="actors" :fields="fields" striped responsive="sm">
+                <template #cell(actions)="row">
+                    <div style="display: flex;">
+                        <div v-if="can('Edit all participants')">
+                            <b-button size="sm" :to="{ name: 'actorEdit', params: {id: row.item.id}}" class="mr-2">
+                                Upravit
+                            </b-button>
+                            <b-button variant="danger" size="sm" @click="remove_actor(row.item.id)" class="mr-2">
+                                Odstranit
+                            </b-button>
+                        </div>
+                    </div>
+                </template>
+            </b-table>
+        </div>
     </div>
 </template>
 

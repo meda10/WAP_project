@@ -1,14 +1,24 @@
 <template>
-    <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
-        <h2 class="form-title">Přidat obchod</h2>
-        <FormulateInput name="adresa" type="text" label="Adresa" validation="required|max:255,length"/>
-        <div class="double-wide">
-            <FormulateInput name="mesto" type="text" label="Město" validation="required|max:255,length"/>
-            <FormulateInput name="psc" type="number" label="PSČ" validation="required|number"/>
+    <div class=" row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Přidat obchod</div>
+                <div class="card-body">
+                    <FormulateForm class="form" v-model="formValues" @submit="submitHandler">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-6">
+                                <FormulateInput class="mb-2" name="adresa" type="text" label="Adresa" validation="required|max:255,length"/>
+                                <FormulateInput class="mb-2" name="mesto" type="text" label="Město" validation="required|max:255,length"/>
+                                <FormulateInput class="mb-2" name="psc" type="number" label="PSČ" validation="required|number"/>
+                                <FormulateInput class="mb-2" name="popis" type="textarea" label="Popis" validation="required|max:1000,length"/>
+                                <FormulateInput input-class="btn btn-success mt-3" type="submit" label="Uložit"/>
+                            </div>
+                        </div>
+                    </FormulateForm>
+                </div>
+            </div>
         </div>
-        <FormulateInput name="popis" type="textarea" label="Popis" validation="required|max:1000,length"/>
-        <FormulateInput type="submit" label="Uložit"/>
-    </FormulateForm>
+    </div>
 </template>
 
 <script>
