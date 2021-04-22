@@ -22,6 +22,7 @@
 
     .formulate-input-label {
         // global label styles
+        margin-bottom: 0;
     }
 
     .formulate-input-element {
@@ -187,6 +188,12 @@
             input {
                 // The actual upload element
             }
+
+            //.formulate-file-progress-inner {
+            //    width: 10px;
+            //    height: 10px;
+            //    background-color: red;
+            //}
         }
     }
 

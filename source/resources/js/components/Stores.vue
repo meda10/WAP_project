@@ -32,8 +32,10 @@ export default {
     },
     methods: {
         get_stores() {
+            this.$emit('emitHandler',  {isLoading: true});
             axios.get('/api/get_all_stores').then((res) => {
                 this.stores = res.data.data;
+                this.$emit('emitHandler',  {isLoading: false});
                 console.log(this.stores);
             });
         },
