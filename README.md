@@ -63,6 +63,11 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose exec php php artisan key:generate
 ```
 
+Storage link
+``` bash
+docker-compose exec php php artisan storage:link
+```
+
 To run periodical scheduling
  ``` bash
 sudo docker-compose exec -d php crond -f
@@ -77,10 +82,10 @@ sudo docker-compose run --rm npm install
 ```
 
 
-If you want to change .vue files, you have to run this:
+To compile project:
 
 ``` bash
-sudo docker-compose run --rm npm run watch
+sudo docker-compose run --rm npm run dev
 ```
 
 If you cannot install anything or run watch/dev than try [this](https://github.com/JeffreyWay/laravel-mix/issues/1072). This happens because of cache.
@@ -152,9 +157,4 @@ To initialize tables and data in PhpMyAdmin run command:
 
 ``` bash
 docker-compose exec php php artisan migrate:fresh --seed
-```
-
-## Storage link
-``` bash
-docker-compose exec php php artisan storage:link
 ```
