@@ -6,6 +6,9 @@
 <script>
 export default {
     title: 'Seriály',
+    props: [
+        'chosenStoreChanged'
+    ],
     data() {
         return {
             genre: {
@@ -18,6 +21,12 @@ export default {
         $route (to, from) {
             this.getGenreByUrl();
         },
+        chosenStoreChanged: {
+            handler: function (chosenStoreChanged) {
+                this.getTitles(this.genre.url);
+            },
+            immediate: true
+        }
     },
     mounted() {
         this.getGenreByUrl();
@@ -39,7 +48,26 @@ export default {
                 console.log(error);
                 this.$emit('emitHandler', {isLoading: false});
             });
-        }
+        },
+        getTitles(url) {
+            // TODO tady Tome potom kontroluj, jestli to vraci dobre ... to chosenStore tam byt musi, aby to filtrovalo i podle vybranyho storu
+            this.$emit('emitHandler', {isLoading: true});
+            var chosenStore = this.$session.get('wap-store') || 1;
+
+            let request = {type: 'serial', genre_url: url,
+                number_of_titles: this.titles.titlesToPage, page_number: this.titles.pageNumber, order: this.titles.ordering, 
+                store_id: chosenStore};
+            axios.post('/api/get_titles', request).then((res) => {
+                this.titles.list = res.data.titles;
+                this.titles.numberOfGenreTitles = res.data.titles_count;
+                this.titles.gridList = [];
+                this.countNumOfPages();
+                this.$emit('emitHandler', {isLoading: false});
+            }).catch((error) => {
+                console.log(error);
+                this.$emit('emitHandler', {isLoading: false});
+            });
+        },
     }
 }
 </script>

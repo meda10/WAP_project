@@ -159,7 +159,7 @@ import dateFormat from 'dateformat';
 export default {
     components: { DatePicker },
     title: '',
-    props: ['cartCookiesProps', 'chosenStoreProps', 'user'],
+    props: ['cartCookiesProps', 'chosenStoreProps', 'user', 'chosenStoreChanged'],
     data() {
         return {
             titleName: '',
@@ -277,6 +277,13 @@ export default {
                 }
             },
             immediate: true
+        },
+        chosenStoreChanged: {
+            handler: function (chosenStoreChanged) {
+                if (chosenStoreChanged != 0)
+                    this.getTitleInfo(true);
+            },
+            immediate: true
         }
     },
     mounted() {
@@ -386,11 +393,23 @@ export default {
             this.$emit('emitHandler', {cartCookies: this.cartCookies});
             this.countMaxItemInCart();
         },
-        getTitleInfo() { //todo store id
+        getTitleInfo(changed) {
             this.$emit('emitHandler',  {isLoading: true});
+            var chosenStore = this.$session.get('wap-store') || 1;
 
-            axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName, 'store_id': this.chosenStoreId}).then((res) => {
+            if (this.titleName === "") return;
+
+            axios.post('/api/get_title', {'type' : this.titleType, 'name': this.titleName, 'store_id': chosenStore}).then((res) => {
+
                 this.titleInfo = res.data;
+                if (this.titleInfo.id === undefined) {
+                    console.log(changed);
+                    if (changed) this.$router.push({ name: 'home' });
+                    else this.$router.push({ name: 'notfound' });
+                }
+                if (this.titleInfo.languages[0] === undefined) {
+                    this.$router.push({ name: 'home' });
+                }
                 this.actors = this.titleInfo.participant;
                 this.titleId = this.titleInfo.id;
                 this.title = this.titleInfo.title_name;
@@ -399,9 +418,8 @@ export default {
                 this.maxPossibleItemCount = this.titleInfo.languages[0].total;
                 this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {
-                console.log(error);
-                console.log(res.data);
-                this.$router.push({ name: 'notfound' });
+                if (changed) this.$router.push({ name: 'home' });
+                else this.$router.push({ name: 'notfound' });
             });
         },
         closedMessage() {

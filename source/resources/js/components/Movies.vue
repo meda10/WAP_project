@@ -165,6 +165,9 @@
 <script>
 export default {
     title: 'Filmy',
+    props: [
+        'chosenStoreChanged'
+    ],
     data() {
         return {
             genre: {
@@ -198,6 +201,12 @@ export default {
         $route (to, from) {
             this.getGenreByUrl();
             this.getTitles(to.params.movieGenre);
+        },
+        chosenStoreChanged: {
+            handler: function (chosenStoreChanged) {
+                this.getTitles(this.genre.url);
+            },
+            immediate: true
         }
     },
     mounted() {
@@ -231,9 +240,11 @@ export default {
         },
         getTitles(url) {
             this.$emit('emitHandler', {isLoading: true});
+            var chosenStore = this.$session.get('wap-store') || 1;
 
             let request = {type: 'movie', genre_url: url,
-                number_of_titles: this.titles.titlesToPage, page_number: this.titles.pageNumber, order: this.titles.ordering};
+                number_of_titles: this.titles.titlesToPage, page_number: this.titles.pageNumber, order: this.titles.ordering, 
+                store_id: chosenStore};
             axios.post('/api/get_titles', request).then((res) => {
                 this.titles.list = res.data.titles;
                 this.titles.numberOfGenreTitles = res.data.titles_count;

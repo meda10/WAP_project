@@ -94,7 +94,7 @@
         <div class="container" style="padding-top: 100px; padding-bottom: 100px;">
             <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
                          :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
-                         :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
+                         :chosenStoreProps="chosenStore" :storesProps="stores" :chosenStoreChanged="chosenStoreChanged"></router-view>
         </div>
 
         <b-modal ref="modal-choose-store" :retain-focus="false" title="Vyberte si prodejnu"
@@ -135,7 +135,8 @@ export default {
                 inputValue: '',
                 searchFocus: false,
                 itemList: []
-            }
+            },
+            chosenStoreChanged: 0
         }
     },
     directives: {
@@ -195,7 +196,8 @@ export default {
     },
     methods: {
         getSeachTitles() {
-            axios.get('/api/get_all_titles_search').then((res) => {
+            this.chosenStore = this.$session.get('wap-store') || 1;
+            axios.get('/api/get_all_titles_search/' + this.chosenStore).then((res) => {
                 this.searchForm.itemList = res.data;
 
                 this.searchForm.itemList.forEach(item => {
@@ -211,6 +213,8 @@ export default {
         },
         handleSaveStore() {
             this.setStore();
+            this.chosenStoreChanged = this.chosenStore;
+            this.getSeachTitles();
         },
         chooseStore() {
             if (!this.$session.exists('wap-store')) {

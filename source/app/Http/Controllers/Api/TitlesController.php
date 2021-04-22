@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
 use mysql_xdevapi\Exception;
 use const http\Client\Curl\AUTH_ANY;
 
+use Illuminate\Support\Facades\Log;
+
 
 class TitlesController extends Controller
 {
@@ -33,14 +35,14 @@ class TitlesController extends Controller
         return response()->json(['ok'=> 'error', 'message' => ''], 404); //todo what is it for?
     }
 
-    public function getAllTitlesSearch()
+    public function getAllTitlesSearch($storeId)
     {
-        return Title::getAllTitles();
+        return Title::getAllTitles($storeId);
     }
 
     public function getTitles(Request $request)
     {
-        return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order);
+        return Title::filterTitles($request->type, $request->genre_url, $request->number_of_titles, $request->page_number, $request->order, $request->store_id);
     }
 
     public function getTitle(Request $request)

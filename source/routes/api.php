@@ -26,7 +26,7 @@ Route::post('/genre_info_from_url', 'Api\TitlesController@getGenreInfoFromUrl');
 Route::post('/get_titles', 'Api\TitlesController@getTitles');
 Route::post('/get_title', 'Api\TitlesController@getTitle');
 
-Route::get('/get_all_titles_search', 'Api\TitlesController@getAllTitlesSearch');
+Route::get('/get_all_titles_search/{id}', 'Api\TitlesController@getAllTitlesSearch');
 Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
 Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
 Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');

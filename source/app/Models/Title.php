@@ -14,6 +14,8 @@ use App\Models\Item;
 use App\Models\Reservation;
 use App\Models\Store;
 
+use Illuminate\Support\Facades\Log;
+
 
 class Title extends Model
 {
@@ -29,15 +31,18 @@ class Title extends Model
         return static::query()->create($attributes);
     }
 
-    public static function filterTitles($type, $genre_url, $numberOfTitles, $pageNumber, $order)
+    public static function filterTitles($type, $genre_url, $numberOfTitles, $pageNumber, $order, $storeId)
     {
         try {
             $filteredTitles = Title::select(['title_name', 'description', 'url', 'type', 'year'])
                             ->whereHas('genres', function($query) use($genre_url) { $query->where('url', 'like', "{$genre_url}%"); })
+                            ->whereHas('items', function($query) use($storeId) { $query->where('items.store_id', $storeId); })
                             ->where('type', 'like', "{$type}%")
                             ->orderBy('created_at', $order);
 
             $response['titles_count'] = $filteredTitles->get()->count();
+            
+            //Log::info($filteredTitles->get());
             $response['titles'] = $filteredTitles->skip($numberOfTitles * ($pageNumber - 1))
                                     ->take($numberOfTitles)
                                     ->get();
@@ -48,9 +53,10 @@ class Title extends Model
         }
     }
 
-    public static function getAllTitles()
+    public static function getAllTitles($store_id)
     {
-        return Title::select(['title_name', 'url', 'type AS typeUrl'])->get();
+        return Title::select(['title_name', 'url', 'type AS typeUrl'])
+                        ->whereHas('items', function($query) use($store_id) { $query->where('items.store_id', $store_id); } )->get();
     }
 
     public static function getTitle($type, $name, $store_id)
