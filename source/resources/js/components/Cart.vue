@@ -3,7 +3,7 @@
         <div style="margin-bottom: 50px">
             <h1>Košík (prodejna {{store.address}})</h1>
         </div>
-        
+
         <div class="alert alert-warning alert-dismissible fade show" role="alert" v-if="!isLoggedIn">
             <strong>Nejste přihlášen(a)!</strong> Musíte se <router-link :to="{ name: 'login' }">přihlásit.</router-link>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -26,8 +26,8 @@
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-2 hidden-xs">
-                                <img :src="'./img/movies/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'movie'" />
-                                <img :src="'./img/series/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'serial'" />
+                                <img :src="'/storage/img/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'movie'" />
+                                <img :src="'/storage/img/' + item.url + '.jpg'" alt="..." class="img-responsive" v-if="item.type === 'serial'" />
                             </div>
                             <div class="col-sm-10 cart-item-name">
                                 <h4 class="nomargin">{{item.name}} ({{item.language}} dabing)</h4>
@@ -44,7 +44,7 @@
                     </td>
                     <td data-th="Subtotal" class="text-center">{{item.quantity * item.price * item.reservationNumberOfDays}} Kč</td>
                     <td class="actions text-center">
-                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item, index)"><i class="fas fa-trash"></i></button>								
+                        <button class="btn btn-danger btn-sm" @click="removeFromCart(item, index)"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -152,7 +152,7 @@ export default {
             modalReservationsError: false,
             modalDiscountError: false,
             reservationsError: [],
-            urlToRemove: '', 
+            urlToRemove: '',
             languageToRemove: '',
             countOfItemToRemove: 1,
             itemToBeRemoved: null,
@@ -250,7 +250,7 @@ export default {
         },
         reservation() {
             this.$emit('emitHandler',  {isLoading: true});
-            
+
             axios.get('/api/user').then((res) => {
                 var reservation = {
                     reservations: this.cartCookies,
@@ -275,8 +275,8 @@ export default {
                                     if (reservationError.url !== item.url ||
                                             reservationError.language_name !== item.language_name ||
                                             reservationError.reservationTimeRange[0] !== item.reservationTimeRange[0] ||
-                                            reservationError.reservationTimeRange[1] !== item.reservationTimeRange[1]) 
-                                            
+                                            reservationError.reservationTimeRange[1] !== item.reservationTimeRange[1])
+
                                             return index;
                                 });
 
