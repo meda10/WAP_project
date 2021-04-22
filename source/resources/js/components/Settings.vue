@@ -11,7 +11,17 @@
                 Email:
             </div>
             <div class="col-sm-5">
-                <span v-if="user">{{ user.email }}</span>
+                <span v-if="user && !whatChange.email">
+                    {{ user.email }} <i class="fas fa-pencil-alt edit-icon" @click="whatChange.email = true; updateForm.email = user.email"></i>
+                </span>
+
+                <div class="form-row align-items-center" v-if="whatChange.email">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="emailEditForm" v-model="updateForm.email">
+                        <button class="btn btn-success" @click="updateEmail">Uložit</button>
+                        <button class="btn btn-danger" @click="whatChange.email = false; updateForm.email = ''">Zrušit</button>
+                    </div>
+                </div>
             </div>
 
             <div class="col-sm-1">
@@ -82,24 +92,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-sm-1">
-                Email:
-            </div>
-            <div class="col-sm-5">
-                <span v-if="user && !whatChange.email">
-                    {{ user.email }} <i class="fas fa-pencil-alt edit-icon" @click="whatChange.email = true; updateForm.email = user.email"></i>
-                </span>
-
-                <div class="form-row align-items-center" v-if="whatChange.email">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="emailEditForm" v-model="updateForm.email">
-                        <button class="btn btn-success" @click="updateEmail">Uložit</button>
-                        <button class="btn btn-danger" @click="whatChange.email = false; updateForm.email = ''">Zrušit</button>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div class="row mt-5 mb-3">
