@@ -53,6 +53,18 @@ class UsersController extends Controller
         return response()->json(['ok' => 'ok'], 200);
     }
 
+    public function updateEmail(Request $request){
+        $user = Auth::user();
+        $validated = $request->validate([
+            'email' => 'required|string|email|max:255|unique:users',
+        ]);
+        $user->update([
+            'email' => $validated['email'],
+        ]);
+        $user->save();
+        return response()->json(['ok' => 'ok', 'email' => $validated['email']], 200);
+    }
+
     public function updateAddress(Request $request)
     {
         $user = Auth::user();
@@ -159,7 +171,7 @@ class UsersController extends Controller
         return request()->validate([
             'jmeno' => 'required|string|max:255',
             'prijmeni' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255', //todo |unique:users
+            'email' => 'required|string|email|max:255|unique:users', //todo |unique:users
             'role' => 'required|string|in:director,manager,employee,customer',
             'adresa' => 'required|string|max:255',
             'password' => 'sometimes|required_with:password_confirm|string',
