@@ -76,7 +76,7 @@ export default {
         this.get_actors();
         this.get_states();
         this.formValues.novy_herec = [];
-        this.$forceUpdate();
+        // this.$forceUpdate();
     },
     methods: {
         removeGenre(key) {
