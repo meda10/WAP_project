@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="reservation">
-            <strong>Rezervace byla úspěšná!</strong>
+            <strong>Rezervace byla úspěšná!</strong> Faktura byla zaslána na Váš email.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -17,35 +17,35 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" :src="'/img/slide1.svg'" alt="First slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide1.svg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>First Slide</h5>
                         <p>Tady bude super text, který tady bude něco ukazovat.</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/img/slide2.svg'" alt="Second slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide2.svg'" alt="Second slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>Druhý slide</h5>
                         <p>Tady bude super text, který tady bude něco ukazovat.</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/img/slide3.svg'" alt="Third slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide3.svg'" alt="Third slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>Třetí slide</h5>
                         <p>Tady bude super text, který tady bude něco ukazovat.</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/img/slide4.svg'" alt="Fourth slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide4.svg'" alt="Fourth slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>Čtvrtý slide</h5>
                         <p>Tady bude super text, který tady bude něco ukazovat.</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/img/slide5.svg'" alt="Fifth slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide5.svg'" alt="Fifth slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>Páty slide</h5>
                         <p>Tady bude super text, který tady bude něco ukazovat.</p>
@@ -60,7 +60,7 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
-        </div>        
+        </div>
 <!--        <div class="row">-->
 <!--            <div class="col-lg-4">jo</div>-->
 <!--            <div class="col-lg-4">ne</div>-->
@@ -83,7 +83,7 @@
             return {
                 reservation: false
             }
-        }, 
+        },
         mounted() {
             this.reservation = this.$route.params.reservation;
         }

@@ -11,7 +11,17 @@
                 Email:
             </div>
             <div class="col-sm-5">
-                <span v-if="user">{{ user.email }}</span>
+                <span v-if="user && !whatChange.email">
+                    {{ user.email }} <i class="fas fa-pencil-alt edit-icon" @click="whatChange.email = true; updateForm.email = user.email"></i>
+                </span>
+
+                <div class="form-row align-items-center" v-if="whatChange.email">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="emailEditForm" v-model="updateForm.email">
+                        <button class="btn btn-success" @click="updateEmail">Uložit</button>
+                        <button class="btn btn-danger" @click="whatChange.email = false; updateForm.email = ''">Zrušit</button>
+                    </div>
+                </div>
             </div>
 
             <div class="col-sm-1">
@@ -88,7 +98,7 @@
             <div class="col">
                 <span class="h3">Adresa:</span> <i class="fas fa-pencil-alt edit-icon"
                                                    @click="whatChange.address = true; updateForm.address = user.address;
-                                                   updateForm.city = user.city; updateForm.zipCode = user.zip_code;"></i>
+                                                   updateForm.city = user.city; updateForm.zip_code = user.zip_code;"></i>
             </div>
         </div>
         <!--   Address show     -->
@@ -135,7 +145,7 @@
             <div class="row mb-3">
                 <label class="col-sm-1 col-form-label" for="addressZipCode">PSČ:</label>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control" id="addressZipCode" v-model="updateForm.zipCode">
+                    <input type="text" class="form-control" id="addressZipCode" v-model="updateForm.zip_code">
                 </div>
             </div>
             <div class="row mb-3">
@@ -144,7 +154,7 @@
                 <div class="col-sm-5">
                     <button class="btn btn-success" @click="updateAddress">Uložit</button>
                     <button class="btn btn-danger" @click="whatChange.address = false;
-                                updateForm.address = ''; updateForm.city = ''; updateForm.zipCode = '';">Zrušit</button>
+                                updateForm.address = ''; updateForm.city = ''; updateForm.zip_code = '';">Zrušit</button>
                 </div>
             </div>
         </div>
@@ -164,13 +174,15 @@ export default {
                 passwordAgain: '',
                 address: '',
                 city: '',
-                zipCode: ''
+                zip_code: '',
+                email: ''
             },
             whatChange: {
                 name: false,
                 surname: false,
                 password: false,
-                address: false
+                address: false,
+                email: false
             }
         }
     },
@@ -192,27 +204,23 @@ export default {
                 return 'Neznámé';
             }
         },
-        updateName() {
+        async updateName() {
             // TODO: values validation
-            console.log("menim NAME");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_name', {'userId': this.user.id, 'name': this.updateForm.name}).then((res) => {
-                // console.log(res);
-                this.updateForm.name = '';
+            await axios.post('/api/update_user_name', {'userId': this.user.id, 'name': this.updateForm.name}).then((res) => {
+                this.user.name  = res.data.name ;
+                this.updateForm.name = res.data.name;
                 this.whatChange.name = false;
                 this.$emit('emitHandler', {isLoading: false});
             }).catch((error) => {
                 console.log(error);
             });
         },
-        updateSurname() {
+        async updateSurname() {
             // TODO: values validation
-            console.log("menim SURNAME");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_surname', {'userId': this.user.id, 'surname': this.updateForm.surname}).then((res) => {
-                // console.log(res);
+            await axios.post('/api/update_user_surname', {'userId': this.user.id, 'surname': this.updateForm.surname}).then((res) => {
+                this.user.surname = res.data.surname;
                 this.updateForm.surname = '';
                 this.whatChange.surname = false;
                 this.$emit('emitHandler', {isLoading: false});
@@ -220,14 +228,12 @@ export default {
                 console.log(error);
             });
         },
-        updatePassword() {
+        async updatePassword() {
             // TODO: values validation
-            console.log("menim PASSWORD");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_password',
-                {'current_password': this.updateForm.passwordCurrent, 'newPassword': this.updateForm.password}).then((res) => {
-                // console.log(res);
+            await axios.post('/api/update_user_password',
+                {'current_password': this.updateForm.passwordCurrent,
+                    'password': this.updateForm.password, 'password_confirmation': this.updateForm.passwordAgain   }).then((res) => {
                 this.updateForm.password = '';
                 this.updateForm.passwordCurrent = '';
                 this.updateForm.passwordAgain = '';
@@ -237,18 +243,31 @@ export default {
                 console.log(error);
             });
         },
-        updateAddress() {
+        async updateAddress() {
             // TODO: values validation
-            console.log("menim ADDRESS");
             this.$emit('emitHandler',  {isLoading: true});
-
-            axios.post('/api/update_user_address',
-                {'address': this.updateForm.address, 'city': this.updateForm.city, 'zip_code': this.updateForm.zipCode}).then((res) => {
+            await axios.post('/api/update_user_address',
+                {'address': this.updateForm.address, 'city': this.updateForm.city, 'zip_code': this.updateForm.zip_code}).then((res) => {
+                this.user.address = res.data.address;
+                this.user.city = res.data.city;
+                this.user.zip_code = res.data.zip_code;
                 this.updateForm.address = '';
                 this.updateForm.city = '';
-                this.updateForm.zipCode = '';
+                this.updateForm.zip_code = '';
                 this.whatChange.address = false;
                 this.$emit('emitHandler', {isLoading: false});
+            }).catch((error) => {
+                console.log(error);
+            });
+        },
+        async updateEmail() {
+            // TODO: values validation
+            this.$emit('emitHandler',  {isLoading: true});
+            await axios.post('/api/update_user_email', {'email': this.updateForm.email}).then((res) => {
+                this.$emit('emitHandler', {isLoading: false});
+                this.user.email = res.data.email;
+                this.updateForm.email = '';
+                this.whatChange.email = false;
             }).catch((error) => {
                 console.log(error);
             });

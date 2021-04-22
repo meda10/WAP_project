@@ -26,7 +26,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('reserve-title', function($user) {
-            return $user->hasRole(['manager', 'customer', 'owner', 'employee']) && $user->isConfirmed();
+            return $user->hasRole(['manager', 'customer', 'owner', 'director', 'employee']) && $user->isConfirmed();
         });
+
+//        Gate::before(function ($user, $ability) {
+//            return $user->hasRole(['director']) ? true : null;
+//        });
     }
 }

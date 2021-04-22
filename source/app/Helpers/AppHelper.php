@@ -2,7 +2,17 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Mail;
 use App\Models\Discount;
+use App\Models\Reservation;
+use App\Http\Resources\ReservationWithUserResource;
+use App\Mail\SendReservationCanceled;
+use App\Mail\SendReservationFined;
+use App\Mail\SendInvoice;
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+
 
 class AppHelper
 {
@@ -48,5 +58,123 @@ class AppHelper
         } while ($generate);
 
         return $code;
+    }
+
+    public static function createInvoiceAndSend($user, $items, $discount)
+    {
+        $name = $user['name'] . ' ' . $user['surname'];
+        $address = $user['address'] . ', ' . $user['city'] . ', ' . $user['zip_code'];
+
+        $customer = new Buyer([
+            'name'          => $name,
+            'custom_fields' => [
+                'Email' => $user['email'],
+                'Adresa' => $address
+            ],
+        ]);
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->addItems($items);
+
+        if ($discount != 0)
+            $invoice->discountByPercent(intval($discount)); 
+
+
+        $data = $invoice->stream();
+        Mail::to($user['email'])->send(new SendInvoice($data));
+    }
+
+    public static function checkUsersReservations()
+    {
+        $reservations = Reservation::where('reservation', '=', date("Y-m-d"))
+                                    ->where('issued', 0)
+                                    ->with('items', 'items.stores', 'items.languages')
+                                    ->with('titles')
+                                    ->with('users')
+                                    ->orderBy('user_id', 'asc')
+                                    ->get();
+
+        if (count($reservations) == 0) return;
+
+        $reservationToBeCanceled = (new ReservationWithUserResource($reservations[0]))->toArray(null);
+        $reservationsToBeCanceled = [];
+        $userEmail = $reservationToBeCanceled['user_email'];
+
+        foreach ($reservations as $index => $reservation) {
+            $reservationToBeCanceled = (new ReservationWithUserResource($reservation))->toArray(null);
+            $reservationsToBeCanceled[] = $reservationToBeCanceled;
+            
+            $userEmailDB = $reservationToBeCanceled['user_email'];
+
+            if ($userEmailDB != $userEmail || $index == count($reservations) - 1) {
+                Mail::to($userEmail)->send(new SendReservationCanceled($reservationsToBeCanceled));
+                $reservationsToBeCanceled = [];
+                $userEmail = $userEmailDB;
+            }
+            
+            $reservation->items()->detach();
+            $reservation->delete();
+            $discountId = $reservation->discount_id;
+            $discount = Discount::getById($discountId);
+            if ($discount != null && count($discount->reservations) == 0) $discount->delete();
+        }
+    }
+
+    public static function checkUsersReservationsFines()
+    {
+        // TODO how big fine?
+        $FINE_PER_DAY = 200;
+
+        $reservations = Reservation::where('reservation_till', '<', date("Y-m-d"))
+                                    ->where('issued', 1)
+                                    ->where('returned', 0)
+                                    ->with('items', 'items.stores', 'items.languages')
+                                    ->with('titles')
+                                    ->with('users')
+                                    ->orderBy('user_id', 'asc')
+                                    ->get();
+
+        if (count($reservations) == 0) return;
+
+        $reservationsToBeFined = [];
+        $sumPrice = 0;
+        
+        $reservationToFined = (new ReservationWithUserResource($reservations[0]))->toArray(null);
+        $userEmail = $reservationToFined['user_email'];
+        
+        foreach ($reservations as $index => $reservation) {
+            $reservationToFined = (new ReservationWithUserResource($reservation))->toArray(null);
+
+            // count fine and store it to DB
+            $reservation_till = new \DateTime($reservationToFined['reservation_till']);
+            $today = new \DateTime(date("Y-m-d"));
+            $interval = $reservation_till->diff($today);
+            $newFine = $interval->days * $FINE_PER_DAY * $reservationToFined->quantity;
+            $reservation->fine = $newFine;
+            $reservation->save();
+
+            // count sum price for this reservation 
+            $reservation_date = new \DateTime($reservationToFined['reservation']);
+            $interval = $reservation_till->diff($reservation_date);
+            $reservationPrice = 0;
+            if (!$reservationToFined['paid']) {
+                $reservationPrice = (($interval->days + 1) * $reservationToFined['price'] * $reservationToFined['quantity']);
+                $reservationPrice = ((100 - $reservationToFined['discount']) / 100) * $reservationPrice;
+            }
+            $reservationToFined['sum_price'] = $newFine + $reservationPrice;
+            $sumPrice += $reservationToFined['sum_price'];
+
+            $reservationsToBeFined[] = $reservationToFined;
+
+            $userEmailDB = $reservationToFined['user_email'];
+
+            if ($userEmailDB != $userEmail || $index == count($reservations) - 1) {
+                Mail::to($userEmail)->send(new SendReservationFined($sumPrice, $reservationsToBeFined));
+                $reservationsToBeFined = [];
+                $userEmail = $userEmailDB;
+                $sumPrice = 0;
+            }
+        }
     }
 }

@@ -14,12 +14,13 @@ class UsersResource extends JsonResource
      */
     public function toArray($request)
     {
+        $role = [ 'director' => 'Ředitel', 'employee' => 'Zaměstnanec', 'manager' => 'Manager', 'customer' => 'Zákazník'];
         return [
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
             'email' => $this->email,
-            'role' => $this->role,
+            'role' => $role[$this->role],
             'confirmed' => $this->confirmed,
             'address' => $this->address,
             'zip_code' => $this->zip_code,

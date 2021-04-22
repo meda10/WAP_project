@@ -35,7 +35,7 @@
             <div class="col-4" v-for="(title, tiKey) in rowList" :key="tiKey">
                 <h4>{{ title.title_name }}</h4>
                 <router-link class="card border-primary mb-4" style="max-width: 20rem;" tag="div" :to="'/film/' + title.url">
-                    <img class="card-img" :src="'/img/movies/'+title.url+'.jpg'">
+                    <img class="card-img" :src="'/storage/img/'+title.url+'.jpg'">
                     <div class="card-img-overlay">
                         <div class="card-body">
                             <h5>{{ title.year }}</h5>
@@ -165,6 +165,9 @@
 <script>
 export default {
     title: 'Filmy',
+    props: [
+        'chosenStoreChanged'
+    ],
     data() {
         return {
             genre: {
@@ -198,6 +201,12 @@ export default {
         $route (to, from) {
             this.getGenreByUrl();
             this.getTitles(to.params.movieGenre);
+        },
+        chosenStoreChanged: {
+            handler: function (chosenStoreChanged) {
+                this.getTitles(this.genre.url);
+            },
+            immediate: true
         }
     },
     mounted() {
@@ -231,9 +240,11 @@ export default {
         },
         getTitles(url) {
             this.$emit('emitHandler', {isLoading: true});
+            var chosenStore = this.$session.get('wap-store') || 1;
 
             let request = {type: 'movie', genre_url: url,
-                number_of_titles: this.titles.titlesToPage, page_number: this.titles.pageNumber, order: this.titles.ordering};
+                number_of_titles: this.titles.titlesToPage, page_number: this.titles.pageNumber, order: this.titles.ordering, 
+                store_id: chosenStore};
             axios.post('/api/get_titles', request).then((res) => {
                 this.titles.list = res.data.titles;
                 this.titles.numberOfGenreTitles = res.data.titles_count;
@@ -256,12 +267,13 @@ export default {
             }
         },
         getGenreByUrl() {
+            if (typeof this.$route.params.movieGenre === 'undefined') {
+                return; // todo this.$route.params.movieGenre is undefined -> route fail with 404
+            }
             this.$emit('emitHandler', {isLoading: true});
-
             axios.post('/api/genre_info_from_url', {'url' : this.$route.params.movieGenre}).then((res) => {
                 this.genre.name = res.data.name;
-                this.genre.url = this.$route.params.movieGenre
-                this.$emit('emitHandler', {isLoading: false});
+                this.genre.url = this.$route.params.movieGenre;
             }).catch((error) => {
                 // TODO handle this error
                 console.log(error);

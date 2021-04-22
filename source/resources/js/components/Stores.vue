@@ -1,17 +1,25 @@
 <template>
     <div>
         <h2>Obchody</h2>
-        <b-button variant="success" size="sm" @click="add_store()" class="mr-2" >Přidat obchod</b-button>
-        <b-table :items="stores" :fields="fields" striped responsive="sm">
-            <template #cell(actions)="row">
-                <b-button size="sm" :to="{ name: 'storeEdit', params: {id: row.item.id}}" class="mr-2">
-                    Upravit
-                </b-button>
-                <b-button variant="danger" size="sm" @click="remove_store(row.item.id)" class="mr-2">
-                    Odstranit
-                </b-button>
-            </template>
-        </b-table>
+        <div v-if="can('Edit all stores')">
+            <b-button style="margin-top: 20px; margin-bottom: 20px;" variant="success" size="sm" @click="add_store()" class="mr-2" >Přidat obchod</b-button>
+        </div>
+        <div class="table-responsive">
+            <b-table :items="stores" :fields="fields" striped responsive="sm">
+                <template #cell(actions)="row">
+                    <div style="display: flex;">
+                        <div v-if="can('Edit all stores')">
+                            <b-button size="sm" :to="{ name: 'storeEdit', params: {id: row.item.id}}" class="mr-2">
+                                Upravit
+                            </b-button>
+                            <b-button variant="danger" size="sm" @click="remove_store(row.item.id)" class="mr-2">
+                                Odstranit
+                            </b-button>
+                        </div>
+                    </div>
+                </template>
+            </b-table>
+        </div>
     </div>
 </template>
 
@@ -31,22 +39,32 @@ export default {
         this.get_stores();
     },
     methods: {
-        get_stores() {
-            this.$emit('emitHandler',  {isLoading: true});
-            axios.get('/api/get_all_stores').then((res) => {
+        async get_stores() {
+            this.$emit('emitHandler',{isLoading: true});
+            await axios.get('/api/get_all_stores').then((res) => {
                 this.stores = res.data.data;
-                this.$emit('emitHandler',  {isLoading: false});
-                console.log(this.stores);
+                // console.log(this.stores);
+                this.$emit('emitHandler',{isLoading: false});
+            }).catch((error) => {
+                // TODO handle this error
+                console.log(error);
+                this.$emit('emitHandler',{isLoading: false});
             });
         },
         async remove_store($id){
-            await axios.delete("/api/delete_store/" + $id).catch(error => {
-                console.log(error.response)
-            });
-            this.get_stores();
+            this.$emit('emitHandler',{isLoading: true});
+            await axios.delete("/api/delete_store/" + $id)
+                .then(res => {
+                    this.get_stores();
+                    this.$emit('emitHandler',{isLoading: false});
+                })
+                .catch(error => {
+                    console.log(error.response)
+                    this.$emit('emitHandler',{isLoading: false});
+                });
         },
-        async add_store(){
-            await this.$router.push({name: 'storeAdd'});
+        add_store(){
+            this.$router.push({name: 'storeAdd'});
         }
     }
 }

@@ -216,3 +216,33 @@
         // form errors (not specific to a field)
     }
 }
+
+.formulate-input-upload-area ul {
+    padding: 0px;
+}
+
+.formulate-input-upload-area ul li{
+    display: block;
+    margin-top: 20px;
+}
+
+#image .formulate-files{
+    padding: 0px;
+}
+
+#image .formulate-files li{
+    display: block;
+    margin-top: 20px;
+}
+
+.form_textarea {
+    height: 400px;
+}
+
+.form_textarea .formulate-input-wrapper .formulate-input-element textarea{
+    height: 350px;
+}
+
+.formulate-file-image-preview img{
+    width: 100%;
+}

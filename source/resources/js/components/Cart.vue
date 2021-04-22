@@ -144,7 +144,7 @@ import dateFormat from 'dateformat';
 
 export default {
     title: 'Košík',
-    props: ['cartCookiesProps', 'cartItemsPriceProps', 'chosenStoreProps', 'storesProps', 'userProps'],
+    props: ['cartCookiesProps', 'cartItemsPriceProps', 'chosenStoreProps', 'storesProps', 'user'],
     data() {
         return {
             isLoggedIn: true,
@@ -174,22 +174,13 @@ export default {
         },
         cartItemsPrice: function () {
             return Number(this.cartItemsPriceProps);
-        },
-        chosenStore: function () {
-            return this.chosenStoreProps;
-        },
-        stores: function () {
-            return this.storesProps;
-        },
-        user: function () {
-            return this.userProps;
         }
     },
     watch: {
-        stores: {
-            handler: function (stores) {
-                stores.forEach(storeItem => {
-                    if (storeItem.id === this.chosenStore) {
+        storesProps: {
+            handler: function (storesProps) {
+                storesProps.forEach(storeItem => {
+                    if (storeItem.id === this.chosenStoreProps) {
                         this.store = storeItem
                         return;
                     }
@@ -201,13 +192,13 @@ export default {
     },
     mounted() {
         this.$emit('emitHandler', {isLoading: true});
-
         var cookiesDiscount = this.$cookies.get('wap-cart-discount') || {};
         if (JSON.stringify(cookiesDiscount) !== JSON.stringify({})) {
             this.discountCode = cookiesDiscount.code;
             this.discountPercent = Number(cookiesDiscount.percent);
             this.discountApplied = true;
         }
+        this.$emit('emitHandler',  {isLoading: false});
     },
     methods: {
         dateFormat: dateFormat,
@@ -295,12 +286,11 @@ export default {
                             this.modalReservationsError = true;
                         }
 
-                        if (error.response.data.error === 'discount_code') {
+                        if (error.response.data.error === 'discount_code')
                             return;
-                        }
 
-                        this.$emit('emitHandler',  {cartCookies: this.cartCookies});
-                        this.$emit('emitHandler',  {isLoading: false});
+                        this.$emit('emitHandler', {cartCookies: this.cartCookies});
+                        this.$emit('emitHandler', {isLoading: false});
                     }
                 });
 

@@ -31,7 +31,9 @@
                         </li>
 
                         <li class="nav-item" v-if="user && user.role !== 'customer'">
-                            <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
+                            <div v-if="can('Administration')">
+                                <router-link :to="{ name: 'administration' }" class="nav-link">Administrace</router-link>
+                            </div>
                         </li>
                     </ul>
 
@@ -89,15 +91,15 @@
             <strong>Váš účet není ověřený.</strong> Ověřte své údaje na některé z našich prodejen.
         </div>
 
-        <div class="container" style="margin-top: 100px;">
+        <div class="container" style="padding-top: 100px; padding-bottom: 100px;">
             <router-view v-on:emitHandler="emitHandler" :user="user" :key="$route.path"
-            :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
-            :chosenStoreProps="chosenStore" :storesProps="stores"></router-view>
+                         :cartCookiesProps="cartCookies" :cartItemsPriceProps="cartItemsPrice"
+                         :chosenStoreProps="chosenStore" :storesProps="stores" :chosenStoreChanged="chosenStoreChanged"></router-view>
         </div>
 
         <b-modal ref="modal-choose-store" :retain-focus="false" title="Vyberte si prodejnu"
-                :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage"
-                :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
+                 :ok-only="!changeStoreMessage" :no-close-on-backdrop="!changeStoreMessage"
+                 :hide-header-close="!changeStoreMessage" @ok="handleSaveStore">
             <div v-if="changeStoreMessage">
                 Při zmeně prodejny dojde ke smazání Vašeho košíku!
             </div>
@@ -133,7 +135,8 @@ export default {
                 inputValue: '',
                 searchFocus: false,
                 itemList: []
-            }
+            },
+            chosenStoreChanged: 0
         }
     },
     directives: {
@@ -184,16 +187,17 @@ export default {
         }
     },
     mounted() {
+        this.getUser();
         this.getStores();
         this.loadCookies();
         this.getGenres();
         this.getSeachTitles();
-        this.getUser();
         this.chooseStore();
     },
     methods: {
         getSeachTitles() {
-            axios.get('/api/get_all_titles_search').then((res) => {
+            this.chosenStore = this.$session.get('wap-store') || 1;
+            axios.get('/api/get_all_titles_search/' + this.chosenStore).then((res) => {
                 this.searchForm.itemList = res.data;
 
                 this.searchForm.itemList.forEach(item => {
@@ -209,6 +213,8 @@ export default {
         },
         handleSaveStore() {
             this.setStore();
+            this.chosenStoreChanged = this.chosenStore;
+            this.getSeachTitles();
         },
         chooseStore() {
             if (!this.$session.exists('wap-store')) {
@@ -233,7 +239,8 @@ export default {
         getStores() {
             axios.get('/api/get_stores').then((res) => {
                 this.stores = res.data;
-                this.chosenStore = this.stores[0].id;
+                var chosenStoreIdSession = this.$session.get('wap-store');
+                this.chosenStore = chosenStoreIdSession || this.stores[0].id;
             });
         },
         clearCookies() {
@@ -253,19 +260,27 @@ export default {
             let currentInput = this.searchForm.inputValue.toLowerCase();
             return currentName.includes(currentInput);
         },
-        logout() {
-            this.isLoading = true;
-
-            axios.post('/logout').then(() => {
+        async logout() {
+            this.$emit('emitHandler',  {isLoading: true});
+            await axios.post('/logout').then(() => {
                 this.user = null;
+                window.Laravel = {
+                    csrfToken: '',
+                    jsPermissions: ''
+                };
+                // console.log(window.Laravel);
+                this.$emit('emitHandler',  {isLoading: false});
                 this.$router.push({ name: 'login' });
+            }).catch( error => {
+                console.log(error);
+                this.$emit('emitHandler',  {isLoading: false});
             });
         },
         getUser() {
             axios.get('/api/user').then((res) => {
                 this.user = res.data;
             }).catch(error => {
-
+                // console.log(error);
             });
         },
         getGenres() {

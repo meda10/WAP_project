@@ -1,3 +1,4 @@
+import VueRouter from 'vue-router';
 import Home from './components/Home';
 import Title from './components/Title';
 import NotFound from './components/NotFound';
@@ -17,14 +18,17 @@ import TitleEdit from "./components/TitleEdit";
 import ActorEdit from "./components/ActorEdit";
 import UserEdit from "./components/UserEdit";
 import UserAdd from "./components/UserAdd";
+import UserReservations from "./components/UserReservations";
 import Users from "./components/Users";
 import Actors from "./components/Actors";
 import Stores from "./components/Stores";
 import StoreAdd from "./components/StoreAdd";
 import StoreEdit from "./components/StoreEdit";
+import Discounts from "./components/Discounts";
+import DiscountAdd from "./components/DiscountAdd";
 
 
-export default {
+const router = new VueRouter({
     mode: 'history',
     routes: [
         {
@@ -55,67 +59,155 @@ export default {
         {
             path: '/admin',
             name: 'administration',
-            component: Administration
+            component: Administration,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/pridat_titul',
             name: 'titleadd',
-            component: TitleAdd
+            component: TitleAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['director', 'manager'],
+            },
         },
         {
             path: '/film/:titleName/upravit',
             name: 'titleEdit',
-            component: TitleEdit
+            component: TitleEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['director', 'manager'],
+            },
+        },
+        {
+            path: '/admin/slevy',
+            name: 'discounts',
+            component: Discounts,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
+        },
+        {
+            path: '/admin/slevy/pridat_slevu',
+            name: 'discountAdd',
+            component: DiscountAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
         },
         {
             path: '/admin/obchody',
             name: 'stores',
-            component: Stores
+            component: Stores,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/obchody/pridat_obchod',
             name: 'storeAdd',
-            component: StoreAdd
+            component: StoreAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
         },
         {
             path: '/admin/obchody/upravit_obchod/:id',
             name: 'storeEdit',
-            component: StoreEdit
+            component: StoreEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
         },
         {
             path: '/admin/herci',
             name: 'actors',
-            component: Actors
+            component: Actors,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/herci/pridat_herce',
             name: 'actorAdd',
-            component: ActorAdd
+            component: ActorAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
         },
         {
             path: '/admin/herci/upravit_herce/:id',
             name: 'actorEdit',
-            component: ActorEdit
+            component: ActorEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['director'],
+            },
         },
         {
             path: '/admin/uzivatele',
             name: 'users',
-            component: Users
+            component: Users,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/pridat_uzivatele',
             name: 'userAdd',
-            component: UserAdd
+            component: UserAdd,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
+        },
+        {
+            path: '/admin/uzivatele/rezervace/:id',
+            name: 'userReservationsId',
+            component: UserReservations,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
+        },
+        {
+            path: '/admin/uzivatele/rezervace',
+            name: 'userReservations',
+            component: UserReservations,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager'],
+            },
         },
         {
             path: '/admin/uzivatele/upravit_uzivatele/:id',
             name: 'userEdit',
-            component: UserEdit
+            component: UserEdit,
+            meta: {
+                authRequired: 'true',
+                role: ['director', 'manager'],
+            },
         },
         {
             path: '/nastaveni',
             name: 'settings',
-            component: Settings
+            component: Settings,
+            meta: {
+                authRequired: 'true',
+                role: ['employee', 'director', 'manager', 'customer'],
+            },
         },
         {
             path: '/filmy',
@@ -124,7 +216,7 @@ export default {
         },
         {
             path: '/filmy/:movieGenre',
-            name: 'movies',
+            name: 'moviesGenre',
             component: Movies
         },
         {
@@ -134,7 +226,7 @@ export default {
         },
         {
             path: '/film/:titleName',
-            name: 'movie',
+            name: 'movieTitle',
             component: Title
         },
         {
@@ -144,7 +236,7 @@ export default {
         },
         {
             path: '/serialy/:serialGenre',
-            name: 'series',
+            name: 'seriesGenre',
             component: Series
         },
         {
@@ -154,7 +246,7 @@ export default {
         },
         {
             path: '/serial/:titleName',
-            name: 'serial',
+            name: 'serialTitle',
             component: Title
         },
         {
@@ -173,4 +265,41 @@ export default {
             component: NotFound
         },
     ],
-}
+});
+
+export default router;
+
+router.afterEach((to, from) => {
+    if (to.name === 'home' && from.name === 'login') {
+        router.go();
+    }
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.authRequired)) {
+        // console.log(window.Laravel);
+        if(window.Laravel.jsPermissions === ''){
+            router.push({name: 'login'});
+        }else {
+            next();
+        }
+    } else {
+        next();
+    }
+    if (to.matched.some(record => record.meta.role)) {
+        if(window.Laravel.jsPermissions !== ''){
+            // console.log(window.Laravel);
+            let roles = to.meta.role;
+            if (!roles.includes(window.Laravel.jsPermissions['roles'][0])) {
+                router.push({name: 'home'});
+            } else {
+                next();
+            }
+        }else {
+            next();
+        }
+    } else {
+        next();
+    }
+    next();
+});

@@ -52,6 +52,13 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose exec php php artisan key:generate
 ```
 
+To run periodical scheduling
+ ``` bash
+sudo docker-compose exec -d php crond -f
+```
+
+Than everything inside method `schedule()` in `source/App/Console/Kernel.php` will be executed. Than use for example `$schedule->call(function () {})->everyTwoMinutes();` to execute function every two minutes (see [Laravel scheduling](https://laravel.com/docs/8.x/scheduling))
+
 After install npm dependencies.
 
 ``` bash
@@ -64,6 +71,9 @@ If you want to change .vue files, you have to run this:
 ``` bash
 sudo docker-compose run --rm npm run watch
 ```
+
+If you cannot install anything or run watch/dev than try [this](https://github.com/JeffreyWay/laravel-mix/issues/1072). This happens because of cache.
+
 
 <!--
 Next you must install the frontend scaffolding (Bootstrap and Vue.js). ("Yes" for commands with `--auth`):
@@ -80,7 +90,7 @@ npm install
 ```
 -->
 
-If you edit css (sass) files, run `npm run dev` command to compile sass file and it will be put into `public/css` directory (more https://laravel.com/docs/7.x/frontend#writing-css). 
+If you edit css (sass) files, run `npm run dev` command to compile sass file and it will be put into `public/css` directory (more [frontend writing](https://laravel.com/docs/7.x/frontend#writing-css)). 
 
 
 Now it should work:
@@ -110,7 +120,6 @@ EXIT;
 exit
 ```
 
-
 ## Delete docker containers and images
 
 In case there was any problem and you wish to delete docker containers and images.
@@ -132,4 +141,9 @@ To initialize tables and data in PhpMyAdmin run command:
 
 ``` bash
 docker-compose exec php php artisan migrate:fresh --seed
+```
+
+## Storage link
+``` bash
+docker-compose exec php php artisan storage:link
 ```

@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\GenreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ParticipantSelectResource;
 
 
 class TitleUpdateResource extends JsonResource
@@ -31,6 +29,7 @@ class TitleUpdateResource extends JsonResource
             'popis' => $this->description,
             'herci' => ParticipantSelectResource::collection($this->participant),
             'zanr' => $genre_arr,
+            'polozka' => ItemsResource::collection($this->items),
         ];
     }
 }

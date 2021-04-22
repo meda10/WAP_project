@@ -15,6 +15,15 @@ RUN chown laravel:laravel /var/www/html
 # Work in the specific space
 WORKDIR /var/www/html
 
+# crontab schedule COPY
+COPY ./compose/php/crontab /etc/crontabs/root
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/crontabs/root
+
+# Apply cron job
+RUN crontab /etc/crontabs/root
+
 # Install dependencies
 RUN apk add --no-cache \
     freetype \
@@ -39,3 +48,8 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN apk add --no-cache $PHPIZE_DEPS \
 	&& pecl install xdebug-2.9.7 \
 	&& docker-php-ext-enable xdebug
+
+RUN apk add icu-dev 
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
+    && docker-php-ext-enable intl

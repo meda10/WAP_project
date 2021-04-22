@@ -15,23 +15,27 @@ class Reservation extends Model
 
     const UPDATED_AT = NULL;
 
-    protected $fillable = ['reservation', 'reservation_till', 'invoice_id', 
-                            'price', 'returned', 'paid', 'issued', 'created_at', 
-                            'user_id', 'item_id', 'fine', 'discount_id'];
+    protected $fillable = ['reservation', 'reservation_till', 'invoice_id',
+                            'price', 'returned', 'paid', 'issued', 'created_at',
+                            'user_id', 'fine', 'discount_id', 'title_id'];
 
     public static function getTitleReservations($titleUrl, $store_id)
     {
         $reservations = [];
-        $reservationsDB = Reservation::whereHas('languages', function($query) use($store_id) { $query->where('store_id', $store_id); })
-                                        ->whereHas('titles', function($query) use($titleUrl) {
-                                                $query->where('url', $titleUrl);  
-                                            })->get();
+
+        $reservationsDB = Reservation::whereHas('titles', function($query) use($titleUrl) {
+                                $query->where('url', $titleUrl);
+                            })->with('items')
+                            ->get();
 
         $interval = new \DateInterval('P1D');
 
         foreach ($reservationsDB as $reservation) {
+            $itemsCount = count($reservation->items);
+
             $reservation->reservation;
             $reservation->reservation_till;
+            $language_name = Language::getLanguageName($reservation->items[0]->language_id)->language_name;
 
             $start = new \DateTime($reservation->reservation);
 
@@ -41,48 +45,49 @@ class Reservation extends Model
             $daterange = new \DatePeriod($start, $interval, $end);
 
             foreach ($daterange as $date) {
-                if (!isset($reservations[$reservation->languages->language_name]))
-                    $reservations[$reservation->languages->language_name] = [];
+                if (!isset($reservations[$language_name]))
+                    $reservations[$language_name] = [];
 
-                if (!isset($reservations[$reservation->languages->language_name][$date->format('Y-m-d')]))
-                    $reservations[$reservation->languages->language_name][$date->format('Y-m-d')] = 1;
+                if (!isset($reservations[$language_name][$date->format('Y-m-d')]))
+                    $reservations[$language_name][$date->format('Y-m-d')] = $itemsCount;
                 else
-                    $reservations[$reservation->languages->language_name][$date->format('Y-m-d')] += 1;
+                    $reservations[$language_name][$date->format('Y-m-d')] += $itemsCount;
             }
         }
 
         return $reservations;
     }
 
-    public static function getUserReservations($user_id)
+    public static function getUserReservations($userEmail)
     {
-        return Reservation::where('user_id', $user_id)
-                                ->with('titles')->with('languages')
-                                ->with('stores')->with('discounts')->orderBy('reservation')->get();
+        return Reservation::whereHas('users', function($query) use($userEmail) {
+                                    $query->where('email', $userEmail);
+                                })
+                                ->with('items', 'items.stores', 'items.languages')
+                                ->with('discounts')->with('titles')->orderBy('reservation')->get();
+    }
+
+    public static function hasReservations($id){
+        return Reservation::where('title_id', $id);
     }
 
     public function items()
     {
-        return $this->hasOne(Item::class, 'id', 'item_id');
+        return $this->belongsToMany(Item::class, 'reservation_item');
     }
 
     public function titles()
     {
-        return $this->hasOneThrough(Title::class, Item::class, 'id', 'id', 'item_id', 'title_id');
-    }
-
-    public function languages()
-    {
-        return $this->hasOneThrough(Language::class, Item::class, 'id', 'id', 'item_id', 'language_id');
+        return $this->hasOne(Title::class, 'id', 'title_id');
     }
 
     public function discounts()
     {
-        return $this->hasOne(Discount::class, 'id');
+        return $this->hasOne(Discount::class, 'id', 'discount_id');
     }
-    
-    public function stores()
+
+    public function users()
     {
-        return $this->hasOneThrough(Store::class, Item::class, 'id', 'id', 'item_id', 'store_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

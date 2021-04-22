@@ -13,7 +13,7 @@ class Participant extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'surname', 'birth', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'surname', 'birth'];
 
     public function by_name($value){
         $id_array = [];
