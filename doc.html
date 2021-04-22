@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0070)https://www.fit.vutbr.cz/study/courses/PIS/private/cviceni/doc.html.cs -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <title>Projekt PIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+<style type="text/css">.backpack.dropzone {
+  font-family: 'SF UI Display', 'Segoe UI';
+  font-size: 15px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 150px;
+  font-weight: lighter;
+  color: white;
+  will-change: right;
+  z-index: 2147483647;
+  bottom: 20%;
+  background: #333;
+  position: fixed;
+  user-select: none;
+  transition: left .5s, right .5s;
+  right: 0px; }
+  .backpack.dropzone .animation {
+    height: 80px;
+    width: 250px;
+    background: url("chrome-extension://lifbcibllhkdhoafpjfnlhfpfgnpldfl/assets/backpack/dropzone/hoverstate.png") left center; }
+  .backpack.dropzone .title::before {
+    content: 'Save to'; }
+  .backpack.dropzone.closed {
+    right: -250px; }
+  .backpack.dropzone.hover .animation {
+    animation: sxt-play-anim-hover 0.91s steps(21);
+    animation-fill-mode: forwards;
+    background: url("chrome-extension://lifbcibllhkdhoafpjfnlhfpfgnpldfl/assets/backpack/dropzone/hoverstate.png") left center; }
+
+@keyframes sxt-play-anim-hover {
+  from {
+    background-position: 0px; }
+  to {
+    background-position: -5250px; } }
+  .backpack.dropzone.saving .title::before {
+    content: 'Saving to'; }
+  .backpack.dropzone.saving .animation {
+    background: url("chrome-extension://lifbcibllhkdhoafpjfnlhfpfgnpldfl/assets/backpack/dropzone/saving_loop.png") left center;
+    animation: sxt-play-anim-saving steps(59) 2.46s infinite; }
+
+@keyframes sxt-play-anim-saving {
+  100% {
+    background-position: -14750px; } }
+  .backpack.dropzone.saved .title::before {
+    content: 'Saved to'; }
+  .backpack.dropzone.saved .animation {
+    background: url("chrome-extension://lifbcibllhkdhoafpjfnlhfpfgnpldfl/assets/backpack/dropzone/saved.png") left center;
+    animation: sxt-play-anim-saved steps(20) 0.83s forwards; }
+
+@keyframes sxt-play-anim-saved {
+  100% {
+    background-position: -5000px; } }
+</style></head>
+<body>
+
+<h1>Videopůjčovna - (Jiný backend + JavaScript frontend)</h1>
+
+<dl>
+	<dt>Autoři</dt>
+	<dd>Roman Bártl (PIS/WAP)
+	      <a href="mailto:xbartl06@stud.fit.vutbr.cz">xbartl06@stud.fit.vutbr.cz</a> -
+        Rezervace, správa rezevací v administraci, databáze, API, pravidelné tasky na pozadí
+	</dd>
+	<dd>Petr Medek (PIS/WAP)
+	    <a href="mailto:xmedek07@stud.fit.vutbr.cz">xmedek07@stud.fit.vutbr.cz</a> - 
+		  TODO
+	</dd>
+  <dd>Tomáš Odehnel (WAP)
+    <a href="mailto:xodehn08@stud.fit.vutbr.cz">xodehn08@stud.fit.vutbr.cz</a> - 
+    TODO
+</dd>
+</dl>
+
+<!-- u�ivatelsk� ��ty -->
+<h2>Uživatelé systému pro testování</h2>
+<table>
+<tbody><tr><th>Email</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>director@gmail.com</td><td>123456789</td><td>Ředitel firmy</td></tr>
+<tr><td>manager@gmail.com</td><td>123456789</td><td>Manažer prodejny</td></tr>
+<tr><td>employee@gmail.com</td><td>123456789</td><td>Řadový zaměstnanec na pokladně</td></tr>
+<tr><td>cutomer@gmail.com</td><td>123456789</td><td>Zákazník</td></tr>
+</tbody></table>
+
+<P style="color: red">Vpřípadě, že byste chtěl dostat po rezervaci potvrzující email s PDF fakturou, bude zapotřebí se v systému zaregistrovat pod funkční emailovou adresou :-)</P>
+
+<h2>Postup instalace</h2>
+<p>Vizte README.md</p>
+
+<h2>Online</h2>
+<p>V případě nějakých problémů stran dockeru byl tento systém nasazen na následující adresu: <a href="http://134.209.26.18:8080/">http://134.209.26.18:8080/</a> (server může být pomalý vzhledem k jeho omezeným HW zdrojům).</p>
+
+
+
+
+</body></html>

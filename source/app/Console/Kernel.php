@@ -29,8 +29,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            //AppHelper::checkUsersReservations();
-            //AppHelper::checkUsersReservationsFines();
+            AppHelper::checkUsersReservations();
+            AppHelper::checkUsersReservationsFines();
         })->daily(18);
     }
 

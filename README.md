@@ -2,20 +2,31 @@
 
 ## Define environment variables in .env file
 
-Create .env file from example file. Inside this file you can edit your local database access informations. *If you wish you can change user name and password but in local environment you don't need to change any values.*
+Create .env file for Docker database configuration.
 
 ``` bash
 cp .env.example .env
 ```
 
-There is also antoher file insice **source** folder. These new files must have same values. 
+
+There is also antoher file inside **source** folder for Laravel configuration. 
+
+If you want to connect to remote database than use this command:
+
 
 ``` bash
-cp source/.env.example source/.env
+cp ./source/.env-remote.example ./source/.env
 ```
 
-These two files are in **.gitignore** so no sensitive data will be public.
 
+If you want to use local database than use this command:
+
+
+``` bash
+cp ./source/.env-local.example ./source/.env
+```
+
+In case that you chose local database than you should setup database according to instructions below (see secition MySQL configuration and beyond).
 
 
 ## Create docker containers
@@ -52,6 +63,11 @@ After that Laravel wants to generate key for *php artisan*.
 sudo docker-compose exec php php artisan key:generate
 ```
 
+Storage link
+``` bash
+docker-compose exec php php artisan storage:link
+```
+
 To run periodical scheduling
  ``` bash
 sudo docker-compose exec -d php crond -f
@@ -66,10 +82,10 @@ sudo docker-compose run --rm npm install
 ```
 
 
-If you want to change .vue files, you have to run this:
+To compile project:
 
 ``` bash
-sudo docker-compose run --rm npm run watch
+sudo docker-compose run --rm npm run dev
 ```
 
 If you cannot install anything or run watch/dev than try [this](https://github.com/JeffreyWay/laravel-mix/issues/1072). This happens because of cache.
@@ -141,9 +157,4 @@ To initialize tables and data in PhpMyAdmin run command:
 
 ``` bash
 docker-compose exec php php artisan migrate:fresh --seed
-```
-
-## Storage link
-``` bash
-docker-compose exec php php artisan storage:link
 ```

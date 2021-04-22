@@ -75,7 +75,7 @@
                     </td>
                 </tr>
             </tbody>
-            <tbody>
+            <!--<tbody>
                 <tr>
                 <td colspan="5" style="padding: 40px 0px 10px 0px">
                 <table id="paymentMethodTable" class="paymentMethodTable table table-condensed table-hover" style="width: 300px; float: right;">
@@ -101,7 +101,7 @@
                 </table>
                 </td>
                 </tr>
-            </tbody>
+            </tbody>-->
             <tfoot>
                 <tr>
                     <td><router-link :to="{ name: 'home' }" class="btn btn-warning"><i class="fa fa-angle-left"></i> Pokračovat v nákupu</router-link></td>
