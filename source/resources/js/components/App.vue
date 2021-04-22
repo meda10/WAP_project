@@ -268,7 +268,7 @@ export default {
                     csrfToken: '',
                     jsPermissions: ''
                 };
-                console.log(window.Laravel);
+                // console.log(window.Laravel);
                 this.$emit('emitHandler',  {isLoading: false});
                 this.$router.push({ name: 'login' });
             }).catch( error => {

@@ -67,7 +67,7 @@
                 <h4 class="alert-heading">Uživatel není ověřen</h4>
                 <p>Aby bylo možné vydávat uživateli rezervace, je nutné aby byl ověřen</p>
                 <hr>
-                <b-button size="sm" :to="{ name: 'userEdit', params: {id: this.userReservation.id}}" class="mr-2">
+                <b-button size="sm" @click="confirm_user()" class="mr-2">
                     Potvrdit uživatele
                 </b-button>
             </div>
@@ -498,7 +498,17 @@ export default {
                 this.reservationReturned = true;
                 this.$emit('emitHandler', {isLoading: false});
             });
-        }
+        },
+        async confirm_user(){
+            this.$emit('emitHandler',  {isLoading: true});
+            await axios.post("/api/confirm_user/" + this.userReservation.id)
+                .then(res => {
+                    this.$emit('emitHandler',  {isLoading: false});
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
     }
 }
 </script>

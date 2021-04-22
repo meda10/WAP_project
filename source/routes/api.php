@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update_user_surname', 'Api\UsersController@updateSurname')->middleware('permission:Basic permissions');;
     Route::post('/update_user_password', 'Api\UsersController@updatePassword')->middleware('permission:Basic permissions');;
     Route::post('/update_user_address', 'Api\UsersController@updateAddress')->middleware('permission:Basic permissions');;
+    Route::post('/update_user_email', 'Api\UsersController@updateEmail')->middleware('permission:Basic permissions');;
 
     //select + buttons
     Route::get('/get_actors_select', 'Api\ParticipantController@get_items_select');

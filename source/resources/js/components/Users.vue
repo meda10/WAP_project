@@ -96,7 +96,7 @@ export default {
                     this.$emit('emitHandler',  {isLoading: false});
                 })
                 .catch(error => {
-                    console.log(error.response)
+                    console.log(error)
                 });
         },
         add_user(){
