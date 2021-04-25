@@ -39,7 +39,7 @@
                                 <!--            :disabled="isLoading"-->
                                 <!--            :label="isLoading ? 'Ukládání...' : 'Uložit'"-->
                                 <!--TODO Remove-->
-                                <pre class="code" v-text="formValues"/>
+<!--                                <pre class="code" v-text="formValues"/>-->
                             </div>
                         </div>
                     </FormulateForm>
