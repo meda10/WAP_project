@@ -31,6 +31,7 @@ Route::get('/genres_menu', 'Api\TitlesController@genresMenu');
 Route::get('/get_genres_movies', 'Api\TitlesController@getGenresMovies');
 Route::get('/get_genres_series', 'Api\TitlesController@getGenresSeries');
 Route::get('/get_stores', 'Api\StoresController@getStores');
+Route::get('/get_titles_home_page', 'Api\Titlescontroller@getLastFiveTitles');
 
 Route::group(['middleware' => 'auth'], function () {
 

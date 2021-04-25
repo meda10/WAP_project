@@ -288,4 +288,10 @@ class TitlesController extends Controller
         $name = $request->file('obrazek')->getClientOriginalName();
         return response()->json(['url' => $path, 'name' => $name], 200);
     }
+
+    public function getHomePageTitles(Request $request)
+    {
+        $storeId = $request->store_id;
+        return Title::getLastFiveTitles($storeId);
+    }
 }
