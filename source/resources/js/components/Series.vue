@@ -254,7 +254,6 @@ export default {
             });
         },
         getTitles(url) {
-            // TODO tady Tome potom kontroluj, jestli to vraci dobre ... to chosenStore tam byt musi, aby to filtrovalo i podle vybranyho storu
             this.$emit('emitHandler', {isLoading: true});
             var chosenStore = this.$session.get('wap-store') || 1;
 
