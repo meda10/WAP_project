@@ -13,35 +13,39 @@
                 <li data-target="#carouselNews" data-slide-to="1"></li>
                 <li data-target="#carouselNews" data-slide-to="2"></li>
                 <li data-target="#carouselNews" data-slide-to="3"></li>
-                <li data-target="#carouselNews" data-slide-to="4"></li>
+<!--                <li data-target="#carouselNews" data-slide-to="4"></li>-->
             </ol>
             <div class="carousel-inner">
                 <router-link class="carousel-item active" tag="div" :to="'/film/mlceni-jehatek'">
-                    <img class="d-block w-100" :src="'/storage/img/slide1.svg'" alt="First slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide1.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Mlčení jehňátek</h5>
-                        <p>Clarice Starlingová, nadaná studentka akademie FBI, je přidělena agentu Crawfordovi vyšetřujícímu případ masového vraha Buffalo Billa, který své oběti stahuje z kůže...</p>
-                    </div>
-                </router-link>
-                <router-link class="carousel-item" tag="div" :to="'/film/terminator-2-den-zuctovani'">
-                    <img class="d-block w-100" :src="'/storage/img/slide2.svg'" alt="Second slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Terminátor</h5>
-                        <p>Deset let po neúspěšném pokusu zabít Sarah Connorovou, matku budoucího vůdce lidstva ve válce proti strojům, se do Los Angeles vrací z budoucnosti nový Terminátor...</p>
+                        <h3 style="font-weight: bold;">
+                            Mlčení jehňátek
+                        </h3>
                     </div>
                 </router-link>
                 <router-link class="carousel-item" tag="div" :to="'/film/kmotr'">
-                    <img class="d-block w-100" :src="'/storage/img/slide3.svg'" alt="Third slide">
+                        <img class="d-block w-100" :src="'/storage/img/slide2.jpg'" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="font-weight: bold;">
+                                Kmotr
+                            </h3>
+                        </div>
+                </router-link>
+                <router-link class="carousel-item" tag="div" :to="'/film/terminator-2-den-zuctovani'">
+                    <img class="d-block w-100" :src="'/storage/img/slide3.webp'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Kmotr</h5>
-                        <p>Gangsterské drama Kmotr, natočené podle stejnojmenného bestselleru Maria Puza, patří mezi přelomová díla tzv. Nového Hollywoodu, a to jak komerčně, tak umělecky...</p>
+                        <h3 style="font-weight: bold;">
+                            Terminátor 2 den zůčtování
+                        </h3>
                     </div>
                 </router-link>
                 <router-link class="carousel-item" tag="div" :to="'/film/temny-rytir'">
-                    <img class="d-block w-100" :src="'/storage/img/slide4.svg'" alt="Fourth slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide4.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Temný rytíř povstal</h5>
-                        <p>Christian Bale se pod režijní taktovkou Christophera Nolana vrací v roli Bruce Waynea, který v kostýmu netopýřího muže Batmana pokračuje v boji se zločinem ve městě Gotham...</p>
+                        <h3 style="font-weight: bold;">
+                            Temný rytíř
+                        </h3>
                     </div>
                 </router-link>
             </div>

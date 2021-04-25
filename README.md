@@ -130,11 +130,20 @@ Create user
 ``` bash
 mysql -u root -p
 show databases;
-GRANT ALL ON laravel_db.* TO 'username'@'%' IDENTIFIED BY 'secret';
+GRANT ALL ON `database`.* TO 'username'@'%' IDENTIFIED BY 'secret';
 FLUSH PRIVILEGES;
 EXIT;
 exit
 ```
+
+## Migrate Database
+
+To initialize tables and data in PhpMyAdmin run command: 
+
+``` bash
+docker-compose exec php php artisan migrate:fresh --seed
+```
+
 
 ## Delete docker containers and images
 
@@ -151,10 +160,3 @@ sudo docker rmi -f $(sudo docker images -a -q)
 ```
 
 
-## Migrate Database
-
-To initialize tables and data in PhpMyAdmin run command: 
-
-``` bash
-docker-compose exec php php artisan migrate:fresh --seed
-```
