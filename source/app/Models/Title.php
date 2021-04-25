@@ -152,6 +152,8 @@ class Title extends Model
 
     public static function getLastFiveTitles()
     {
-        return Title::orderBy('created_at')->take(5)->get();
+        return Title::orderBy('created_at')
+                        ->whereHas('items', function($query) use($storeId) { $query->where('items.store_id', $storeId); })
+                        ->take(5)->get();
     }
 }

@@ -289,8 +289,9 @@ class TitlesController extends Controller
         return response()->json(['url' => $path, 'name' => $name], 200);
     }
 
-    public function getHomePageTitles()
+    public function getHomePageTitles(Request $request)
     {
-        return Title::getLastFiveTitles();
+        $storeId = $request->store_id;
+        return Title::getLastFiveTitles($storeId);
     }
 }
