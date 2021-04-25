@@ -136,6 +136,15 @@ EXIT;
 exit
 ```
 
+## Migrate Database
+
+To initialize tables and data in PhpMyAdmin run command: 
+
+``` bash
+docker-compose exec php php artisan migrate:fresh --seed
+```
+
+
 ## Delete docker containers and images
 
 In case there was any problem and you wish to delete docker containers and images.
@@ -151,10 +160,3 @@ sudo docker rmi -f $(sudo docker images -a -q)
 ```
 
 
-## Migrate Database
-
-To initialize tables and data in PhpMyAdmin run command: 
-
-``` bash
-docker-compose exec php php artisan migrate:fresh --seed
-```
