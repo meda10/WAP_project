@@ -13,48 +13,41 @@
                 <li data-target="#carouselNews" data-slide-to="1"></li>
                 <li data-target="#carouselNews" data-slide-to="2"></li>
                 <li data-target="#carouselNews" data-slide-to="3"></li>
-                <li data-target="#carouselNews" data-slide-to="4"></li>
+<!--                <li data-target="#carouselNews" data-slide-to="4"></li>-->
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active">
+                <router-link class="carousel-item active" tag="div" :to="'/film/mlceni-jehatek'">
                     <img class="d-block w-100" :src="'/storage/img/slide1.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
-                            <router-link style="text-decoration: none;" :to="{ path: '/film/mlceni-jehatek' }">Mlčení jehňátek</router-link>
+                            Mlčení jehňátek
                         </h3>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/storage/img/slide2.jpg'" alt="First slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h3 style="font-weight: bold;">
-                            <router-link style="text-decoration: none;" :to="{ path: '/film/kmotr' }">Kmotr</router-link>
-                        </h3>
-                    </div>
-                </div>
-                <div class="carousel-item">
+                </router-link>
+                <router-link class="carousel-item" tag="div" :to="'/film/kmotr'">
+                        <img class="d-block w-100" :src="'/storage/img/slide2.jpg'" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="font-weight: bold;">
+                                Kmotr
+                            </h3>
+                        </div>
+                </router-link>
+                <router-link class="carousel-item" tag="div" :to="'/film/terminator-2-den-zuctovani'">
                     <img class="d-block w-100" :src="'/storage/img/slide3.webp'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
-                            <router-link style="text-decoration: none;" :to="{ path: '/film/terminator-2-den-zuctovani' }">Terminátor 2 den zůčtování</router-link>
+                            Terminátor 2 den zůčtování
                         </h3>
                     </div>
-                </div>
-                <div class="carousel-item">
+                </router-link>
+                <router-link class="carousel-item" tag="div" :to="'/film/temny-rytir'">
                     <img class="d-block w-100" :src="'/storage/img/slide4.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
-                            <router-link style="text-decoration: none;" :to="{ path: '/film/temny-rytir' }">Temný rytíř</router-link>
+                            Temný rytíř
                         </h3>
                     </div>
-                </div>
-<!--                <div class="carousel-item">-->
-<!--                    <img class="d-block w-100" :src="'/storage/img/slide5.svg'" alt="Fifth slide">-->
-<!--                    <div class="carousel-caption d-none d-md-block">-->
-<!--                        <h5>Páty slide</h5>-->
-<!--                        <p>Tady bude super text, který tady bude něco ukazovat.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
+                </router-link>
             </div>
             <a class="carousel-control-prev" href="#carouselNews" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -85,11 +78,11 @@
         title: 'Home Page',
         data() {
             return {
-                reservation: false
+                reservation: false,
             }
         },
         mounted() {
             this.reservation = this.$route.params.reservation;
-        }
+        },
     }
 </script>
