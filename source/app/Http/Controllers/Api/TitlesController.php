@@ -178,6 +178,10 @@ class TitlesController extends Controller
                         if(!in_array($value['herec'], $actor_id_arr, true)){
                             $title->participant()->attach($value['herec'], ['director' => 1]);
                         }
+                    }else {
+                        if(!in_array($value['herec'], $actor_id_arr, true)){
+                            $title->participant()->attach($value['herec']);
+                        }
                     }
                 }catch (\Exception $e){
                     if(!in_array($value['herec'], $actor_id_arr, true)){
@@ -236,7 +240,7 @@ class TitlesController extends Controller
 
         $reservations = Reservation::hasReservations($title->id);
 
-        if($reservations != null){
+        if(isset($reservations[0])){
             return response()->json(['ok'=> 'error', 'message' => 'Titul nelze smazat protože existují rezervace'], 403);
         }
 
@@ -245,7 +249,7 @@ class TitlesController extends Controller
         $title->items()->delete();
         try {
             Storage::delete("/public/img/".$title->url.".jpg");
-        }catch (Exception $e){}
+        }catch (\Exception $e){}
         $title->delete();
 
         return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
@@ -257,7 +261,7 @@ class TitlesController extends Controller
             'rok' => 'required|numeric|min:1899',
             'typ' => 'required|in:movie,serial',
             'cena' => 'required|numeric|min:1',
-            'popis' => 'required|string|max:255',
+            'popis' => 'required|string|max:1000',
             'zeme_puvodu' => 'required|exists:states,id',
             'zanr' => 'required|exists:genres,id',
             'novy_herec.*.jmeno' => 'required|string|max:255',

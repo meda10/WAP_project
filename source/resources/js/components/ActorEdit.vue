@@ -42,12 +42,15 @@ export default {
     },
     methods: {
         async submitHandler (data) {
-            await axios.post('/api/set_actor', data)
+            this.$emit('emitHandler',  {isLoading: true});
+            await axios.put('/api/update_actor/' + this.actor_id, data)
                 .then(res => {
+                    this.$emit('emitHandler',  {isLoading: false});
                     this.$router.push({name: 'actors'});
                 })
                 .catch(err => {
-                    console.log(err.response)
+                    console.log(err)
+                    this.$emit('emitHandler',  {isLoading: false});
                     if (err.response) {
                         // client received an error response (5xx, 4xx)
                     } else if (err.request) {
