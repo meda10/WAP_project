@@ -99,7 +99,7 @@ class UsersController extends Controller
     public function store(Request $request){
         $this->user_validator();
 
-        User::create([
+        $user = User::create([
             'name' => $request['jmeno'],
             'surname' => $request['prijmeni'],
             'email' => $request['email'],
@@ -111,6 +111,7 @@ class UsersController extends Controller
             'store_id' => $request['obchod'],
             'confirmed' => $request['potvrzeni'],
         ]);
+        $user->assignRole(Role::where('name', $request['role'])->get());
         return response()->json(['ok'=> 'ok'], 200);
     }
 
@@ -155,13 +156,18 @@ class UsersController extends Controller
             'surname' => $request['prijmeni'],
             'email' => $request['email'],
             'role' => $request['role'],
-            'password' => Hash::make($request['password']),
             'address' => $request['adresa'],
             'city' => $request['mesto'],
             'zip_code' => $request['psc'],
             'confirmed' => $request['potvrzeni'],
             'store_id' => $request['obchod'],
         ]);
+
+        if(isset($request['password'])){
+            $user->update([
+                'password' => Hash::make($request['password']),
+            ]);
+        }
         $user->assignRole(Role::where('name', $request['role'])->get());
         $user->save();
         return response()->json(['ok'=> 'ok'], 200);
@@ -171,7 +177,7 @@ class UsersController extends Controller
         return request()->validate([
             'jmeno' => 'required|string|max:255',
             'prijmeni' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users', //todo |unique:users
+            'email' => 'required|string|email|max:255', //todo |unique:users
             'role' => 'required|string|in:director,manager,employee,customer',
             'adresa' => 'required|string|max:255',
             'password' => 'sometimes|required_with:password_confirm|string',

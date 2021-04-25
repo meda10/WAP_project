@@ -245,7 +245,7 @@ class TitlesController extends Controller
         $title->items()->delete();
         try {
             Storage::delete("/public/img/".$title->url.".jpg");
-        }catch (Exception $e){}
+        }catch (\Exception $e){}
         $title->delete();
 
         return response()->json(['ok'=> 'ok', 'message' => 'ok'], 200);
