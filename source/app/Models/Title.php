@@ -149,4 +149,9 @@ class Title extends Model
                     ->select(['languages.language', 'languages.language_name', DB::raw('count(*) as total')])
                     ->groupBy('language_id');
     }
+
+    public static function getLastFiveTitles()
+    {
+        return Title::orderBy('created_at')->take(5)->get();
+    }
 }
