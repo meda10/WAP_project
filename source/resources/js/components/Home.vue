@@ -44,7 +44,7 @@
                     <img class="d-block w-100" :src="'/storage/img/slide4.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
-                            <router-link style="text-decoration: none;" :to="{ path: '/film/temny-rytir.jpg' }">Temný rytíř</router-link>
+                            <router-link style="text-decoration: none;" :to="{ path: '/film/temny-rytir' }">Temný rytíř</router-link>
                         </h3>
                     </div>
                 </div>
