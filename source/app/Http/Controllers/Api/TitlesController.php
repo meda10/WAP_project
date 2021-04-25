@@ -178,6 +178,10 @@ class TitlesController extends Controller
                         if(!in_array($value['herec'], $actor_id_arr, true)){
                             $title->participant()->attach($value['herec'], ['director' => 1]);
                         }
+                    }else {
+                        if(!in_array($value['herec'], $actor_id_arr, true)){
+                            $title->participant()->attach($value['herec']);
+                        }
                     }
                 }catch (\Exception $e){
                     if(!in_array($value['herec'], $actor_id_arr, true)){
@@ -236,7 +240,7 @@ class TitlesController extends Controller
 
         $reservations = Reservation::hasReservations($title->id);
 
-        if($reservations != null){
+        if(isset($reservations[0])){
             return response()->json(['ok'=> 'error', 'message' => 'Titul nelze smazat protože existují rezervace'], 403);
         }
 

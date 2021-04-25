@@ -84,13 +84,16 @@ export default {
             this.image = data;
         },
         async submitHandler (data) {
+            this.$emit('emitHandler',  {isLoading: true});
             data.obrazek = this.image['obrazek'];
             await axios.put("/api/update_title/" + this.url, data)
                 .then(res => {
-                    // this.$router.push({path: '/film/' + res.data['url']});
+                    this.$emit('emitHandler',  {isLoading: false});
+                    this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
-                    console.log(err.response)
+                    this.$emit('emitHandler',  {isLoading: false});
+                    console.log(err)
                 });
         },
         async get_actors() {
@@ -137,7 +140,7 @@ export default {
             this.$emit('emitHandler',  {isLoading: true});
             await axios.get('/api/get_one_title/' + this.url).then((res) => {
                 this.formValues = res.data.data;
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.$emit('emitHandler',  {isLoading: false});
             }).catch((error) => {
                 // TODO handle this error

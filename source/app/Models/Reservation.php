@@ -68,7 +68,7 @@ class Reservation extends Model
     }
 
     public static function hasReservations($id){
-        return Reservation::where('title_id', $id);
+        return Reservation::where('title_id', $id)->get();
     }
 
     public function items()
