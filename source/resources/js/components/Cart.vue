@@ -113,8 +113,9 @@
         </table>
 
         <div v-if="cartCookies.length === 0">
-            <!-- TODO -->
-            Jsem tak prázdný ;(
+            <h3>
+                Košík je prázdný <i class="fas fa-sad-tear fa-3x"></i>
+            </h3>
         </div>
 
         <b-modal id="modal-remove-from-cart" title="Položka bude odebrána"
