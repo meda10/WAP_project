@@ -130,7 +130,7 @@ Create user
 ``` bash
 mysql -u root -p
 show databases;
-GRANT ALL ON laravel_db.* TO 'username'@'%' IDENTIFIED BY 'secret';
+GRANT ALL ON `database`.* TO 'username'@'%' IDENTIFIED BY 'secret';
 FLUSH PRIVILEGES;
 EXIT;
 exit
