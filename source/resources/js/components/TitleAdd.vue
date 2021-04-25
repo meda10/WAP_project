@@ -108,8 +108,8 @@ export default {
             this.genresSelected[i] = this.genres[i];
             delete this.genres[i];
             delete this.genresSelected[''];
-            console.log("genres:", this.genres);
-            console.log("genresSelected:",this.genresSelected);
+            // console.log("genres:", this.genres);
+            // console.log("genresSelected:",this.genresSelected);
             this.$forceUpdate();
         },
         async submitHandler (data) {
