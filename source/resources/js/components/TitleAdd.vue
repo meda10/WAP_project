@@ -108,8 +108,9 @@ export default {
             this.genresSelected[i] = this.genres[i];
             delete this.genres[i];
             delete this.genresSelected[''];
-            // console.log("genres:", this.genres);
-            // console.log("genresSelected:",this.genresSelected);
+            console.log("genres:", this.genres);
+            console.log("genresSelected:",this.genresSelected);
+            this.$forceUpdate();
         },
         async submitHandler (data) {
             let genData = [];
@@ -119,8 +120,10 @@ export default {
             // if (genData.length < 1) {
             //     console.log("chyba"); //todo chyba
             // }
-            data["zanr"] = this.genData;
-            data["zanr"] = ["1","4"]; //todo Genre does not work
+            // console.log(genData);
+            data["zanr"] = genData;
+            // console.log(data["zanr"]);
+            // data["zanr"] = ["1","4"]; //todo Genre does not work
             await axios.post('/api/set_titles', data)
                 .then(res => {
                     this.$router.push({path: '/film/' + res.data['url']});
