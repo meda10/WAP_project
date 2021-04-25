@@ -17,40 +17,44 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" :src="'/storage/img/slide1.svg'" alt="First slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide1.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>First Slide</h5>
-                        <p>Tady bude super text, který tady bude něco ukazovat.</p>
+                        <h3 style="font-weight: bold;">
+                            <router-link style="text-decoration: none;" :to="{ path: '/film/mlceni-jehatek' }">Mlčení jehňátek</router-link>
+                        </h3>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/storage/img/slide2.svg'" alt="Second slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide2.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Druhý slide</h5>
-                        <p>Tady bude super text, který tady bude něco ukazovat.</p>
+                        <h3 style="font-weight: bold;">
+                            <router-link style="text-decoration: none;" :to="{ path: '/film/kmotr' }">Kmotr</router-link>
+                        </h3>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/storage/img/slide3.svg'" alt="Third slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide3.webp'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Třetí slide</h5>
-                        <p>Tady bude super text, který tady bude něco ukazovat.</p>
+                        <h3 style="font-weight: bold;">
+                            <router-link style="text-decoration: none;" :to="{ path: '/film/terminator-2-den-zuctovani' }">Terminátor 2 den zůčtování</router-link>
+                        </h3>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/storage/img/slide4.svg'" alt="Fourth slide">
+                    <img class="d-block w-100" :src="'/storage/img/slide4.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Čtvrtý slide</h5>
-                        <p>Tady bude super text, který tady bude něco ukazovat.</p>
+                        <h3 style="font-weight: bold;">
+                            <router-link style="text-decoration: none;" :to="{ path: '/film/temny-rytir.jpg' }">Temný rytíř</router-link>
+                        </h3>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100" :src="'/storage/img/slide5.svg'" alt="Fifth slide">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Páty slide</h5>
-                        <p>Tady bude super text, který tady bude něco ukazovat.</p>
-                    </div>
-                </div>
+<!--                <div class="carousel-item">-->
+<!--                    <img class="d-block w-100" :src="'/storage/img/slide5.svg'" alt="Fifth slide">-->
+<!--                    <div class="carousel-caption d-none d-md-block">-->
+<!--                        <h5>Páty slide</h5>-->
+<!--                        <p>Tady bude super text, který tady bude něco ukazovat.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <a class="carousel-control-prev" href="#carouselNews" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
