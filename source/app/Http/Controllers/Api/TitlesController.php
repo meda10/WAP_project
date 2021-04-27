@@ -277,7 +277,7 @@ class TitlesController extends Controller
             'rok' => 'required|numeric|min:1899',
             'typ' => 'required|in:movie,serial',
             'cena' => 'required|numeric|min:1',
-            'popis' => 'required|string|max:255',
+            'popis' => 'required|string|max:10000',
             'zeme_puvodu' => 'required|exists:states,id',
             'zanr' => 'required|exists:genres,id',
             'novy_herec.*.jmeno' => 'required|string|max:255',
