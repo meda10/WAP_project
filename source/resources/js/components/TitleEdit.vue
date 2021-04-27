@@ -13,7 +13,7 @@
                                 <FormulateInput name="typ" type="select" label="Typ" placeholder="Vyberte možnost" :options="{serial: 'Serial', movie: 'Film'}" validation="required|matches:serial,movie"/>
                                 <FormulateInput name="cena" type="number" label="Cena" validation="required|number" min="1"/>
                                 <FormulateInput name="zanr" type="checkbox" label="Žánr" :options="{'1': 'Akční', '13': 'Dobrodružný', '9': 'Dokumentární', '4': 'Drama', '8': 'Fantasy', '2': 'Komedie', '5': 'Krimi', '11': 'Mysteriózní', '3': 'Romantický', '7': 'Sci-fy', '6': 'Thriller', '12': 'Western', '10': 'Životopisný',}"/>
-                                <FormulateInput class="form_textarea" type="textarea" name="popis" label="Popis" validation="required|max:1000,length"/>
+                                <FormulateInput class="form_textarea" type="textarea" name="popis" label="Popis" validation="required|max:10000,length"/>
                                 <FormulateForm id="image" style="margin-top: 15px" name="form_img" @submit="form_img_submit">
                                     <FormulateInput @input="new_image()" name="obrazek" upload-behavior="live" type="image" label="Select an image to upload" :value="obrazek" help="Vyberte soubor jpg." validation="mime:image/jpeg"/>
                                 </FormulateForm>

@@ -22,7 +22,7 @@
                                                 placeholder="Vyber žánr" @change="selectGenre($event)"
                                                 :error="Object.keys(genresSelected).length === 0 ? 'Vyberte alespoň jeden žánr.' : null"/>
 
-                                <FormulateInput class="mb-2" type="textarea" name="popis" label="Popis" validation="required|max:1000,length"/>
+                                <FormulateInput class="mb-2" type="textarea" name="popis" label="Popis" validation="required|max:10000,length"/>
                                 <FormulateInput class="mb-2" name="obrazek" type="image" upload-behavior="live" label="Vyberte obrázek" help="Vyberte soubor png nebo jpg." validation="required|mime:image/jpeg,image/png"/>
 
                                 <hr class="white-hr pt-1">
