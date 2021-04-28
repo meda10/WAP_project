@@ -208,16 +208,18 @@ class TitlesController extends Controller
         }
         $title->save();
 
-        $title->items()->delete();
-        foreach ($request['polozka'] as $item){
-            for ($i = 0; $i < $item['pocet']; $i++){
-                Item::create([
-                    'language_id' => $item['jazyk'],
-                    'store_id' => $item['prodejna'],
-                    'title_id' => $title->id,
-                ]);
+        try {
+            $title->items()->delete();
+            foreach ($request['polozka'] as $item){
+                for ($i = 0; $i < $item['pocet']; $i++){
+                    Item::create([
+                        'language_id' => $item['jazyk'],
+                        'store_id' => $item['prodejna'],
+                        'title_id' => $title->id,
+                    ]);
+                }
             }
-        }
+        }catch (\Exception $e){}
 
         $pattern = '#^img\/.*\.jpg$#';;
         foreach ($request['obrazek'] as $obrazek){
