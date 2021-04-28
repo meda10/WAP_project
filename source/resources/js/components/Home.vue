@@ -16,7 +16,7 @@
 <!--                <li data-target="#carouselNews" data-slide-to="4"></li>-->
             </ol>
             <div class="carousel-inner">
-                <router-link class="carousel-item active" tag="div" :to="'/film/mlceni-jehatek'">
+                <router-link class="carousel-item active" tag="div" :to="{name: 'movieTitle', params: {titleName: 'mlceni-jehatek'}}">
                     <img class="d-block w-100" :src="'/storage/img/slide1.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
@@ -24,7 +24,7 @@
                         </h3>
                     </div>
                 </router-link>
-                <router-link class="carousel-item" tag="div" :to="'/film/kmotr'">
+                <router-link class="carousel-item" tag="div" :to="{name: 'movieTitle', params: {titleName: 'kmotr'}}">
                         <img class="d-block w-100" :src="'/storage/img/slide2.jpg'" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
                             <h3 style="font-weight: bold;">
@@ -32,7 +32,7 @@
                             </h3>
                         </div>
                 </router-link>
-                <router-link class="carousel-item" tag="div" :to="'/film/terminator-2-den-zuctovani'">
+                <router-link class="carousel-item" tag="div" :to="{name: 'movieTitle', params: {titleName: 'terminator-2-den-zuctovani'}}">
                     <img class="d-block w-100" :src="'/storage/img/slide3.webp'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">
@@ -40,7 +40,7 @@
                         </h3>
                     </div>
                 </router-link>
-                <router-link class="carousel-item" tag="div" :to="'/film/temny-rytir'">
+                <router-link class="carousel-item" tag="div" :to="{name: 'movieTitle', params: {titleName: 'temny-rytir'}}">
                     <img class="d-block w-100" :src="'/storage/img/slide4.jpg'" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                         <h3 style="font-weight: bold;">

@@ -126,7 +126,8 @@ export default {
             // data["zanr"] = ["1","4"]; //todo Genre does not work
             await axios.post('/api/set_titles', data)
                 .then(res => {
-                    this.$router.push({path: '/film/' + res.data['url']});
+                    this.$router.push({name: 'movieTitle', params: {titleName: res.data['url']}});
+                    // this.$router.push({path: '/film/' + res.data['url']});
                 })
                 .catch(err => {
                     alert(err.message);

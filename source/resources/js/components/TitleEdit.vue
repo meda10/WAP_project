@@ -89,7 +89,7 @@ export default {
             await axios.put("/api/update_title/" + this.url, data)
                 .then(res => {
                     this.$emit('emitHandler',  {isLoading: false});
-                    this.$router.push({path: '/film/' + res.data['url']});
+                    this.$router.push({name: 'movieTitle', params: {titleName: res.data['url']}});
                 })
                 .catch(err => {
                     this.$emit('emitHandler',  {isLoading: false});
