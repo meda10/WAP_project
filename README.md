@@ -1,4 +1,8 @@
-# Installation of WAP project
+# WAP project
+
+Information system for video shop. Implemented in Laravel and VueJS, deployed with docker.
+
+# Installation
 
 ## Define environment variables in .env file
 
